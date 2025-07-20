@@ -9,7 +9,6 @@
 //
 
 #import "MTKeyboard.h"
-#import "MTMathKeyboardRootView.h"
 #import "MTFontManager.h"
 #import "MTMathAtomFactory.h"
 
@@ -37,7 +36,7 @@
     static dispatch_once_t once_token;
     dispatch_once(&once_token, ^{
         
-        NSBundle *bundle = [MTMathKeyboardRootView getMathKeyboardResourcesBundle];
+        NSBundle *bundle = SWIFTPM_MODULE_BUNDLE;
         NSString* fontPath = [bundle pathForResource:@"lmroman10-bolditalic" ofType:@"otf"];
         CGDataProviderRef fontDataProvider = CGDataProviderCreateWithFilename([fontPath UTF8String]);
         CGFontRef myFont = CGFontCreateWithDataProvider(fontDataProvider);

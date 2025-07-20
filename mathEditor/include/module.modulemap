@@ -1,6 +1,0 @@
-module MathEditor {
-  header "../editor/MTEditableMathLabel.h"
-  header "../keyboard/MTMathKeyboardRootView.h"
-
-  export *
-}

@@ -2,6 +2,7 @@
 
 import SwiftUI
 import MathEditor
+import MathKeyboard
 
 struct ContentView: View {
     var body: some View {
