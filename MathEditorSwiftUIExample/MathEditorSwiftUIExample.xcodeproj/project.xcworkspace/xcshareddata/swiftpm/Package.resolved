@@ -1,0 +1,15 @@
+{
+  "originHash" : "3845228a2da848133f1c5b0fe02201c5631261188fc4a1a940a392278f808293",
+  "pins" : [
+    {
+      "identity" : "iosmath",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/maitbayev/iosMath.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "066ba2f8353782a644889efe9ceb884ea844180b"
+      }
+    }
+  ],
+  "version" : 3
+}
