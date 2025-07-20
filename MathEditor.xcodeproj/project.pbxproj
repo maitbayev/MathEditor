@@ -3,13 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 47;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1385A98064E559BF2F757304 /* libPods-MathEditor_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FF6761D7D7AC0EC9F0679C9 /* libPods-MathEditor_Example.a */; };
-		2040F7C6A902C4AEF598B076 /* libPods-MathEditor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 473720D7C87DFE272F052861 /* libPods-MathEditor.a */; };
-		243FB02EE755A1D41861623B /* libPods-MathEditor_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 023479B03FDA39233191C9B7 /* libPods-MathEditor_Tests.a */; };
 		490BE5781CE6A08100AE31A0 /* MTDisplayEditingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 490BE5771CE6A08100AE31A0 /* MTDisplayEditingTest.m */; };
 		49DEC8241CF5523E000053CD /* MTCaretView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49DEC81F1CF5523E000053CD /* MTCaretView.m */; };
 		49DEC8251CF5523E000053CD /* MTDisplay+Editing.m in Sources */ = {isa = PBXBuildFile; fileRef = 49DEC8211CF5523E000053CD /* MTDisplay+Editing.m */; };
@@ -29,6 +26,7 @@
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
+		862D28DD2E2D4C4400F9B6FE /* MathEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 862D28DC2E2D4C4400F9B6FE /* MathEditor */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -45,10 +43,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		023479B03FDA39233191C9B7 /* libPods-MathEditor_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MathEditor_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		09D14643E1EDE3F6786E897E /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		1377C04C01CE56EB11AB5A1B /* Pods-MathEditor.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MathEditor.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MathEditor/Pods-MathEditor.debug.xcconfig"; sourceTree = "<group>"; };
-		473720D7C87DFE272F052861 /* libPods-MathEditor.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MathEditor.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		490BE5561CE695CC00AE31A0 /* libMathEditor.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMathEditor.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		490BE5771CE6A08100AE31A0 /* MTDisplayEditingTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDisplayEditingTest.m; sourceTree = "<group>"; };
 		497F92211CF8CBFF00022162 /* MathEditor-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MathEditor-Prefix.pch"; sourceTree = "<group>"; };
@@ -74,7 +69,6 @@
 		49DEC83D1CF5591D000053CD /* WhiteBGKeyboardTab.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = WhiteBGKeyboardTab.xcassets; sourceTree = "<group>"; };
 		49DEC83E1CF57D75000053CD /* lmroman10-bolditalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "lmroman10-bolditalic.otf"; sourceTree = "<group>"; };
 		49DEC83F1CF59F82000053CD /* MathEditor.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = MathEditor.podspec; sourceTree = "<group>"; };
-		5628D2459CDCF8D3064ABC73 /* libPods-iosMathEditor.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iosMathEditor.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58A195388D20070C39A /* MathEditor_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MathEditor_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -92,16 +86,8 @@
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
-		733BAF45E72F86EDFEAAAD61 /* libPods-iosMathEditor_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iosMathEditor_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		753F7D8158AE6B036B248A96 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		7A378091F23FA26A8EEA2F82 /* Pods-MathEditor_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MathEditor_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-MathEditor_Example/Pods-MathEditor_Example.release.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		8A93C35286D2F42BBFFF6281 /* Pods-MathEditor.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MathEditor.release.xcconfig"; path = "Pods/Target Support Files/Pods-MathEditor/Pods-MathEditor.release.xcconfig"; sourceTree = "<group>"; };
-		8FF6761D7D7AC0EC9F0679C9 /* libPods-MathEditor_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MathEditor_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A4EC35D984BA58883006D2C3 /* Pods-MathEditor_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MathEditor_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MathEditor_Tests/Pods-MathEditor_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		AA22ED6294D4E5576093F8A8 /* Pods-MathEditor_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MathEditor_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MathEditor_Tests/Pods-MathEditor_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		AEA5AA8AF2C91D3A7B9B05F9 /* libPods-iosMathEditor_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iosMathEditor_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C22335FDD0B9F56B94B8187A /* Pods-MathEditor_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MathEditor_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MathEditor_Example/Pods-MathEditor_Example.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,7 +95,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2040F7C6A902C4AEF598B076 /* libPods-MathEditor.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,7 +105,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				1385A98064E559BF2F757304 /* libPods-MathEditor_Example.a in Frameworks */,
+				862D28DD2E2D4C4400F9B6FE /* MathEditor in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,7 +116,6 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				243FB02EE755A1D41861623B /* libPods-MathEditor_Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,19 +183,6 @@
 			path = ../MathKeyboardResources;
 			sourceTree = "<group>";
 		};
-		4D5F9F41E950A502FB2B3BEA /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				1377C04C01CE56EB11AB5A1B /* Pods-MathEditor.debug.xcconfig */,
-				8A93C35286D2F42BBFFF6281 /* Pods-MathEditor.release.xcconfig */,
-				C22335FDD0B9F56B94B8187A /* Pods-MathEditor_Example.debug.xcconfig */,
-				7A378091F23FA26A8EEA2F82 /* Pods-MathEditor_Example.release.xcconfig */,
-				AA22ED6294D4E5576093F8A8 /* Pods-MathEditor_Tests.debug.xcconfig */,
-				A4EC35D984BA58883006D2C3 /* Pods-MathEditor_Tests.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
@@ -221,7 +192,6 @@
 				490BE5571CE695CC00AE31A0 /* mathEditor */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
-				4D5F9F41E950A502FB2B3BEA /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -242,12 +212,6 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				5628D2459CDCF8D3064ABC73 /* libPods-iosMathEditor.a */,
-				733BAF45E72F86EDFEAAAD61 /* libPods-iosMathEditor_Example.a */,
-				AEA5AA8AF2C91D3A7B9B05F9 /* libPods-iosMathEditor_Tests.a */,
-				473720D7C87DFE272F052861 /* libPods-MathEditor.a */,
-				8FF6761D7D7AC0EC9F0679C9 /* libPods-MathEditor_Example.a */,
-				023479B03FDA39233191C9B7 /* libPods-MathEditor_Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -313,11 +277,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 490BE55E1CE695CC00AE31A0 /* Build configuration list for PBXNativeTarget "MathEditor" */;
 			buildPhases = (
-				48A9CBFCAB5894F9BFC552E4 /* [CP] Check Pods Manifest.lock */,
 				490BE5521CE695CC00AE31A0 /* Sources */,
 				490BE5531CE695CC00AE31A0 /* Frameworks */,
 				490BE5541CE695CC00AE31A0 /* CopyFiles */,
-				4C3A2645A6B5FE31FA662BF1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -332,12 +294,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5BF195388D20070C39A /* Build configuration list for PBXNativeTarget "MathEditor_Example" */;
 			buildPhases = (
-				A3E2D0D1A985C3FEA5864005 /* [CP] Check Pods Manifest.lock */,
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				D8A5CFAD5F09AAA428AB4D10 /* [CP] Embed Pods Frameworks */,
-				E202BD0EA2A01E97CAF04F2E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -352,12 +311,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "MathEditor_Tests" */;
 			buildPhases = (
-				4B44B263AD3BCE039EE8DD71 /* [CP] Check Pods Manifest.lock */,
 				6003F5AA195388D20070C39A /* Sources */,
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
-				E5084554A0ECA0F3755B8CC7 /* [CP] Embed Pods Frameworks */,
-				02495CB9EE6CCCBF5814B5C0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -374,8 +330,9 @@
 		6003F582195388D10070C39A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = MT;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 1640;
 				ORGANIZATIONNAME = "Kostub Deshmukh";
 				TargetAttributes = {
 					490BE5551CE695CC00AE31A0 = {
@@ -388,10 +345,14 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
 			mainGroup = 6003F581195388D10070C39A;
+			packageReferences = (
+				862D28DB2E2D4C4400F9B6FE /* XCLocalSwiftPackageReference "../MathEditor" */,
+			);
 			productRefGroup = 6003F58B195388D20070C39A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -423,129 +384,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		02495CB9EE6CCCBF5814B5C0 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MathEditor_Tests/Pods-MathEditor_Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		48A9CBFCAB5894F9BFC552E4 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		4B44B263AD3BCE039EE8DD71 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		4C3A2645A6B5FE31FA662BF1 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MathEditor/Pods-MathEditor-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A3E2D0D1A985C3FEA5864005 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		D8A5CFAD5F09AAA428AB4D10 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MathEditor_Example/Pods-MathEditor_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E202BD0EA2A01E97CAF04F2E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MathEditor_Example/Pods-MathEditor_Example-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E5084554A0ECA0F3755B8CC7 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MathEditor_Tests/Pods-MathEditor_Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		490BE5521CE695CC00AE31A0 /* Sources */ = {
@@ -603,13 +441,12 @@
 /* Begin XCBuildConfiguration section */
 		490BE55C1CE695CC00AE31A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1377C04C01CE56EB11AB5A1B /* Pods-MathEditor.debug.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -622,14 +459,13 @@
 		};
 		490BE55D1CE695CC00AE31A0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A93C35286D2F42BBFFF6281 /* Pods-MathEditor.release.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -644,23 +480,39 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -673,7 +525,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -684,29 +536,45 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -715,11 +583,11 @@
 		};
 		6003F5C0195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C22335FDD0B9F56B94B8187A /* Pods-MathEditor_Example.debug.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MathEditorExample/MathEditor-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/MathEditorExample/iosMathEditor-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12;
 				PRODUCT_BUNDLE_IDENTIFIER = MathChat.MathEditorExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -728,11 +596,11 @@
 		};
 		6003F5C1195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7A378091F23FA26A8EEA2F82 /* Pods-MathEditor_Example.release.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MathEditorExample/MathEditor-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/MathEditorExample/iosMathEditor-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12;
 				PRODUCT_BUNDLE_IDENTIFIER = MathChat.MathEditorExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -741,7 +609,6 @@
 		};
 		6003F5C3195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AA22ED6294D4E5576093F8A8 /* Pods-MathEditor_Tests.debug.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
@@ -765,7 +632,6 @@
 		};
 		6003F5C4195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A4EC35D984BA58883006D2C3 /* Pods-MathEditor_Tests.release.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
@@ -823,6 +689,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		862D28DB2E2D4C4400F9B6FE /* XCLocalSwiftPackageReference "../MathEditor" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../MathEditor;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		862D28DC2E2D4C4400F9B6FE /* MathEditor */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MathEditor;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6003F582195388D10070C39A /* Project object */;
 }
