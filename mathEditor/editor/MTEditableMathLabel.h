@@ -8,6 +8,8 @@
 //  MIT license. See the LICENSE file for details.
 //
 
+#if TARGET_OS_IPHONE
+
 #import <UIKit/UIKit.h>
 #include "MTMathList.h"
 
@@ -89,3 +91,5 @@
 - (CGSize) mathDisplaySize;
 
 @end
+
+#endif

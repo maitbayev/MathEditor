@@ -8,13 +8,13 @@
 //  MIT license. See the LICENSE file for details.
 //
 
-#import <UIKit/UIKit.h>
+#import "MTConfig.h"
 
 @class MTEditableMathLabel;
 
-@interface MTCaretView : UIView
+@interface MTCaretView : MTView
 
-@property (nonatomic) UIColor* caretColor;
+@property (nonatomic) MTColor* caretColor;
 
 - (id) initWithEditor:(MTEditableMathLabel*)label;
 

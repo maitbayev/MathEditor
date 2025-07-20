@@ -8,6 +8,8 @@
 //  MIT license. See the LICENSE file for details.
 //
 
+#if TARGET_OS_IPHONE
+
 #import <CoreText/CoreText.h>
 
 #import "MTDisplay+Editing.h"
@@ -594,3 +596,5 @@ static CGFloat distanceFromPointToRect(CGPoint point, CGRect rect) {
 }
 
 @end
+
+#endif

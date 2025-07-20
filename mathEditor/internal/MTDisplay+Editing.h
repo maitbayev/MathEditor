@@ -8,6 +8,8 @@
 //  MIT license. See the LICENSE file for details.
 //
 
+#if TARGET_OS_IPHONE
+
 #import "MTMathListDisplay.h"
 #import "MTMathListIndex.h"
 
@@ -27,3 +29,4 @@
 
 @end
 
+#endif

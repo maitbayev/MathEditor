@@ -8,8 +8,11 @@
 //  MIT license. See the LICENSE file for details.
 //
 
+#if TARGET_OS_IPHONE
+
 #import "MTCaretView.h"
 #import "MTEditableMathLabel.h"
+#import "MTConfig.h"
 
 static const NSTimeInterval InitialBlinkDelay = 0.7;
 static const NSTimeInterval BlinkRate = 0.5;
@@ -27,7 +30,7 @@ static NSInteger getCaretHeight() {
     return kCaretAscent + kCaretDescent;
 }
 
-@interface MTCaretHandle : UIView
+@interface MTCaretHandle : MTView
 
 @property (nonatomic, weak) MTEditableMathLabel* label;
 
@@ -220,3 +223,4 @@ static NSInteger getCaretHeight() {
 
 @end
 
+#endif

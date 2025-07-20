@@ -5,11 +5,14 @@ import PackageDescription
 let package = Package(
   name: "MathEditor",
   defaultLocalization: "en",
-  platforms: [.iOS(.v13)],
+  platforms: [.iOS(.v13), .macOS(.v11)],
   products: [
     .library(
       name: "MathEditor",
-      targets: ["MathEditor", "MathKeyboard"])
+      targets: ["MathEditor"]),
+    .library(
+      name: "MathKeyboard",
+      targets: ["MathKeyboard"])
   ],
   dependencies: [
     .package(url: "https://github.com/maitbayev/iosMath.git", branch: "master")
