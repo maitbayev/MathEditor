@@ -8,8 +8,6 @@
 //  MIT license. See the LICENSE file for details.
 //
 
-#if TARGET_OS_IPHONE
-
 #import <CoreText/CoreText.h>
 
 #import "MTDisplay+Editing.h"
@@ -95,11 +93,11 @@ static CGFloat distanceFromPointToRect(CGPoint point, CGRect rect) {
     return kInvalidPosition;
 }
 
-- (void) highlightCharacterAtIndex:(MTMathListIndex*) index color:(UIColor*) color
+- (void) highlightCharacterAtIndex:(MTMathListIndex*) index color:(MTColor*) color
 {
 }
 
-- (void)highlightWithColor:(UIColor *)color
+- (void)highlightWithColor:(MTColor *)color
 {
 }
 @end
@@ -115,9 +113,9 @@ static CGFloat distanceFromPointToRect(CGPoint point, CGRect rect) {
 - (CGPoint) caretPositionForIndex:(MTMathListIndex*) index;
 
 // Highlight the character(s) at the given index.
-- (void) highlightCharacterAtIndex:(MTMathListIndex*) index color:(UIColor*) color;
+- (void) highlightCharacterAtIndex:(MTMathListIndex*) index color:(MTColor*) color;
 
-- (void)highlightWithColor:(UIColor *)color;
+- (void)highlightWithColor:(MTColor *)color;
 
 @end
 
@@ -158,7 +156,7 @@ static CGFloat distanceFromPointToRect(CGPoint point, CGRect rect) {
 }
 
 
-- (void)highlightCharacterAtIndex:(MTMathListIndex *)index color:(UIColor *)color
+- (void)highlightCharacterAtIndex:(MTMathListIndex *)index color:(MTColor *)color
 {
     assert(NSLocationInRange(index.atomIndex, self.range));
     assert(index.subIndexType == kMTSubIndexTypeNone || index.subIndexType == kMTSubIndexTypeNucleus);
@@ -175,7 +173,7 @@ static CGFloat distanceFromPointToRect(CGPoint point, CGRect rect) {
     self.attributedString = attrStr;
 }
 
-- (void)highlightWithColor:(UIColor *)color
+- (void)highlightWithColor:(MTColor *)color
 {
     NSMutableAttributedString* attrStr = self.attributedString.mutableCopy;
     [attrStr addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)[color CGColor]
@@ -224,9 +222,9 @@ static CGFloat distanceFromPointToRect(CGPoint point, CGRect rect) {
 - (CGPoint) caretPositionForIndex:(MTMathListIndex*) index;
 
 // Highlight the character(s) at the given index.
-- (void) highlightCharacterAtIndex:(MTMathListIndex*) index color:(UIColor*) color;
+- (void) highlightCharacterAtIndex:(MTMathListIndex*) index color:(MTColor*) color;
 
-- (void)highlightWithColor:(UIColor *)color;
+- (void)highlightWithColor:(MTColor *)color;
 
 - (MTMathListDisplay*) subAtomForIndexType:(MTMathListSubIndexType) type;
 
@@ -263,13 +261,13 @@ static CGFloat distanceFromPointToRect(CGPoint point, CGRect rect) {
     return CGPointMake(self.position.x, self.position.y);
 }
 
-- (void)highlightCharacterAtIndex:(MTMathListIndex *)index color:(UIColor *)color
+- (void)highlightCharacterAtIndex:(MTMathListIndex *)index color:(MTColor *)color
 {
     assert(index.subIndexType == kMTSubIndexTypeNone);
     [self highlightWithColor:color];
 }
 
-- (void)highlightWithColor:(UIColor *)color
+- (void)highlightWithColor:(MTColor *)color
 {
     [self.numerator highlightWithColor:color];
     [self.denominator highlightWithColor:color];
@@ -308,9 +306,9 @@ static CGFloat distanceFromPointToRect(CGPoint point, CGRect rect) {
 - (CGPoint) caretPositionForIndex:(MTMathListIndex*) index;
 
 // Highlight the character(s) at the given index.
-- (void) highlightCharacterAtIndex:(MTMathListIndex*) index color:(UIColor*) color;
+- (void) highlightCharacterAtIndex:(MTMathListIndex*) index color:(MTColor*) color;
 
-- (void)highlightWithColor:(UIColor *)color;
+- (void)highlightWithColor:(MTColor *)color;
 
 - (MTMathListDisplay*) subAtomForIndexType:(MTMathListSubIndexType) type;
 
@@ -350,13 +348,13 @@ static CGFloat distanceFromPointToRect(CGPoint point, CGRect rect) {
     return CGPointMake(self.position.x, self.position.y);
 }
 
-- (void)highlightCharacterAtIndex:(MTMathListIndex *)index color:(UIColor *)color
+- (void)highlightCharacterAtIndex:(MTMathListIndex *)index color:(MTColor *)color
 {
     assert(index.subIndexType == kMTSubIndexTypeNone);
     [self highlightWithColor:color];
 }
 
-- (void)highlightWithColor:(UIColor *)color
+- (void)highlightWithColor:(MTColor *)color
 {
     [self.radicand highlightWithColor:color];
 }
@@ -395,9 +393,9 @@ static CGFloat distanceFromPointToRect(CGPoint point, CGRect rect) {
 - (CGPoint) caretPositionForIndex:(MTMathListIndex*) index;
 
 // Highlight the character(s) at the given index.
-- (void) highlightCharacterAtIndex:(MTMathListIndex*) index color:(UIColor*) color;
+- (void) highlightCharacterAtIndex:(MTMathListIndex*) index color:(MTColor*) color;
 
-- (void)highlightWithColor:(UIColor *)color;
+- (void)highlightWithColor:(MTColor *)color;
 
 @end
 
@@ -572,7 +570,7 @@ static CGFloat distanceFromPointToRect(CGPoint point, CGRect rect) {
 }
 
 
-- (void)highlightCharacterAtIndex:(MTMathListIndex *)index color:(UIColor *)color
+- (void)highlightCharacterAtIndex:(MTMathListIndex *)index color:(MTColor *)color
 {
     if (!index) {
         return;
@@ -588,7 +586,7 @@ static CGFloat distanceFromPointToRect(CGPoint point, CGRect rect) {
     }
 }
 
-- (void)highlightWithColor:(UIColor *)color
+- (void)highlightWithColor:(MTColor *)color
 {
     for (MTDisplay* atom in self.subDisplays) {
         [atom highlightWithColor:color];
@@ -596,5 +594,3 @@ static CGFloat distanceFromPointToRect(CGPoint point, CGRect rect) {
 }
 
 @end
-
-#endif

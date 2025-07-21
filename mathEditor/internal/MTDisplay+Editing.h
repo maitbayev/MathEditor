@@ -8,8 +8,6 @@
 //  MIT license. See the LICENSE file for details.
 //
 
-#if TARGET_OS_IPHONE
-
 #import "MTMathListDisplay.h"
 #import "MTMathListIndex.h"
 
@@ -22,11 +20,10 @@
 - (CGPoint) caretPositionForIndex:(MTMathListIndex*) index;
 
 // Highlight the character(s) at the given index.
-- (void) highlightCharacterAtIndex:(MTMathListIndex*) index color:(UIColor*) color;
+- (void) highlightCharacterAtIndex:(MTMathListIndex*) index color:(MTColor*) color;
 
 // Highlight the entire display with the given color
-- (void) highlightWithColor:(UIColor*) color;
+- (void) highlightWithColor:(MTColor*) color;
 
 @end
 
-#endif
