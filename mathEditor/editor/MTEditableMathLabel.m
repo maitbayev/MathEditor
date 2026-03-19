@@ -16,6 +16,7 @@
 #import "MTMathList.h"
 #import "MTMathUILabel.h"
 #import "MTMathAtomFactory.h"
+#import "MTCancelView.h"
 #import "MTCaretView.h"
 #import "MTMathList+Editing.h"
 #import "MTDisplay+Editing.h"
@@ -55,16 +56,13 @@
 
 - (void) createCancelImage
 {
-    self.cancelImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cross"]];
+    if (self.cancelImage != nil) {
+        return;
+    }
+    self.cancelImage = [[MTCancelView alloc] initWithTarget:self action:@selector(clearTapped:)];
     CGRect frame = CGRectMake(self.frame.size.width - 55, (self.frame.size.height - 45)/2, 45, 45);
     self.cancelImage.frame = frame;
     [self addSubview:self.cancelImage];
-    
-    self.cancelImage.userInteractionEnabled = YES;
-    UITapGestureRecognizer *cancelRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clearTapped:)];
-    [self.cancelImage addGestureRecognizer:cancelRecognizer];
-    cancelRecognizer.delegate = nil;
-    self.cancelImage.hidden = YES;
 }
 
 - (void) initialize
@@ -90,6 +88,7 @@
     label.userInteractionEnabled = NO;
     label.textAlignment = kMTTextAlignmentCenter;
     self.label = label;
+    // [self createCancelImage];
     CGAffineTransform transform = CGAffineTransformMakeTranslation(0, self.bounds.size.height);
     _flipTransform = CGAffineTransformConcat(CGAffineTransformMakeScale(1.0, -1.0), transform);
 

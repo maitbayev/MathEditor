@@ -8,14 +8,13 @@
 //  MIT license. See the LICENSE file for details.
 //
 
-#if TARGET_OS_IPHONE
-
 #import "MTConfig.h"
 #import "MTKeyInput.h"
 #include "MTMathList.h"
 
 @class MTEditableMathLabel;
 @class MTMathListIndex;
+@class MTCancelView;
 
 /** Delegate for the `MTEditableMathLabel`. All methods are optional. */
 @protocol MTEditableMathLabelDelegate <NSObject>
@@ -72,7 +71,7 @@
 @property (nonatomic) MTColor* textColor;
 @property (nonatomic) MTColor* caretColor;
 
-@property (nonatomic) UIImageView* cancelImage;
+@property (nonatomic) MTCancelView* cancelImage;
 @property (nonatomic, weak) id<MTEditableMathLabelDelegate> delegate;
 @property (nonatomic, weak) MTView<MTMathKeyboard>* keyboard;
 @property (nonatomic) CGFloat fontSize;
@@ -93,4 +92,3 @@
 
 @end
 
-#endif
