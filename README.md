@@ -64,6 +64,8 @@ To use the provided keyboard, set:
 label.keyboard = [MTMathKeyboardRootView sharedInstance];
 ```
 
+`MTMathKeyboardRootView` now uses a SwiftUI-backed implementation internally while preserving the same Objective-C API.
+
 You can set any keyboard you want to use. A keyboard needs to be a
 `UIView` and implement the `MTMathKeyboard` interface.
 

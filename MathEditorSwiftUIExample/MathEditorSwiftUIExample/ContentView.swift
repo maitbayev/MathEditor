@@ -18,16 +18,16 @@ struct ContentView: View {
 #if os(iOS)
 struct MathEditorView : UIViewRepresentable {
   typealias UIViewType = MTEditableMathLabel
-  
+
   func makeUIView(context: Context) -> MTEditableMathLabel {
     let mathLabel = MTEditableMathLabel()
     mathLabel.keyboard = MTMathKeyboardRootView.sharedInstance()
     mathLabel.backgroundColor = .clear
     return mathLabel
   }
-  
+
   func updateUIView(_ uiView: MTEditableMathLabel, context: Context) {
-    
+
   }
 }
 #endif
@@ -35,16 +35,16 @@ struct MathEditorView : UIViewRepresentable {
 #if os(macOS)
 struct MathEditorView : NSViewRepresentable {
   typealias NSViewType = MTEditableMathLabel
-  
+
   func makeNSView(context: Context) -> MTEditableMathLabel {
     let mathLabel = MTEditableMathLabel()
     mathLabel.keyboard = MTMathKeyboardRootView.sharedInstance()
     mathLabel.backgroundColor = .clear
     return mathLabel
   }
-  
+
   func updateNSView(_ uiView: MTEditableMathLabel, context: Context) {
-    
+
   }
 }
 #endif
