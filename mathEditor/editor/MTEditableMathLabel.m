@@ -59,7 +59,7 @@
     if (self.cancelImage != nil) {
         return;
     }
-    self.cancelImage = [[MTCancelView alloc] initWithTarget:self action:@selector(clearTapped:)];
+    self.cancelImage = [[MTCancelView alloc] initWithTarget:self action:@selector(clear)];
     CGRect frame = CGRectMake(self.frame.size.width - 55, (self.frame.size.height - 45)/2, 45, 45);
     self.cancelImage.frame = frame;
     [self addSubview:self.cancelImage];
@@ -264,11 +264,6 @@
         [_caretView showHandle:NO];
         [self insertionPointChanged];
     }
-}
-
-- (void)clearTapped:(UITapGestureRecognizer *)tap
-{
-    [self clear];
 }
 
 - (void)clear
