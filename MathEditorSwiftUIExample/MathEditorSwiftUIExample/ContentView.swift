@@ -2,7 +2,7 @@
 
 import SwiftUI
 import MathEditor
-import MathKeyboard
+
 
 struct ContentView: View {
     var body: some View {
@@ -16,6 +16,8 @@ struct ContentView: View {
 }
 
 #if os(iOS)
+import MathKeyboard
+
 struct MathEditorView : UIViewRepresentable {
   typealias UIViewType = MTEditableMathLabel
   

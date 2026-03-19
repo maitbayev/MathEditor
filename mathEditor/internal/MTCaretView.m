@@ -38,7 +38,7 @@ static NSInteger getCaretHeight() {
 
 @implementation MTCaretHandle {
     UIBezierPath* _path;
-    UIColor* _color;
+    MTColor* _color;
 }
 
 - (id) initWithFrame:(CGRect)frame
@@ -74,7 +74,7 @@ static NSInteger getCaretHeight() {
     [_path fill];
 }
 
-- (void) setColor:(UIColor*) color
+- (void) setColor:(MTColor*) color
 {
     _color = [color colorWithAlphaComponent:0.6];
 }
@@ -136,7 +136,7 @@ static NSInteger getCaretHeight() {
         _blinker.backgroundColor = self.caretColor;
         [self addSubview:_blinker];
         _handle = [[MTCaretHandle alloc] initWithFrame:CGRectMake(0, 0, kCaretHandleWidth * _scale, kCaretHandleHeight *_scale)];
-        _handle.backgroundColor = [UIColor clearColor];
+        _handle.backgroundColor = [MTColor clearColor];
         _handle.hidden = YES;
         _handle.label = label;
         [self addSubview:_handle];
@@ -205,7 +205,7 @@ static NSInteger getCaretHeight() {
     [_blinkTimer invalidate];
 }
 
-- (void)setCaretColor:(UIColor *)caretColor
+- (void)setCaretColor:(MTColor *)caretColor
 {
     _caretColor = caretColor;
     _handle.color = caretColor;

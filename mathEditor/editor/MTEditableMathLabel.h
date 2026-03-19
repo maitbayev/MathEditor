@@ -11,6 +11,7 @@
 #if TARGET_OS_IPHONE
 
 #import <UIKit/UIKit.h>
+#import "MTConfig.h"
 #include "MTMathList.h"
 
 @class MTEditableMathLabel;
@@ -67,9 +68,9 @@
 @interface MTEditableMathLabel : UIView<UIKeyInput>
 
 @property (nonatomic) MTMathList* mathList;
-@property (nonatomic) UIColor* highlightColor;
-@property (nonatomic) UIColor* textColor;
-@property (nonatomic) UIColor* caretColor;
+@property (nonatomic) MTColor* highlightColor;
+@property (nonatomic) MTColor* textColor;
+@property (nonatomic) MTColor* caretColor;
 
 @property (nonatomic) UIImageView* cancelImage;
 @property (nonatomic, weak) id<MTEditableMathLabelDelegate> delegate;
