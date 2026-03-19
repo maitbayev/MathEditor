@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		862D28F82E2D525900F9B6FE /* MathEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 862D28F72E2D525900F9B6FE /* MathEditor */; };
 		862D28FB2E2D527100F9B6FE /* MathEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 862D28FA2E2D527100F9B6FE /* MathEditor */; };
+		86F319312F6C3EA600D38473 /* MathKeyboard in Frameworks */ = {isa = PBXBuildFile; productRef = 86F319302F6C3EA600D38473 /* MathKeyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86F319312F6C3EA600D38473 /* MathKeyboard in Frameworks */,
 				862D28F82E2D525900F9B6FE /* MathEditor in Frameworks */,
 				862D28FB2E2D527100F9B6FE /* MathEditor in Frameworks */,
 			);
@@ -40,6 +42,7 @@
 			isa = PBXGroup;
 			children = (
 				862D28E92E2D51E100F9B6FE /* MathEditorSwiftUIExample */,
+				86F3192F2F6C3EA500D38473 /* Frameworks */,
 				862D28E82E2D51E100F9B6FE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -50,6 +53,13 @@
 				862D28E72E2D51E100F9B6FE /* MathEditorSwiftUIExample.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		86F3192F2F6C3EA500D38473 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,6 +84,7 @@
 			packageProductDependencies = (
 				862D28F72E2D525900F9B6FE /* MathEditor */,
 				862D28FA2E2D527100F9B6FE /* MathEditor */,
+				86F319302F6C3EA600D38473 /* MathKeyboard */,
 			);
 			productName = MathEditorSwiftUIExample;
 			productReference = 862D28E72E2D51E100F9B6FE /* MathEditorSwiftUIExample.app */;
@@ -275,7 +286,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11;
@@ -314,7 +325,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11;
@@ -369,6 +380,11 @@
 		862D28FA2E2D527100F9B6FE /* MathEditor */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MathEditor;
+		};
+		86F319302F6C3EA600D38473 /* MathKeyboard */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 862D28F92E2D527100F9B6FE /* XCLocalSwiftPackageReference "../../MathEditor" */;
+			productName = MathKeyboard;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

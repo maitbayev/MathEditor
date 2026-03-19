@@ -276,10 +276,10 @@ final class SwiftUIMathKeyboard: UIView, MTMathKeyboard {
 
 struct MathEditorView : UIViewRepresentable {
   typealias UIViewType = MTEditableMathLabel
-
+  let keyboard = SwiftUIMathKeyboard(frame: CGRect(x: 0, y: 0, width: 320, height: 225))
   func makeUIView(context: Context) -> MTEditableMathLabel {
     let mathLabel = MTEditableMathLabel()
-    mathLabel.keyboard = SwiftUIMathKeyboard(frame: CGRect(x: 0, y: 0, width: 320, height: 225))
+    mathLabel.keyboard = keyboard
     mathLabel.backgroundColor = .clear
     return mathLabel
   }
