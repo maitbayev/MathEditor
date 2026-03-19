@@ -8,6 +8,8 @@
 //  MIT license. See the LICENSE file for details.
 //
 
+#if TARGET_OS_IPHONE
+
 #import "MTKeyboard.h"
 #import "MTFontManager.h"
 #import "MTMathAtomFactory.h"
@@ -272,3 +274,5 @@
     
 }
 @end
+
+#endif

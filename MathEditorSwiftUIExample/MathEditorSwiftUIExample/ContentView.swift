@@ -21,8 +21,8 @@ struct MathEditorView : UIViewRepresentable {
   
   func makeUIView(context: Context) -> MTEditableMathLabel {
     let mathLabel = MTEditableMathLabel()
-    mathLabel.keyboard = MTMathKeyboardRootView.sharedInstance()
     mathLabel.backgroundColor = .clear
+    mathLabel.keyboard = MTMathKeyboardRootView.sharedInstance();
     return mathLabel
   }
   
@@ -33,18 +33,10 @@ struct MathEditorView : UIViewRepresentable {
 #endif
 
 #if os(macOS)
-struct MathEditorView : NSViewRepresentable {
-  typealias NSViewType = MTEditableMathLabel
-  
-  func makeNSView(context: Context) -> MTEditableMathLabel {
-    let mathLabel = MTEditableMathLabel()
-    mathLabel.keyboard = MTMathKeyboardRootView.sharedInstance()
-    mathLabel.backgroundColor = .clear
-    return mathLabel
-  }
-  
-  func updateNSView(_ uiView: MTEditableMathLabel, context: Context) {
-    
+struct MathEditorView: View {
+  var body: some View {
+    Text("MathEditor is not wired up for macOS in this example yet.")
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
   }
 }
 #endif

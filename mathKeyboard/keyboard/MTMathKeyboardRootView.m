@@ -9,6 +9,8 @@
 //  MIT license. See the LICENSE file for details.
 //
 
+#if TARGET_OS_IPHONE
+
 #import "MTMathKeyboardRootView.h"
 
 static NSInteger const DEFAULT_KEYBOARD = 0;
@@ -227,3 +229,5 @@ static NSInteger const DEFAULT_KEYBOARD = 0;
 }
 
 @end
+
+#endif

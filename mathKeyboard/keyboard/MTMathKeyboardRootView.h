@@ -9,8 +9,9 @@
 //  MIT license. See the LICENSE file for details.
 //
 
+#if TARGET_OS_IPHONE
+
 #import <UIKit/UIKit.h>
-#import <Foundation/Foundation.h>
 #import "MTKeyboard.h"
 #import "MTEditableMathLabel.h"
 
@@ -42,3 +43,5 @@
 @property (nonatomic) BOOL radicalHighlighted;
 
 @end
+
+#endif

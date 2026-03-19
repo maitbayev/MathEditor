@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		862D28F82E2D525900F9B6FE /* MathEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 862D28F72E2D525900F9B6FE /* MathEditor */; };
 		862D28FB2E2D527100F9B6FE /* MathEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 862D28FA2E2D527100F9B6FE /* MathEditor */; };
+		C1489ED52F6CB33A00AB2993 /* MathKeyboard in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = C1489ED42F6CB33A00AB2993 /* MathKeyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1489ED52F6CB33A00AB2993 /* MathKeyboard in Frameworks */,
 				862D28F82E2D525900F9B6FE /* MathEditor in Frameworks */,
 				862D28FB2E2D527100F9B6FE /* MathEditor in Frameworks */,
 			);
@@ -40,6 +42,7 @@
 			isa = PBXGroup;
 			children = (
 				862D28E92E2D51E100F9B6FE /* MathEditorSwiftUIExample */,
+				C14D8B922F6CB11E003F79FF /* Frameworks */,
 				862D28E82E2D51E100F9B6FE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -50,6 +53,13 @@
 				862D28E72E2D51E100F9B6FE /* MathEditorSwiftUIExample.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		C14D8B922F6CB11E003F79FF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,6 +84,7 @@
 			packageProductDependencies = (
 				862D28F72E2D525900F9B6FE /* MathEditor */,
 				862D28FA2E2D527100F9B6FE /* MathEditor */,
+				C1489ED42F6CB33A00AB2993 /* MathKeyboard */,
 			);
 			productName = MathEditorSwiftUIExample;
 			productReference = 862D28E72E2D51E100F9B6FE /* MathEditorSwiftUIExample.app */;
@@ -369,6 +380,11 @@
 		862D28FA2E2D527100F9B6FE /* MathEditor */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MathEditor;
+		};
+		C1489ED42F6CB33A00AB2993 /* MathKeyboard */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 862D28F92E2D527100F9B6FE /* XCLocalSwiftPackageReference "../../MathEditor" */;
+			productName = MathKeyboard;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
