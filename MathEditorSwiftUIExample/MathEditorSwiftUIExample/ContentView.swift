@@ -16,7 +16,7 @@ struct ContentView: View {
 }
 
 #if os(iOS)
-private enum KeyboardTab: CaseIterable {
+private enum KeyboardTab: Int, CaseIterable {
   case numbers
   case operations
   case functions
@@ -41,23 +41,49 @@ private final class KeyboardState: ObservableObject {
   func dismiss() { textView?.resignFirstResponder() }
 }
 
-private struct KeyboardButton: View {
+private struct KeyboardKey: View {
   let title: String
+  var width: CGFloat
+  var height: CGFloat = 45
   var enabled: Bool = true
-  var selected: Bool = false
   var action: () -> Void
 
   var body: some View {
     Button(action: action) {
-      Text(title)
-        .frame(maxWidth: .infinity)
-        .frame(height: 36)
-        .foregroundStyle(enabled ? Color.primary : Color.secondary)
-        .background(selected ? Color.blue.opacity(0.2) : Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 6))
+      ZStack {
+        Rectangle()
+          .fill(enabled ? Color.white : Color(white: 0.86))
+          .overlay(Rectangle().stroke(Color(white: 0.75), lineWidth: 0.5))
+        Text(title)
+          .font(.system(size: 22, weight: .light))
+          .foregroundStyle(enabled ? Color.black : Color.gray)
+      }
+      .frame(width: width, height: height)
     }
     .buttonStyle(.plain)
     .disabled(!enabled)
+  }
+}
+
+private struct IconTabButton: View {
+  let normalImage: String
+  let selectedImage: String
+  let selected: Bool
+  let action: () -> Void
+
+  var body: some View {
+    Button(action: action) {
+      Image(uiImage: keyboardImage(named: selected ? selectedImage : normalImage))
+        .resizable()
+        .scaledToFill()
+        .frame(width: 80, height: 45)
+        .clipped()
+    }
+    .buttonStyle(.plain)
+  }
+
+  private func keyboardImage(named name: String) -> UIImage {
+    UIImage(named: name, in: MTMathKeyboardRootView.getMathKeyboardResourcesBundle(), compatibleWith: nil) ?? UIImage()
   }
 }
 
@@ -65,45 +91,62 @@ private struct MathKeyboardSwiftUIView: View {
   @ObservedObject var state: KeyboardState
 
   var body: some View {
-    VStack(spacing: 8) {
-      HStack(spacing: 6) {
-        tabButton(.numbers, title: "123")
-        tabButton(.operations, title: "+−×")
-        tabButton(.functions, title: "ƒx")
-        tabButton(.letters, title: "ABC")
+    VStack(spacing: 0) {
+      HStack(spacing: 0) {
+        IconTabButton(normalImage: "Numbers Symbol wbg", selectedImage: "Number Symbol", selected: state.tab == .numbers) { state.tab = .numbers }
+        IconTabButton(normalImage: "Operations Symbol wbg", selectedImage: "Operations Symbol", selected: state.tab == .operations) { state.tab = .operations }
+        IconTabButton(normalImage: "Functions Symbol wbg", selectedImage: "Functions Symbol", selected: state.tab == .functions) { state.tab = .functions }
+        IconTabButton(normalImage: "Letter Symbol wbg", selectedImage: "Letter Symbol", selected: state.tab == .letters) { state.tab = .letters }
       }
+      .frame(height: 45)
 
-      tabContent
-
-      HStack(spacing: 6) {
-        KeyboardButton(title: "⌫") { state.backspace() }
-        KeyboardButton(title: "Return") { state.insert("\n") }
-        KeyboardButton(title: "Hide") { state.dismiss() }
+      ZStack {
+        Rectangle().fill(Color.white)
+        tabContent
       }
+      .frame(height: 180)
     }
-    .padding(8)
-    .background(Color(UIColor.systemGray5))
-  }
-
-  private func tabButton(_ tab: KeyboardTab, title: String) -> some View {
-    KeyboardButton(title: title, selected: state.tab == tab) {
-      state.tab = tab
-    }
+    .frame(width: 320, height: 225)
+    .background(Color.white)
   }
 
   @ViewBuilder
   private var tabContent: some View {
     switch state.tab {
     case .numbers:
-      rows([["7", "8", "9"], ["4", "5", "6"], ["1", "2", "3"], ["0", ".", "="]], enabled: state.numbersAllowed) { key in
+      threeByFourGrid(
+        leftColumns: [["7", "8", "9"], ["4", "5", "6"], ["1", "2", "3"], ["0", ".", "="]],
+        rightColumn: ["⌫", "Enter", "⌄"],
+        leftEnabled: state.numbersAllowed
+      ) { key in
+        if key == "=" && !state.equalsAllowed { return }
         state.insert(key)
+      } rightAction: { key in
+        actionForSideKey(key)
       }
+
     case .operations:
-      rows([["+", "-", "*", "/"], ["<", ">", "≤", "≥"], ["(", ")", "||", "_"]], enabled: state.operatorsAllowed) { key in
-        state.insert(key)
+      threeByFourGrid(
+        leftColumns: [["<", ">", "≤"], ["≥", "≠", "≈"], ["+", "−", "×"], ["÷", "(", ")"]],
+        rightColumn: ["⌫", "Enter", "⌄"],
+        leftEnabled: state.operatorsAllowed
+      ) { key in
+        switch key {
+        case "−": state.insert("-")
+        case "×": state.insert("*")
+        case "÷": state.insert("/")
+        default: state.insert(key)
+        }
+      } rightAction: { key in
+        actionForSideKey(key)
       }
+
     case .functions:
-      rows([["/", "^", "√", "∛"], ["sin", "cos", "tan", "log"], ["ln", "π", "e"]], enabled: true) { key in
+      threeByFourGrid(
+        leftColumns: [["√", "∛", "^"], ["/", "_", "log"], ["sin", "cos", "tan"], ["ln", "π", "e"]],
+        rightColumn: ["⌫", "Enter", "⌄"],
+        leftEnabled: true
+      ) { key in
         switch key {
         case "/": state.insert(MTSymbolFractionSlash)
         case "√": state.insert(MTSymbolSquareRoot)
@@ -114,42 +157,74 @@ private struct MathKeyboardSwiftUIView: View {
         case "π": state.insert("\\pi")
         default: state.insert(key)
         }
+      } rightAction: { key in
+        actionForSideKey(key)
       }
+
     case .letters:
-      VStack(spacing: 6) {
-        rows([["a", "b", "c", "x", "y", "z"], ["m", "n", "p", "q", "r", "s"]].map { row in
-          row.map { state.isLowerCase ? $0 : $0.uppercased() }
-        }, enabled: state.variablesAllowed) { key in
+      threeByFourGrid(
+        leftColumns: [[display("a"), display("b"), display("c")], [display("x"), display("y"), display("z")], [display("m"), display("n"), display("p")], [display("⇧"), greek1, greek2]],
+        rightColumn: [greek3, greek4, greek5],
+        leftEnabled: state.variablesAllowed
+      ) { key in
+        if key == display("⇧") {
+          state.isLowerCase.toggle()
+        } else {
           state.insert(key)
         }
-        HStack(spacing: 6) {
-          KeyboardButton(title: state.isLowerCase ? "⇧" : "⇩") {
-            state.isLowerCase.toggle()
-          }
-          ForEach(state.isLowerCase ? ["α", "Δ", "σ", "μ", "λ"] : ["ρ", "ω", "Φ", "ν", "β"], id: \.self) { letter in
-            KeyboardButton(title: letter, enabled: state.variablesAllowed) {
-              state.insert(letter)
-            }
-          }
-        }
+      } rightAction: { key in
+        state.insert(key)
       }
     }
   }
 
-  private func rows(_ rows: [[String]], enabled: Bool, action: @escaping (String) -> Void) -> some View {
-    VStack(spacing: 6) {
-      ForEach(rows.indices, id: \.self) { rowIndex in
-        HStack(spacing: 6) {
-          ForEach(rows[rowIndex], id: \.self) { key in
-            KeyboardButton(
-              title: key,
-              enabled: enabled && !(key == "=" && !state.equalsAllowed),
-              selected: (key == "^" && state.exponentHighlighted) || (key == "√" && state.squareRootHighlighted) || (key == "∛" && state.radicalHighlighted)
-            ) {
-              action(key)
+  private var greek1: String { state.isLowerCase ? "α" : "ρ" }
+  private var greek2: String { state.isLowerCase ? "Δ" : "ω" }
+  private var greek3: String { state.isLowerCase ? "σ" : "Φ" }
+  private var greek4: String { state.isLowerCase ? "μ" : "ν" }
+  private var greek5: String { state.isLowerCase ? "λ" : "β" }
+
+  private func display(_ letter: String) -> String {
+    state.isLowerCase ? letter.lowercased() : letter.uppercased()
+  }
+
+  private func actionForSideKey(_ key: String) {
+    switch key {
+    case "⌫": state.backspace()
+    case "Enter": state.insert("\n")
+    default: state.dismiss()
+    }
+  }
+
+  private func threeByFourGrid(
+    leftColumns: [[String]],
+    rightColumn: [String],
+    leftEnabled: Bool,
+    leftAction: @escaping (String) -> Void,
+    rightAction: @escaping (String) -> Void
+  ) -> some View {
+    HStack(spacing: 0) {
+      HStack(spacing: 0) {
+        ForEach(0..<4, id: \.self) { column in
+          VStack(spacing: 0) {
+            ForEach(0..<3, id: \.self) { row in
+              let key = leftColumns[column][row]
+              KeyboardKey(
+                title: key,
+                width: column == 0 ? 49 : 50,
+                enabled: leftEnabled && !(key == "=" && !state.equalsAllowed)
+              ) {
+                leftAction(key)
+              }
             }
           }
         }
+      }
+
+      VStack(spacing: 0) {
+        KeyboardKey(title: rightColumn[0], width: 72) { rightAction(rightColumn[0]) }
+        KeyboardKey(title: rightColumn[1], width: 72, height: 90) { rightAction(rightColumn[1]) }
+        KeyboardKey(title: rightColumn[2], width: 72) { rightAction(rightColumn[2]) }
       }
     }
   }
@@ -204,7 +279,7 @@ struct MathEditorView : UIViewRepresentable {
 
   func makeUIView(context: Context) -> MTEditableMathLabel {
     let mathLabel = MTEditableMathLabel()
-    mathLabel.keyboard = SwiftUIMathKeyboard(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 250))
+    mathLabel.keyboard = SwiftUIMathKeyboard(frame: CGRect(x: 0, y: 0, width: 320, height: 225))
     mathLabel.backgroundColor = .clear
     return mathLabel
   }
