@@ -27,7 +27,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *squareRootButton;
 @property (weak, nonatomic) IBOutlet UIButton *radicalButton;
 
-@property (nonatomic, weak) UIView<UIKeyInput>* textView;
+@property (nonatomic, weak) MTView<MTKeyInput>* textView;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *numbers;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *variables;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *operators;

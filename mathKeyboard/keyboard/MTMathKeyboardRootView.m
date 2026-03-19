@@ -214,14 +214,14 @@ static NSInteger const DEFAULT_KEYBOARD = 0;
     }
 }
 
-- (void)startedEditing:(UIView<UIKeyInput> *)label
+- (void)startedEditing:(MTView<MTKeyInput> *)label
 {
     for (MTKeyboard *keyboard in _keyboards) {
         keyboard.textView = label;
     }
 }
 
-- (void)finishedEditing:(UIView<UIKeyInput> *)label
+- (void)finishedEditing:(MTView<MTKeyInput> *)label
 {
     for (MTKeyboard *keyboard in _keyboards) {
         keyboard.textView = nil;

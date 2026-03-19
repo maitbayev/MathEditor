@@ -12,6 +12,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MTConfig.h"
+#import "MTKeyInput.h"
 #include "MTMathList.h"
 
 @class MTEditableMathLabel;
@@ -53,19 +54,19 @@
  this protocol.
  
  This protocol informs the keyboard when a particular `MTEditableMathUILabel` is being edited.
- The keyboard should use this information to send `UIKeyInput` messages to the label.
+ The keyboard should use this information to send `MTKeyInput` messages to the label.
  
  This protocol inherits from `MTMathKeyboardTraits`.
  */
 @protocol MTMathKeyboard <MTMathKeyboardTraits>
 
-- (void) startedEditing:(UIView<UIKeyInput>*) label;
-- (void) finishedEditing:(UIView<UIKeyInput>*) label;
+- (void) startedEditing:(MTView<MTKeyInput>*) label;
+- (void) finishedEditing:(MTView<MTKeyInput>*) label;
 
 @end
 
 
-@interface MTEditableMathLabel : UIView<UIKeyInput>
+@interface MTEditableMathLabel : MTView<MTKeyInput>
 
 @property (nonatomic) MTMathList* mathList;
 @property (nonatomic) MTColor* highlightColor;
