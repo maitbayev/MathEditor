@@ -10,7 +10,6 @@
 
 #if TARGET_OS_IPHONE
 
-#import <UIKit/UIKit.h>
 #import "MTConfig.h"
 #import "MTKeyInput.h"
 #include "MTMathList.h"
@@ -75,9 +74,9 @@
 
 @property (nonatomic) UIImageView* cancelImage;
 @property (nonatomic, weak) id<MTEditableMathLabelDelegate> delegate;
-@property (nonatomic, weak) UIView<MTMathKeyboard>* keyboard;
+@property (nonatomic, weak) MTView<MTMathKeyboard>* keyboard;
 @property (nonatomic) CGFloat fontSize;
-@property (nonatomic) IBInspectable UIEdgeInsets contentInsets;
+@property (nonatomic) MTEdgeInsets contentInsets;
 
 - (void) clear;
 
