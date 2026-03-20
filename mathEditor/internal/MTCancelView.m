@@ -6,6 +6,7 @@
 
 #import "MTCancelView.h"
 #import "MTTapGestureRecognizer.h"
+#import "MTView/MTView+AutoLayout.h"
 
 @interface MTCancelView ()
 
@@ -29,25 +30,17 @@
             image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
         _imageView = [[UIImageView alloc] initWithImage:image];
-        _imageView.translatesAutoresizingMaskIntoConstraints = NO;
         _imageView.contentMode = UIViewContentModeScaleAspectFit;
         _imageView.tintColor = [MTColor secondaryLabelColor];
 #else
         NSImage *image = [NSImage imageWithSystemSymbolName:@"xmark.circle" accessibilityDescription:nil];
         _imageView = [[NSImageView alloc] initWithFrame:CGRectZero];
         _imageView.image = image;
-        _imageView.translatesAutoresizingMaskIntoConstraints = NO;
         _imageView.imageScaling = NSImageScaleProportionallyUpOrDown;
         _imageView.contentTintColor = [MTColor secondaryLabelColor];
 #endif
         [self addSubview:_imageView];
-
-        [NSLayoutConstraint activateConstraints:@[
-            [_imageView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
-            [_imageView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-            [_imageView.topAnchor constraintEqualToAnchor:self.topAnchor],
-            [_imageView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
-        ]];
+        [_imageView pinToSuperview];
 
 #if TARGET_OS_IPHONE
         self.userInteractionEnabled = YES;
