@@ -25,13 +25,12 @@
 #import "MTUnicode.h"
 #import "MTMathListBuilder.h"
 
-@interface MTEditableMathLabel() <UIGestureRecognizerDelegate, UITextInput>
+@interface MTEditableMathLabel() <UITextInput>
 
 @property (nonatomic) MTMathUILabel* label;
 @property (nonatomic) MTTapGestureRecognizer* tapGestureRecognizer;
 
 @end
-
 @implementation MTEditableMathLabel {
     MTCaretView* _caretView;
     MTMathListIndex* _insertionIndex;
@@ -71,7 +70,6 @@
     // Add tap gesture recognizer to let the user enter editing mode.
     self.tapGestureRecognizer = [[MTTapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
     [self addGestureRecognizer:self.tapGestureRecognizer];
-    self.tapGestureRecognizer.delegate = self;
     
     // Create our text storage.
     
@@ -89,7 +87,7 @@
     label.userInteractionEnabled = NO;
     label.textAlignment = kMTTextAlignmentCenter;
     self.label = label;
-    // [self createCancelImage];
+     [self createCancelImage];
     CGAffineTransform transform = CGAffineTransformMakeTranslation(0, self.bounds.size.height);
     _flipTransform = CGAffineTransformConcat(CGAffineTransformMakeScale(1.0, -1.0), transform);
 
@@ -158,12 +156,12 @@
     return self.label.fontSize;
 }
 
-- (void)setContentInsets:(UIEdgeInsets)contentInsets
+- (void)setContentInsets:(MTEdgeInsets)contentInsets
 {
     self.label.contentInsets = contentInsets;
 }
 
-- (UIEdgeInsets)contentInsets
+- (MTEdgeInsets)contentInsets
 {
     return self.label.contentInsets;
 }
@@ -228,17 +226,6 @@
     return val;
 }
 
-/**
- UIGestureRecognizerDelegate method.
- Called to determine if we want to handle a given gesture.
- */
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gesture shouldReceiveTouch:(UITouch *)touch
-{
-	// If gesture touch occurs in our view, we want to handle it
-    return YES;
-    //return (touch.view == self);
-}
-
 - (void) startEditing
 {
     if (![self isFirstResponder]) {
@@ -252,13 +239,18 @@
  */
 - (void)tap:(MTTapGestureRecognizer *)tap
 {
+    [self handleTapAtPoint:MTTapGestureLocationInView(tap, self)];
+}
+
+- (void)handleTapAtPoint:(CGPoint)tapPoint
+{
     if (![self isFirstResponder]) {
         _insertionIndex = nil;
         [_caretView showHandle:NO];
         [self startEditing];
     } else {
         // If already editing move the cursor and show handle
-        _insertionIndex = [self closestIndexToPoint:MTTapGestureLocationInView(tap, self)];
+        _insertionIndex = [self closestIndexToPoint:tapPoint];
         if (_insertionIndex == nil) {
             _insertionIndex = [MTMathListIndex level0Index:self.mathList.atoms.count];
         }

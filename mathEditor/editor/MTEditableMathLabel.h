@@ -8,7 +8,7 @@
 //  MIT license. See the LICENSE file for details.
 //
 
-#import "MTConfig.h"
+@import iosMath;
 #import "MTKeyInput.h"
 #include "MTMathList.h"
 
@@ -91,4 +91,3 @@
 - (CGSize) mathDisplaySize;
 
 @end
-
