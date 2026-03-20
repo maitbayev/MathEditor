@@ -173,57 +173,32 @@
 
 #pragma mark - Custom user interaction
 
-- (UIView *)inputView
-{
-    return self.keyboard;
-}
 
-/**
- UIResponder protocol override.
- Our view can become first responder to receive user text input.
- */
-- (BOOL)canBecomeFirstResponder
+- (BOOL)doBecomeFirstResponder
 {
-    return YES;
-}
-
-- (BOOL)becomeFirstResponder
-{
-    BOOL canBecome = [super becomeFirstResponder];
-    if (canBecome) {
-        if (_insertionIndex == nil) {
-            _insertionIndex = [MTMathListIndex level0Index:self.mathList.atoms.count];
-        }
-
-        [self.keyboard startedEditing:self];
-        
-        [self insertionPointChanged];
-        if ([self.delegate respondsToSelector:@selector(didBeginEditing:)]) {
-            [self.delegate didBeginEditing:self];
-        }
-    } else {
-        // Sometimes it takes some time
-        // [self performSelector:@selector(startEditing) withObject:nil afterDelay:0.0];
+    if (_insertionIndex == nil) {
+        _insertionIndex = [MTMathListIndex level0Index:self.mathList.atoms.count];
     }
-    return canBecome;
+
+    [self.keyboard startedEditing:self];
+
+    [self insertionPointChanged];
+    if ([self.delegate respondsToSelector:@selector(didBeginEditing:)]) {
+        [self.delegate didBeginEditing:self];
+    }
 }
 
 /**
  UIResponder protocol override.
  Called when our view is being asked to resign first responder state.
  */
-- (BOOL)resignFirstResponder
+- (BOOL)doResignFirstResponder
 {
-    BOOL val = YES;
-    if ([self isFirstResponder]) {
-        [self.keyboard finishedEditing:self];
-         val = [super resignFirstResponder];
-        [self insertionPointChanged];
-        if ([self.delegate respondsToSelector:@selector(didEndEditing:)]) {
-            [self.delegate didEndEditing:self];
-        }
+    [self.keyboard finishedEditing:self];
+    [self insertionPointChanged];
+    if ([self.delegate respondsToSelector:@selector(didEndEditing:)]) {
+        [self.delegate didEndEditing:self];
     }
-    return val;
 }
 
 - (void) startEditing

@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MTEditableMathLabel () <UITextInput>
+@interface MTEditableMathLabel (UITextInput) <UITextInput>
 @end
 
 @implementation MTEditableMathLabel (UITextInput)

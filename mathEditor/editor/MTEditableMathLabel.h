@@ -90,4 +90,7 @@
 
 - (CGSize) mathDisplaySize;
 
+// Compatibility?
+- (void)doBecomeFirstResponder;
+- (void)doResignFirstResponder;
 @end
