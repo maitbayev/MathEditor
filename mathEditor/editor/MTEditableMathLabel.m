@@ -25,7 +25,7 @@
 #import "MTUnicode.h"
 #import "MTMathListBuilder.h"
 
-@interface MTEditableMathLabel() <UITextInput>
+@interface MTEditableMathLabel() 
 
 @property (nonatomic) MTMathUILabel* label;
 @property (nonatomic) MTTapGestureRecognizer* tapGestureRecognizer;
@@ -834,33 +834,6 @@ static const unichar kMTUnicodeGreekCapitalEnd = 0x03A9;
     return NO;
 }
 
-#pragma mark - UITextInputTraits
-
-- (UITextAutocapitalizationType)autocapitalizationType
-{
-    return UITextAutocapitalizationTypeNone;
-}
-
-- (UITextAutocorrectionType)autocorrectionType
-{
-    return UITextAutocorrectionTypeNo;
-}
-
-- (UIReturnKeyType)returnKeyType
-{
-    return UIReturnKeyDefault;
-}
-
-- (UITextSpellCheckingType)spellCheckingType
-{
-    return UITextSpellCheckingTypeNo;
-}
-
-- (UIKeyboardType)keyboardType
-{
-    return UIKeyboardTypeASCIICapable;
-}
-
 
 #pragma mark - Hit Testing
 
@@ -915,120 +888,6 @@ static const unichar kMTUnicodeGreekCapitalEnd = 0x03A9;
 {
     // relayout the displaylist to clear highlights
     [self.label setNeedsLayout];
-}
-
-#pragma mark - UITextInput
-
-// These are blank just to get a UITextInput implementation, to fix the dictation button bug.
-// Proposed fix from: http://stackoverflow.com/questions/20980898/work-around-for-dictation-custom-text-view-bug
-
-@synthesize beginningOfDocument;
-@synthesize endOfDocument;
-@synthesize inputDelegate;
-@synthesize markedTextRange;
-@synthesize markedTextStyle;
-@synthesize selectedTextRange;
-@synthesize tokenizer;
-
-- (UITextWritingDirection)baseWritingDirectionForPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
-{
-    return UITextWritingDirectionLeftToRight;
-}
-
-- (CGRect)caretRectForPosition:(UITextPosition *)position
-{
-    return CGRectZero;
-}
-
-- (void)unmarkText
-{
-    
-}
-
-- (UITextRange *)characterRangeAtPoint:(CGPoint)point
-{
-    return nil;
-}
-- (UITextRange *)characterRangeByExtendingPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction
-{
-    return nil;
-}
-- (UITextPosition *)closestPositionToPoint:(CGPoint)point
-{
-    return nil;
-}
-- (UITextPosition *)closestPositionToPoint:(CGPoint)point withinRange:(UITextRange *)range
-{
-    return nil;
-}
-- (NSComparisonResult)comparePosition:(UITextPosition *)position toPosition:(UITextPosition *)other
-{
-    return NSOrderedSame;
-}
-- (void)dictationRecognitionFailed
-{
-}
-- (void)dictationRecordingDidEnd
-{
-}
-- (CGRect)firstRectForRange:(UITextRange *)range
-{
-    return CGRectZero;
-}
-
-- (CGRect)frameForDictationResultPlaceholder:(id)placeholder
-{
-    return CGRectZero;
-}
-- (void)insertDictationResult:(NSArray *)dictationResult
-{
-}
-- (id)insertDictationResultPlaceholder
-{
-    return nil;
-}
-
-- (NSInteger)offsetFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition
-{
-    return 0;
-}
-- (UITextPosition *)positionFromPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction offset:(NSInteger)offset
-{
-    return nil;
-}
-- (UITextPosition *)positionFromPosition:(UITextPosition *)position offset:(NSInteger)offset
-{
-    return nil;
-}
-
-- (UITextPosition *)positionWithinRange:(UITextRange *)range farthestInDirection:(UITextLayoutDirection)direction
-{
-    return nil;
-}
-- (void)removeDictationResultPlaceholder:(id)placeholder willInsertResult:(BOOL)willInsertResult
-{
-}
-- (void)replaceRange:(UITextRange *)range withText:(NSString *)text
-{
-}
-- (NSArray *)selectionRectsForRange:(UITextRange *)range
-{
-    return nil;
-}
-- (void)setBaseWritingDirection:(UITextWritingDirection)writingDirection forRange:(UITextRange *)range
-{
-}
-- (void)setMarkedText:(NSString *)markedText selectedRange:(NSRange)selectedRange
-{
-}
-
-- (NSString *)textInRange:(UITextRange *)range
-{
-    return nil;
-}
-- (UITextRange *)textRangeFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition
-{
-    return nil;
 }
 
 @end
