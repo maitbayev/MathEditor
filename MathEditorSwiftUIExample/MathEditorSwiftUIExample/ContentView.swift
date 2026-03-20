@@ -6,6 +6,8 @@ import SwiftUI
 struct ContentView: View {
   var body: some View {
     MathEditorView()
+      .background(Color.gray.opacity(0.1))
+      .frame(maxHeight: 100)
       .padding()
   }
 }

@@ -81,11 +81,6 @@
     
     self.mathList =  [MTMathList new];
 
-    // This value is `YES` by default.
-    // self.userInteractionEnabled = YES;
-    // TODO: do we need this?
-    self.autoresizesSubviews = YES;
-    
     // Create and set up the APLSimpleCoreTextView that will do the drawing.
     MTMathUILabel *label = [[MTMathUILabel alloc] initWithFrame:self.bounds];
     [self addSubview:label];
