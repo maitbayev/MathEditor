@@ -7,9 +7,9 @@
 
 #if TARGET_OS_IPHONE
 
-#import <objc/runtime.h>
 #import <Foundation/Foundation.h>
-#import  "MTEditableMathLabel.h"
+#import <objc/runtime.h>
+#import "MTEditableMathLabel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,44 +29,56 @@ NS_ASSUME_NONNULL_BEGIN
 //@synthesize selectedTextRange;
 //@synthesize tokenizer;
 
-- (nullable UITextRange *)selectedTextRange {
+- (nullable UITextRange *)selectedTextRange
+{
     return objc_getAssociatedObject(self, @selector(selectedTextRange));
 }
-- (void)setSelectedTextRange:(nullable UITextRange *)selectedTextRange {
+- (void)setSelectedTextRange:(nullable UITextRange *)selectedTextRange
+{
     objc_setAssociatedObject(self, @selector(selectedTextRange), selectedTextRange, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (nullable id<UITextInputDelegate>)inputDelegate {
+- (nullable id<UITextInputDelegate>)inputDelegate
+{
     id (^block)(void) = objc_getAssociatedObject(self, @selector(inputDelegate));
     return block ? block() : nil;
 }
 
-- (void)setInputDelegate:(nullable id<UITextInputDelegate>)inputDelegate {
+- (void)setInputDelegate:(nullable id<UITextInputDelegate>)inputDelegate
+{
     __weak id<UITextInputDelegate> weakDelegate = inputDelegate;
-    id (^block)(void) = ^{ return weakDelegate; };
+    id (^block)(void) = ^{
+      return weakDelegate;
+    };
     objc_setAssociatedObject(self, @selector(inputDelegate), block, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (nullable UITextRange *)markedTextRange {
+- (nullable UITextRange *)markedTextRange
+{
     return objc_getAssociatedObject(self, @selector(markedTextRange));
 }
 
-- (nullable NSDictionary *)markedTextStyle {
+- (nullable NSDictionary *)markedTextStyle
+{
     return objc_getAssociatedObject(self, @selector(markedTextStyle));
 }
-- (void)setMarkedTextStyle:(nullable NSDictionary *)markedTextStyle {
+- (void)setMarkedTextStyle:(nullable NSDictionary *)markedTextStyle
+{
     objc_setAssociatedObject(self, @selector(markedTextStyle), markedTextStyle, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (UITextPosition *)beginningOfDocument {
+- (UITextPosition *)beginningOfDocument
+{
     return objc_getAssociatedObject(self, @selector(beginningOfDocument));
 }
 
-- (UITextPosition *)endOfDocument {
+- (UITextPosition *)endOfDocument
+{
     return objc_getAssociatedObject(self, @selector(endOfDocument));
 }
 
-- (id<UITextInputTokenizer>)tokenizer {
+- (id<UITextInputTokenizer>)tokenizer
+{
     id<UITextInputTokenizer> tokenizer = objc_getAssociatedObject(self, @selector(tokenizer));
     if (!tokenizer) {
         tokenizer = [[UITextInputStringTokenizer alloc] initWithTextInput:self];
@@ -75,7 +87,8 @@ NS_ASSUME_NONNULL_BEGIN
     return tokenizer;
 }
 
-- (UITextWritingDirection)baseWritingDirectionForPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
+- (UITextWritingDirection)baseWritingDirectionForPosition:(UITextPosition *)position
+                                              inDirection:(UITextStorageDirection)direction
 {
     return UITextWritingDirectionLeftToRight;
 }
@@ -87,14 +100,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)unmarkText
 {
-    
 }
 
 - (nullable UITextRange *)characterRangeAtPoint:(CGPoint)point
 {
     return nil;
 }
-- (nullable UITextRange *)characterRangeByExtendingPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction
+- (nullable UITextRange *)characterRangeByExtendingPosition:(UITextPosition *)position
+                                                inDirection:(UITextLayoutDirection)direction
 {
     return nil;
 }
@@ -137,7 +150,9 @@ NS_ASSUME_NONNULL_BEGIN
 {
     return 0;
 }
-- (nullable UITextPosition *)positionFromPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction offset:(NSInteger)offset
+- (nullable UITextPosition *)positionFromPosition:(UITextPosition *)position
+                                      inDirection:(UITextLayoutDirection)direction
+                                           offset:(NSInteger)offset
 {
     return nil;
 }
@@ -146,7 +161,8 @@ NS_ASSUME_NONNULL_BEGIN
     return nil;
 }
 
-- (nullable UITextPosition *)positionWithinRange:(UITextRange *)range farthestInDirection:(UITextLayoutDirection)direction
+- (nullable UITextPosition *)positionWithinRange:(UITextRange *)range
+                             farthestInDirection:(UITextLayoutDirection)direction
 {
     return nil;
 }
