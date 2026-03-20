@@ -21,6 +21,10 @@ NS_ASSUME_NONNULL_BEGIN
     [self doLayout];
 }
 
+- (BOOL)isFlipped {
+    return YES;
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

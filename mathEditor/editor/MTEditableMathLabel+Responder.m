@@ -69,6 +69,21 @@ NS_ASSUME_NONNULL_BEGIN
     return val;
 }
 
+
+#if TARGET_OS_OSX
+
+- (void)keyDown:(NSEvent *)event {
+    // interpretKeyEvents feeds the event into the input system,
+    // which calls insertText: or deleteBackward: as appropriate.
+    [self interpretKeyEvents:@[event]];
+}
+
+- (void)deleteBackward:(nullable id)sender {
+    [self deleteBackward];
+}
+
+#endif // TARGET_OS_OSX
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -171,11 +171,17 @@ static NSInteger getCaretHeight() {
 #endif // TARGET_OS_IPHONE
 
 #if TARGET_OS_OSX
+
 - (void) layout {
     [super layout];
     [self doLayout];
 }
-#endif // TARGET_OS_IPHONE
+
+- (BOOL)isFlipped {
+  return YES;
+}
+
+#endif // TARGET_OS_OSX
 
 - (void) doLayout
 {
@@ -193,7 +199,6 @@ static NSInteger getCaretHeight() {
 {
     _blinker.hidden = !_blinker.hidden;
 }
-
 
 // UIView didMoveToSuperview override to set up blink timers after caret view created in superview.
 - (void)didMoveToSuperview
