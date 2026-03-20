@@ -38,7 +38,6 @@
 
 @end
 @implementation MTEditableMathLabel {
-    MTCaretView* _caretView;
     MTMathListIndex* _insertionIndex;
     CGAffineTransform _flipTransform;
     NSMutableArray* _indicesToHighlight;
@@ -836,20 +835,6 @@ static const unichar kMTUnicodeGreekCapitalEnd = 0x03A9;
     }
     return [self.label.displayList caretPositionForIndex:index];
 }
-
-#if TARGET_OS_IPHONE
-
-- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
-{
-    BOOL inside = [super pointInside:point withEvent:event];
-    if (inside) {
-        return YES;
-    }
-    // check if a point is in the caret view.
-    return [_caretView pointInside:[self convertPoint:point toView:_caretView] withEvent:event];
-}
-
-#endif // TARGET_OS_IPHONE
 
 #pragma mark - Highlighting
 
