@@ -162,27 +162,6 @@ static NSInteger getCaretHeight() {
     [self setNeedsLayout];
 }
 
-#if TARGET_OS_IPHONE
-- (void) layoutSubviews
-{
-    [super layoutSubviews];
-    [self doLayout];
-}
-#endif // TARGET_OS_IPHONE
-
-#if TARGET_OS_OSX
-
-- (void) layout {
-    [super layout];
-    [self doLayout];
-}
-
-- (BOOL)isFlipped {
-  return YES;
-}
-
-#endif // TARGET_OS_OSX
-
 - (void) doLayout
 {
     _blinker.frame = CGRectMake(0, 0, kCaretWidth * _scale, getCaretHeight() *_scale);
@@ -215,14 +194,6 @@ static NSInteger getCaretHeight() {
     }
 }
 
-#if TARGET_OS_OSX
-- (void)viewDidMoveToSuperview
-{
-    [super viewDidMoveToSuperview];
-    [self didMoveToSuperview];
-}
-#endif
-
 // Helper method to set an initial blink delay
 - (void)delayBlink
 {
@@ -254,6 +225,29 @@ static NSInteger getCaretHeight() {
         return [super pointInside:point withEvent:event];
     }
 }
-#endif
+
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    [self doLayout];
+}
+#endif // TARGET_OS_IPHONE
+
+#if TARGET_OS_OSX
+- (void)viewDidMoveToSuperview
+{
+    [super viewDidMoveToSuperview];
+    [self didMoveToSuperview];
+}
+
+- (void) layout {
+    [super layout];
+    [self doLayout];
+}
+
+- (BOOL)isFlipped {
+  return YES;
+}
+#endif // TARGET_OS_OSX
 
 @end
