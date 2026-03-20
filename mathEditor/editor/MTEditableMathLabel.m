@@ -21,6 +21,7 @@
 #import "MTTapGestureRecognizer.h"
 #import "MTMathList+Editing.h"
 #import "MTDisplay+Editing.h"
+#import "MTView/MTView+AutoLayout.h"
 
 #import "MTUnicode.h"
 #import "MTMathListBuilder.h"
@@ -76,12 +77,13 @@
     self.mathList =  [MTMathList new];
     
     self.userInteractionEnabled = YES;
+    // TODO: do we need this?
     self.autoresizesSubviews = YES;
     
     // Create and set up the APLSimpleCoreTextView that will do the drawing.
     MTMathUILabel *label = [[MTMathUILabel alloc] initWithFrame:self.bounds];
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self addSubview:label];
+    [label pinToSuperview];
     label.fontSize = 30;
     label.backgroundColor = self.backgroundColor;
     label.userInteractionEnabled = NO;
