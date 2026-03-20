@@ -26,9 +26,10 @@
     [self layoutSubtreeIfNeeded];
 }
 
-- (void)bringSubviewToFront:(NSView *)view {
+- (void)bringSubviewToFront:(NSView *)view
+{
     if (view.superview != self) {
-      return;
+        return;
     }
     [view removeFromSuperview];
     [self addSubview:view];

@@ -1,44 +1,53 @@
 // Copyright © 2025 Snap, Inc. All rights reserved.
 
-import SwiftUI
 import MathEditor
-
+import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-      MathEditorView()
-        .padding()
-    }
+  var body: some View {
+    MathEditorView()
+      .padding()
+  }
 }
 
 #Preview {
-    ContentView()
+  ContentView()
 }
 
 #if os(iOS)
-import MathKeyboard
+  import MathKeyboard
 
-struct MathEditorView : UIViewRepresentable {
-  typealias UIViewType = MTEditableMathLabel
-  
-  func makeUIView(context: Context) -> MTEditableMathLabel {
-    let mathLabel = MTEditableMathLabel()
-    mathLabel.backgroundColor = .clear
-    mathLabel.keyboard = MTMathKeyboardRootView.sharedInstance();
-    return mathLabel
+  struct MathEditorView: UIViewRepresentable {
+    typealias UIViewType = MTEditableMathLabel
+
+    func makeUIView(context: Context) -> MTEditableMathLabel {
+      let mathLabel = MTEditableMathLabel()
+      mathLabel.backgroundColor = .clear
+      mathLabel.keyboard = MTMathKeyboardRootView.sharedInstance()
+      return mathLabel
+    }
+
+    func updateUIView(_ uiView: MTEditableMathLabel, context: Context) {
+
+    }
   }
-  
-  func updateUIView(_ uiView: MTEditableMathLabel, context: Context) {
-    
-  }
-}
-#endif
+#endif  // os(iOS)
 
 #if os(macOS)
-struct MathEditorView: View {
-  var body: some View {
-    Text("MathEditor is not wired up for macOS in this example yet.")
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+  struct MathEditorView: NSViewRepresentable {
+    typealias UIViewType = MTEditableMathLabel
+
+    func makeNSView(context: Context) -> MTEditableMathLabel {
+      let mathLabel = MTEditableMathLabel()
+      mathLabel.backgroundColor = .clear
+      //    mathLabel.keyboard = MTMathKeyboardRootView.sharedInstance();
+      return mathLabel
+    }
+
+    func updateNSView(_ uiView: MTEditableMathLabel, context: Context) {
+
+    }
   }
-}
+
 #endif

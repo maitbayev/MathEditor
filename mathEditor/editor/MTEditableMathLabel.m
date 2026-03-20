@@ -8,8 +8,6 @@
 //  MIT license. See the LICENSE file for details.
 //
 
-//#if TARGET_OS_IPHONE
-
 #import <QuartzCore/QuartzCore.h>
 
 #import "MTEditableMathLabel.h"
@@ -895,5 +893,3 @@ static const unichar kMTUnicodeGreekCapitalEnd = 0x03A9;
 }
 
 @end
-
-//#endif
