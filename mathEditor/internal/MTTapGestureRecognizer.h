@@ -4,7 +4,7 @@
 //  Small cross-platform tap gesture abstraction.
 //
 
-#import "MTConfig.h"
+@import iosMath;
 
 #if TARGET_OS_IPHONE
 
