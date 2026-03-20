@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)layoutIfNeeded;
 
+- (void)bringSubviewToFront:(NSView *)view;
+
 #endif
 
 @end

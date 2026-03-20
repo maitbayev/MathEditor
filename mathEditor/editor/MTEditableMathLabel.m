@@ -8,7 +8,7 @@
 //  MIT license. See the LICENSE file for details.
 //
 
-#if TARGET_OS_IPHONE
+//#if TARGET_OS_IPHONE
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -28,7 +28,12 @@
 #import "MTUnicode.h"
 #import "MTMathListBuilder.h"
 
-@interface MTEditableMathLabel() 
+// TODO: move this method declaration to iosMath.
+@interface MTMathUILabel (SizeThatFits)
+- (CGSize)sizeThatFits:(CGSize)size;
+@end
+
+@interface MTEditableMathLabel()
 
 @property (nonatomic) MTMathUILabel* label;
 @property (nonatomic) MTTapGestureRecognizer* tapGestureRecognizer;
@@ -77,8 +82,9 @@
     // Create our text storage.
     
     self.mathList =  [MTMathList new];
-    
-    self.userInteractionEnabled = YES;
+
+    // This value is `YES` by default.
+    // self.userInteractionEnabled = YES;
     // TODO: do we need this?
     self.autoresizesSubviews = YES;
     
@@ -88,7 +94,10 @@
     [label pinToSuperview];
     label.fontSize = 30;
     label.backgroundColor = self.backgroundColor;
+
+    #if TARGET_OS_IPHONE
     label.userInteractionEnabled = NO;
+    #endif
     label.textAlignment = kMTTextAlignmentCenter;
     self.label = label;
      [self createCancelImage];
@@ -106,10 +115,22 @@
     self.mathList = [MTMathList new];
 }
 
+#if TARGET_OS_IPHONE
 -(void)layoutSubviews
 {
     [super layoutSubviews];
-    
+    [self doLayout];
+}
+#endif
+
+#if TARGET_OS_OSX
+- (void)layout {
+    [super layout];
+    [self doLayout];
+}
+#endif
+
+-(void)doLayout {
     CGRect frame = CGRectMake(self.frame.size.width - 55, (self.frame.size.height - 45)/2, 45, 45);
     self.cancelImage.frame = frame;
     
@@ -837,6 +858,8 @@ static const unichar kMTUnicodeGreekCapitalEnd = 0x03A9;
     return [self.label.displayList caretPositionForIndex:index];
 }
 
+#if TARGET_OS_IPHONE
+
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {
     BOOL inside = [super pointInside:point withEvent:event];
@@ -846,6 +869,8 @@ static const unichar kMTUnicodeGreekCapitalEnd = 0x03A9;
     // check if a point is in the caret view.
     return [_caretView pointInside:[self convertPoint:point toView:_caretView] withEvent:event];
 }
+
+#endif // TARGET_OS_IPHONE
 
 #pragma mark - Highlighting
 
@@ -871,4 +896,4 @@ static const unichar kMTUnicodeGreekCapitalEnd = 0x03A9;
 
 @end
 
-#endif
+//#endif
