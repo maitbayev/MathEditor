@@ -7,6 +7,7 @@
 #if TARGET_OS_IPHONE
 
 #import "MTCancelView.h"
+#import "MTTapGestureRecognizer.h"
 
 @interface MTCancelView ()
 
@@ -38,7 +39,7 @@
         ]];
 
         self.userInteractionEnabled = YES;
-        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:target action:action];
+        MTTapGestureRecognizer *tapRecognizer = [[MTTapGestureRecognizer alloc] initWithTarget:target action:action];
         [self addGestureRecognizer:tapRecognizer];
         self.hidden = YES;
     }

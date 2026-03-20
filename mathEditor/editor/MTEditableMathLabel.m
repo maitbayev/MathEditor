@@ -18,6 +18,7 @@
 #import "MTMathAtomFactory.h"
 #import "MTCancelView.h"
 #import "MTCaretView.h"
+#import "MTTapGestureRecognizer.h"
 #import "MTMathList+Editing.h"
 #import "MTDisplay+Editing.h"
 
@@ -27,7 +28,7 @@
 @interface MTEditableMathLabel() <UIGestureRecognizerDelegate, UITextInput>
 
 @property (nonatomic) MTMathUILabel* label;
-@property (nonatomic) UITapGestureRecognizer* tapGestureRecognizer;
+@property (nonatomic) MTTapGestureRecognizer* tapGestureRecognizer;
 
 @end
 
@@ -68,7 +69,7 @@
 - (void) initialize
 {
     // Add tap gesture recognizer to let the user enter editing mode.
-    self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    self.tapGestureRecognizer = [[MTTapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
     [self addGestureRecognizer:self.tapGestureRecognizer];
     self.tapGestureRecognizer.delegate = self;
     
@@ -249,7 +250,7 @@
 /**
  Our tap gesture recognizer selector that enters editing mode, or if already in editing mode, updates the text insertion point.
  */
-- (void)tap:(UITapGestureRecognizer *)tap
+- (void)tap:(MTTapGestureRecognizer *)tap
 {
     if (![self isFirstResponder]) {
         _insertionIndex = nil;
@@ -257,7 +258,7 @@
         [self startEditing];
     } else {
         // If already editing move the cursor and show handle
-        _insertionIndex = [self closestIndexToPoint:[tap locationInView:self]];
+        _insertionIndex = [self closestIndexToPoint:MTTapGestureLocationInView(tap, self)];
         if (_insertionIndex == nil) {
             _insertionIndex = [MTMathListIndex level0Index:self.mathList.atoms.count];
         }
