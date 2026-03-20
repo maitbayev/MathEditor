@@ -216,7 +216,7 @@
  */
 - (void)tap:(MTTapGestureRecognizer *)tap
 {
-    [self handleTapAtPoint:MTTapGestureLocationInView(tap, self)];
+    [self handleTapAtPoint:[tap locationInView:self]];
 }
 
 - (void)handleTapAtPoint:(CGPoint)tapPoint

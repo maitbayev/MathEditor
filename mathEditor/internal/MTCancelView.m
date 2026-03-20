@@ -25,10 +25,8 @@
     self = [super initWithFrame:CGRectZero];
     if (self) {
 #if TARGET_OS_IPHONE
-        UIImage *image = [UIImage systemImageNamed:@"xmark.circle"];
-        if (image != nil) {
-            image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        }
+        UIImage *image = [UIImage systemImageNamed:@"clear"];
+        image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _imageView = [[UIImageView alloc] initWithImage:image];
         _imageView.contentMode = UIViewContentModeScaleAspectFit;
         _imageView.tintColor = [MTColor secondaryLabelColor];
@@ -42,9 +40,6 @@
         [self addSubview:_imageView];
         [_imageView pinToSuperview];
 
-#if TARGET_OS_IPHONE
-        self.userInteractionEnabled = YES;
-#endif
         MTTapGestureRecognizer *tapRecognizer = [[MTTapGestureRecognizer alloc] initWithTarget:target action:action];
         [self addGestureRecognizer:tapRecognizer];
         self.hidden = YES;
