@@ -237,7 +237,7 @@
         if (_insertionIndex == nil) {
             _insertionIndex = [MTMathListIndex level0Index:self.mathList.atoms.count];
         }
-        [_caretView showHandle:NO];
+        [_caretView showHandle:YES];
         [self insertionPointChanged];
     }
 }
@@ -246,12 +246,13 @@
 {
     self.mathList = [MTMathList new];
     [self insertionPointChanged];
+    [_caretView showHandle:NO];
 }
 
 - (void)moveCaretToPoint:(CGPoint)point
 {
     _insertionIndex = [self closestIndexToPoint:point];
-    [_caretView showHandle:NO];
+//    [_caretView showHandle:NO];
     [self insertionPointChanged];
 }
 

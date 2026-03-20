@@ -11,6 +11,7 @@
 #import "MTCaretView.h"
 #import "MTEditableMathLabel.h"
 #import "MTConfig.h"
+#import "MTView/MTView+Layout.h"
 
 static const NSTimeInterval InitialBlinkDelay = 0.7;
 static const NSTimeInterval BlinkRate = 0.5;
@@ -133,11 +134,11 @@ static NSInteger getCaretHeight() {
 {
     self = [super initWithFrame:CGRectZero];
     if (self) {
-#if TARGET_OS_IPHONE
         _scale = label.fontSize / kCaretFontSize;
-        _blinker = [[UIView alloc] initWithFrame:CGRectZero];
+        _blinker = [[MTView alloc] initWithFrame:CGRectZero];
         _blinker.backgroundColor = self.caretColor;
         [self addSubview:_blinker];
+#if TARGET_OS_IPHONE
         _handle = [[MTCaretHandle alloc] initWithFrame:CGRectMake(0, 0, kCaretHandleWidth * _scale, kCaretHandleHeight *_scale)];
         _handle.backgroundColor = [MTColor clearColor];
         _handle.hidden = YES;
@@ -158,12 +159,25 @@ static NSInteger getCaretHeight() {
 - (void) setFontSize:(CGFloat)fontSize
 {
     _scale = fontSize / kCaretFontSize;
-#if TARGET_OS_IPHONE
     [self setNeedsLayout];
-#endif
 }
 
+#if TARGET_OS_IPHONE
 - (void) layoutSubviews
+{
+    [super layoutSubviews];
+    [self doLayout];
+}
+#endif // TARGET_OS_IPHONE
+
+#if TARGET_OS_OSX
+- (void) layout {
+    [super layout];
+    [self doLayout];
+}
+#endif // TARGET_OS_IPHONE
+
+- (void) doLayout
 {
     _blinker.frame = CGRectMake(0, 0, kCaretWidth * _scale, getCaretHeight() *_scale);
     _handle.frame = CGRectMake(-(kCaretHandleWidth - kCaretWidth) * _scale/2, (getCaretHeight() + kCaretHandleDescent) *_scale, kCaretHandleWidth *_scale, kCaretHandleHeight *_scale);
@@ -196,6 +210,13 @@ static NSInteger getCaretHeight() {
     }
 }
 
+#if TARGET_OS_OSX
+- (void)viewDidMoveToSuperview
+{
+    [super viewDidMoveToSuperview];
+    [self didMoveToSuperview];
+}
+#endif
 
 // Helper method to set an initial blink delay
 - (void)delayBlink
