@@ -43,6 +43,8 @@ struct ContentView: View {
     func makeNSView(context: Context) -> MTEditableMathLabel {
       let mathLabel = MTEditableMathLabel()
       mathLabel.backgroundColor = .clear
+      mathLabel.caretColor = NSColor.labelColor
+      mathLabel.textColor = NSColor.labelColor
       //    mathLabel.keyboard = MTMathKeyboardRootView.sharedInstance();
       return mathLabel
     }

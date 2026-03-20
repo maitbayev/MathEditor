@@ -12,6 +12,7 @@
 #import "MTEditableMathLabel.h"
 #import "MTConfig.h"
 #import "MTView/MTView+Layout.h"
+#import "NSBezierPath+addLineToPoint.h"
 
 static const NSTimeInterval InitialBlinkDelay = 0.7;
 static const NSTimeInterval BlinkRate = 0.5;
@@ -35,10 +36,8 @@ static NSInteger getCaretHeight() {
 
 @end
 
-#if TARGET_OS_IPHONE
-
 @implementation MTCaretHandle {
-    UIBezierPath* _path;
+    MTBezierPath* _path;
     MTColor* _color;
 }
 
@@ -51,9 +50,9 @@ static NSInteger getCaretHeight() {
     return self;
 }
 
-- (UIBezierPath*) createHandlePath
+- (MTBezierPath*) createHandlePath
 {
-    UIBezierPath* path = [UIBezierPath bezierPath];
+    MTBezierPath* path = [MTBezierPath bezierPath];
     CGSize size = self.bounds.size;
     [path moveToPoint:CGPointMake(size.width/2, 0)];
     [path addLineToPoint:CGPointMake(size.width, size.height/4)];
@@ -64,11 +63,6 @@ static NSInteger getCaretHeight() {
     return path;
 }
 
-- (void) layoutSubviews
-{
-    _path = [self createHandlePath];
-}
-
 - (void)drawRect:(CGRect)rect
 {
     [_color setFill];
@@ -77,7 +71,15 @@ static NSInteger getCaretHeight() {
 
 - (void) setColor:(MTColor*) color
 {
-    _color = [color colorWithAlphaComponent:0.6];
+    _color = [color colorWithAlphaComponent:0.7];
+}
+
+#if TARGET_OS_IPHONE
+
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    _path = [self createHandlePath];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -113,9 +115,23 @@ static NSInteger getCaretHeight() {
     return CGRectContainsPoint(hitArea, point);
 }
 
+#endif
+
+
+#if TARGET_OS_OSX
+- (void) layout
+{
+    [super layout];
+    _path = [self createHandlePath];
+}
+
+- (BOOL) isFlipped {
+    return YES;
+}
+#endif // TARGET_OS_OSX
+
 @end
 
-#endif
 
 @interface MTCaretView ()
 
@@ -138,13 +154,11 @@ static NSInteger getCaretHeight() {
         _blinker = [[MTView alloc] initWithFrame:CGRectZero];
         _blinker.backgroundColor = self.caretColor;
         [self addSubview:_blinker];
-#if TARGET_OS_IPHONE
         _handle = [[MTCaretHandle alloc] initWithFrame:CGRectMake(0, 0, kCaretHandleWidth * _scale, kCaretHandleHeight *_scale)];
         _handle.backgroundColor = [MTColor clearColor];
         _handle.hidden = YES;
         _handle.label = label;
         [self addSubview:_handle];
-#endif
     }
     return self;
 }
@@ -211,9 +225,7 @@ static NSInteger getCaretHeight() {
 - (void)setCaretColor:(MTColor *)caretColor
 {
     _caretColor = caretColor;
-#if TARGET_OS_IPHONE
     _handle.color = caretColor;
-#endif
     _blinker.backgroundColor = self.caretColor;
 }
 

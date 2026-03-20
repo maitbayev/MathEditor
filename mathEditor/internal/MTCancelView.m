@@ -25,7 +25,7 @@
     self = [super initWithFrame:CGRectZero];
     if (self) {
 #if TARGET_OS_IPHONE
-        UIImage *image = [UIImage systemImageNamed:@"clear"];
+        UIImage *image = [UIImage systemImageNamed:@"xmark.circle"];
         image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _imageView = [[UIImageView alloc] initWithImage:image];
         _imageView.contentMode = UIViewContentModeScaleAspectFit;
