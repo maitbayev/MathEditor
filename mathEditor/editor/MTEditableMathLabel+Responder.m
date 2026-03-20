@@ -8,21 +8,24 @@
 #if TARGET_OS_IPHONE
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "MTConfig.h"
 #import "MTEditableMathLabel.h"
+#import "MTView+FirstResponder.h"
+// #import "AppKit/AppKit.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MTEditableMathLabel (UIResponder)
-
+@interface MTEditableMathLabel (Responder)
 @end
 
-@implementation MTEditableMathLabel (UIResponder)
+@implementation MTEditableMathLabel (Responder)
 
+#if TARGET_OS_IPHONE
 - (nullable UIView *)inputView
 {
     return self.keyboard;
 }
+#endif // TARGET_OS_IPHONE
 
 /**
  UIResponder protocol override.
