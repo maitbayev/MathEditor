@@ -113,21 +113,6 @@
     self.mathList = [MTMathList new];
 }
 
-#if TARGET_OS_IPHONE
--(void)layoutSubviews
-{
-    [super layoutSubviews];
-    [self doLayout];
-}
-#endif
-
-#if TARGET_OS_OSX
-- (void)layout {
-    [super layout];
-    [self doLayout];
-}
-#endif
-
 -(void)doLayout {
     CGRect frame = CGRectMake(self.frame.size.width - 55, (self.frame.size.height - 45)/2, 45, 45);
     self.cancelImage.frame = frame;

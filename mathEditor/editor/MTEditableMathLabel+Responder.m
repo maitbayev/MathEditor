@@ -5,13 +5,10 @@
 //  Created by Madiyar Aitbayev on 20/03/2026.
 //
 
-#if TARGET_OS_IPHONE
-
 #import <Foundation/Foundation.h>
 #import "MTConfig.h"
 #import "MTEditableMathLabel.h"
 #import "MTView/MTView+FirstResponder.h"
-// #import "AppKit/AppKit.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,11 +18,21 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation MTEditableMathLabel (Responder)
 
 #if TARGET_OS_IPHONE
+
 - (nullable UIView *)inputView
 {
     return self.keyboard;
 }
+
 #endif // TARGET_OS_IPHONE
+
+/**
+ NSResponder protocol override.
+ Our view can become first responder to receive user text input.
+ */
+- (BOOL)acceptsFirstResponder {
+    return [self canBecomeFirstResponder];
+}
 
 /**
  UIResponder protocol override.
@@ -66,4 +73,3 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
-#endif
