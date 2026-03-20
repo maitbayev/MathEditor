@@ -36,11 +36,15 @@ NS_ASSUME_NONNULL_BEGIN
     objc_setAssociatedObject(self, @selector(selectedTextRange), selectedTextRange, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (id<UITextInputDelegate>)inputDelegate {
-    return objc_getAssociatedObject(self, @selector(inputDelegate));
+- (nullable id<UITextInputDelegate>)inputDelegate {
+    id (^block)(void) = objc_getAssociatedObject(self, @selector(inputDelegate));
+    return block ? block() : nil;
 }
-- (void)setInputDelegate:(id<UITextInputDelegate>)inputDelegate {
-    objc_setAssociatedObject(self, @selector(inputDelegate), inputDelegate, OBJC_ASSOCIATION_ASSIGN);
+
+- (void)setInputDelegate:(nullable id<UITextInputDelegate>)inputDelegate {
+    __weak id<UITextInputDelegate> weakDelegate = inputDelegate;
+    id (^block)(void) = ^{ return weakDelegate; };
+    objc_setAssociatedObject(self, @selector(inputDelegate), block, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 - (nullable UITextRange *)markedTextRange {
