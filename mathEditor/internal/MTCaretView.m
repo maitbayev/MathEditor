@@ -84,11 +84,14 @@ static NSInteger getCaretHeight() {
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    _color = [_color colorWithAlphaComponent:1.0];
+    [self setNeedsDisplay];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
+    _color = [_color colorWithAlphaComponent:0.6];
+    [self setNeedsDisplay];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -104,7 +107,8 @@ static NSInteger getCaretHeight() {
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
+    _color = [_color colorWithAlphaComponent:0.6];
+    [self setNeedsDisplay];
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
