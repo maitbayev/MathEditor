@@ -8,8 +8,6 @@
 //  MIT license. See the LICENSE file for details.
 //
 
-#if TARGET_OS_IPHONE
-
 #import "MTCaretView.h"
 #import "MTEditableMathLabel.h"
 #import "MTConfig.h"
@@ -35,6 +33,8 @@ static NSInteger getCaretHeight() {
 @property (nonatomic, weak) MTEditableMathLabel* label;
 
 @end
+
+#if TARGET_OS_IPHONE
 
 @implementation MTCaretHandle {
     UIBezierPath* _path;
@@ -114,6 +114,8 @@ static NSInteger getCaretHeight() {
 
 @end
 
+#endif
+
 @interface MTCaretView ()
 
 @property (nonatomic) NSTimer *blinkTimer;
@@ -122,7 +124,7 @@ static NSInteger getCaretHeight() {
 
 
 @implementation MTCaretView {
-    UIView *_blinker;
+    MTView *_blinker;
     MTCaretHandle *_handle;
     CGFloat _scale;
 }
@@ -131,6 +133,7 @@ static NSInteger getCaretHeight() {
 {
     self = [super initWithFrame:CGRectZero];
     if (self) {
+#if TARGET_OS_IPHONE
         _scale = label.fontSize / kCaretFontSize;
         _blinker = [[UIView alloc] initWithFrame:CGRectZero];
         _blinker.backgroundColor = self.caretColor;
@@ -140,6 +143,7 @@ static NSInteger getCaretHeight() {
         _handle.hidden = YES;
         _handle.label = label;
         [self addSubview:_handle];
+#endif
     }
     return self;
 }
@@ -154,7 +158,9 @@ static NSInteger getCaretHeight() {
 - (void) setFontSize:(CGFloat)fontSize
 {
     _scale = fontSize / kCaretFontSize;
+#if TARGET_OS_IPHONE
     [self setNeedsLayout];
+#endif
 }
 
 - (void) layoutSubviews
@@ -208,10 +214,13 @@ static NSInteger getCaretHeight() {
 - (void)setCaretColor:(MTColor *)caretColor
 {
     _caretColor = caretColor;
+#if TARGET_OS_IPHONE
     _handle.color = caretColor;
+#endif
     _blinker.backgroundColor = self.caretColor;
 }
 
+#if TARGET_OS_IPHONE
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event{
     if (!_handle.hidden) {
         return [_handle pointInside:[self convertPoint:point toView:_handle] withEvent:event];
@@ -219,8 +228,6 @@ static NSInteger getCaretHeight() {
         return [super pointInside:point withEvent:event];
     }
 }
-
+#endif
 
 @end
-
-#endif
