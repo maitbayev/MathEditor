@@ -6,7 +6,6 @@ import SwiftUI
 struct ContentView: View {
   var body: some View {
     MathEditorView()
-      .background(Color.gray.opacity(0.1))
       .frame(maxHeight: 100)
       .padding()
   }
@@ -38,18 +37,29 @@ struct ContentView: View {
 #if os(macOS)
 
   struct MathEditorView: NSViewRepresentable {
-    typealias UIViewType = MTEditableMathLabel
+    typealias UIViewType = NSView
 
-    func makeNSView(context: Context) -> MTEditableMathLabel {
+    func makeNSView(context: Context) -> NSView {
       let mathLabel = MTEditableMathLabel()
       mathLabel.backgroundColor = .clear
       mathLabel.caretColor = NSColor.labelColor
       mathLabel.textColor = NSColor.labelColor
       //    mathLabel.keyboard = MTMathKeyboardRootView.sharedInstance();
-      return mathLabel
+
+      let wrapper = NSView()
+      wrapper.addSubview(mathLabel)
+      mathLabel.translatesAutoresizingMaskIntoConstraints = false
+      NSLayoutConstraint.activate([
+        mathLabel.topAnchor.constraint(equalTo: wrapper.topAnchor),
+        mathLabel.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor),
+        mathLabel.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor),
+        mathLabel.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor, constant: -44),
+      ])
+      wrapper.backgroundColor = .clear
+      return wrapper
     }
 
-    func updateNSView(_ uiView: MTEditableMathLabel, context: Context) {
+    func updateNSView(_ nsView: NSView, context: Context) {
 
     }
   }

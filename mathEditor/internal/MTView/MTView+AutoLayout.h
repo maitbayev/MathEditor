@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)pinToSuperview;
 
+- (void)pinToSuperviewWithTop:(CGFloat)top leading:(CGFloat)leading bottom:(CGFloat)bottom trailing:(CGFloat)trailing;
+
 @end
 
 NS_ASSUME_NONNULL_END

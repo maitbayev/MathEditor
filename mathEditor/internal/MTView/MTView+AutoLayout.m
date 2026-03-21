@@ -12,13 +12,20 @@
 
 - (void)pinToSuperview
 {
+    [self pinToSuperviewWithTop:0 leading:0 bottom:0 trailing:0];
+}
+
+- (void)pinToSuperviewWithTop:(CGFloat)top leading:(CGFloat)leading bottom:(CGFloat)bottom trailing:(CGFloat)trailing
+{
     MTView *superview = self.superview;
+    if (!superview)
+        return;
     self.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-        [self.leadingAnchor constraintEqualToAnchor:superview.leadingAnchor],
-        [self.trailingAnchor constraintEqualToAnchor:superview.trailingAnchor],
-        [self.topAnchor constraintEqualToAnchor:superview.topAnchor],
-        [self.bottomAnchor constraintEqualToAnchor:superview.bottomAnchor]
+        [self.topAnchor constraintEqualToAnchor:superview.topAnchor constant:top],
+        [self.leadingAnchor constraintEqualToAnchor:superview.leadingAnchor constant:leading],
+        [self.trailingAnchor constraintEqualToAnchor:superview.trailingAnchor constant:-trailing],
+        [self.bottomAnchor constraintEqualToAnchor:superview.bottomAnchor constant:-bottom]
     ]];
 }
 
