@@ -31,15 +31,30 @@ static NSInteger const DEFAULT_KEYBOARD = 0;
     
 }
 
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
 // Keyboard should be singleton
 +(instancetype)sharedInstance {
     static MTMathKeyboardRootView *instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        
-        NSBundle* bundle = [self getMathKeyboardResourcesBundle];
-        instance = [bundle loadNibNamed:@"MTMathKeyboardRootView" owner:nil options:nil][0];
-        
+        instance = [[self alloc] initWithFrame:CGRectMake(0, 0, 320, 225)];
     });
     
     return instance;
@@ -51,12 +66,62 @@ static NSInteger const DEFAULT_KEYBOARD = 0;
     return SWIFTPM_MODULE_BUNDLE;
 }
 
--(void)awakeFromNib
+- (UIButton *)buildTabButtonWithTag:(NSInteger)tag
+                           normalImage:(NSString *)normalImageName
+                         selectedImage:(NSString *)selectedImageName
 {
-    [super awakeFromNib];
-    // initialize all keyboards first
-    NSBundle* bundle = [MTMathKeyboardRootView getMathKeyboardResourcesBundle];
+    NSBundle *bundle = [MTMathKeyboardRootView getMathKeyboardResourcesBundle];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.tag = tag;
+    button.translatesAutoresizingMaskIntoConstraints = NO;
+    button.backgroundColor = [UIColor colorWithWhite:0.7686 alpha:1.0];
+    [button setImage:[UIImage imageNamed:normalImageName inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
+    [button setImage:[UIImage imageNamed:selectedImageName inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateSelected];
+    [button addTarget:self action:@selector(switchTabs:) forControlEvents:UIControlEventTouchUpInside];
+    return button;
+}
 
+- (void)setupStaticLayout
+{
+    self.backgroundColor = [UIColor whiteColor];
+    self.contentMode = UIViewContentModeScaleAspectFill;
+
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectZero];
+    contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    contentView.backgroundColor = [UIColor whiteColor];
+    contentView.contentMode = UIViewContentModeScaleAspectFill;
+    [self addSubview:contentView];
+    _contentView = contentView;
+
+    _numbersTab = [self buildTabButtonWithTag:0 normalImage:@"Numbers Symbol wbg" selectedImage:@"Number Symbol"];
+    _operationsTab = [self buildTabButtonWithTag:1 normalImage:@"Operations Symbol wbg" selectedImage:@"Operations Symbol"];
+    _functionsTab = [self buildTabButtonWithTag:2 normalImage:@"Functions Symbol wbg" selectedImage:@"Functions Symbol"];
+    _lettersTab = [self buildTabButtonWithTag:3 normalImage:@"Letter Symbol wbg" selectedImage:@"Letter Symbol"];
+
+    [self addSubview:_numbersTab];
+    [self addSubview:_operationsTab];
+    [self addSubview:_functionsTab];
+    [self addSubview:_lettersTab];
+
+    NSDictionary *views = @{
+        @"contentView": contentView,
+        @"numbersTab": _numbersTab,
+        @"operationsTab": _operationsTab,
+        @"functionsTab": _functionsTab,
+        @"lettersTab": _lettersTab,
+    };
+
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[numbersTab(==operationsTab)][operationsTab(==functionsTab)][functionsTab(==lettersTab)][lettersTab]|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[numbersTab(45)][contentView]|" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[operationsTab(==numbersTab)]" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[functionsTab(==numbersTab)]" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[lettersTab(==numbersTab)]" options:0 metrics:nil views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView]|" options:0 metrics:nil views:views]];
+}
+
+- (void)setupKeyboards
+{
+    NSBundle* bundle = [MTMathKeyboardRootView getMathKeyboardResourcesBundle];
     _tab1Keyboard = (MTKeyboard *)[[UINib nibWithNibName:@"MTKeyboard" bundle:bundle] instantiateWithOwner:self options:nil][0];
     _tab2Keyboard = (MTKeyboard *)[[UINib nibWithNibName:@"MTKeyboardTab2" bundle:bundle] instantiateWithOwner:self options:nil][0];
     _tab3Keyboard = (MTKeyboard *)[[UINib nibWithNibName:@"MTKeyboardTab3" bundle:bundle] instantiateWithOwner:self options:nil][0];
@@ -69,7 +134,12 @@ static NSInteger const DEFAULT_KEYBOARD = 0;
     for (MTKeyboard *keyboard in _keyboards) {
         [self addFullSizeView:keyboard to:_contentView];
     }
+}
 
+- (void)commonInit
+{
+    [self setupStaticLayout];
+    [self setupKeyboards];
     [self switchKeyboard:DEFAULT_KEYBOARD];
 }
 
