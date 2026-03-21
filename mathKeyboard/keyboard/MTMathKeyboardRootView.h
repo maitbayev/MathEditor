@@ -18,11 +18,11 @@
 @interface MTMathKeyboardRootView : UIView<MTMathKeyboard>
 
 - (IBAction)switchTabs:(UIButton *)sender;
-@property (weak, nonatomic) IBOutlet UIView *contentView;
-@property (weak, nonatomic) IBOutlet UIButton *numbersTab;
-@property (weak, nonatomic) IBOutlet UIButton *lettersTab;
-@property (weak, nonatomic) IBOutlet UIButton *functionsTab;
-@property (weak, nonatomic) IBOutlet UIButton *operationsTab;
+@property (strong, nonatomic) IBOutlet UIView *contentView;
+@property (strong, nonatomic) IBOutlet UIButton *numbersTab;
+@property (strong, nonatomic) IBOutlet UIButton *lettersTab;
+@property (strong, nonatomic) IBOutlet UIButton *functionsTab;
+@property (strong, nonatomic) IBOutlet UIButton *operationsTab;
 
 - (void) switchToDefaultTab;
 
