@@ -87,7 +87,7 @@
     #endif
     label.textAlignment = kMTTextAlignmentCenter;
     self.label = label;
-     [self createCancelImage];
+    // [self createCancelImage];
     CGAffineTransform transform = CGAffineTransformMakeTranslation(0, self.bounds.size.height);
     _flipTransform = CGAffineTransformConcat(CGAffineTransformMakeScale(1.0, -1.0), transform);
 
@@ -230,7 +230,7 @@
         if (_insertionIndex == nil) {
             _insertionIndex = [MTMathListIndex level0Index:self.mathList.atoms.count];
         }
-        [_caretView showHandle:YES];
+        [_caretView showHandle:NO];
         [self insertionPointChanged];
     }
 }
