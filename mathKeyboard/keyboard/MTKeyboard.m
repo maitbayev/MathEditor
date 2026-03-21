@@ -19,8 +19,7 @@
 @property BOOL isLowerCase;
 @property (nonatomic) MTKeyboardLayout layout;
 @property (nonatomic) NSArray<NSDictionary *> *layoutButtons;
-@property (nonatomic) NSUInteger rowCount;
-@property (nonatomic) NSUInteger columnCount;
+@property (nonatomic) UIImageView *backgroundView;
 
 @end
 
@@ -95,12 +94,11 @@
 
 - (UIButton *)makeButtonWithTitle:(NSString *)title image:(NSString *)imageName action:(SEL)action
 {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.translatesAutoresizingMaskIntoConstraints = YES;
-    button.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1];
-    button.layer.cornerRadius = 4.0;
+    button.backgroundColor = [UIColor clearColor];
     button.titleLabel.font = [UIFont systemFontOfSize:22 weight:UIFontWeightRegular];
-    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     if (title.length > 0) {
         [button setTitle:title forState:UIControlStateNormal];
     }
@@ -116,11 +114,12 @@
 
 - (void)addButtonSpec:(NSMutableArray<NSDictionary *> *)specs
                button:(UIButton *)button
-                  row:(NSUInteger)row
-               column:(NSUInteger)column
-              colSpan:(NSUInteger)colSpan
+                    x:(CGFloat)x
+                    y:(CGFloat)y
+                width:(CGFloat)width
+               height:(CGFloat)height
 {
-    [specs addObject:@{@"button": button, @"row": @(row), @"column": @(column), @"colSpan": @(MAX((NSUInteger)1, colSpan))}];
+    [specs addObject:@{@"button": button, @"x": @(x), @"y": @(y), @"width": @(width), @"height": @(height)}];
 }
 
 - (void)setupProgrammaticKeyboard
@@ -134,150 +133,129 @@
     NSMutableArray<UIButton *> *letters = [NSMutableArray array];
     NSMutableArray<UIButton *> *greekLetters = [NSMutableArray array];
 
-    self.rowCount = 4;
-    self.columnCount = 6;
+    NSString *backgroundImageName = @"Numbers Keyboard";
     switch (self.layout) {
         case MTKeyboardLayoutNumbers: {
-            NSArray *rows = @[
-                @[@"1",@"2",@"3",@"4",@"5",@"6"],
-                @[@"7",@"8",@"9",@".",@"0",@"="],
-                @[@"+",@"-",@"×",@"÷",@"x",@"y"],
+            NSArray *items = @[
+                @[@"x", @0, @0, @50, @45], @[@"7", @50, @0, @49, @45], @[@"8", @99, @0, @50, @45], @[@"9", @149, @0, @50, @45], @[@"÷", @199, @0, @49, @45],
+                @[@"y", @0, @45, @50, @45], @[@"4", @50, @45, @49, @45], @[@"5", @99, @45, @50, @45], @[@"6", @149, @45, @50, @45], @[@"×", @199, @45, @49, @45],
+                @[@"Fraction", @0, @90, @50, @45], @[@"1", @50, @90, @49, @45], @[@"2", @99, @90, @50, @45], @[@"3", @149, @90, @50, @45], @[@"-", @199, @90, @49, @45],
+                @[@"Exponent", @0, @135, @50, @45], @[@"0", @50, @135, @49, @45], @[@".", @99, @135, @50, @45], @[@"=", @149, @135, @50, @45], @[@"+", @199, @135, @49, @45],
             ];
-            for (NSUInteger r = 0; r < rows.count; r++) {
-                NSArray *row = rows[r];
-                for (NSUInteger c = 0; c < row.count; c++) {
-                    NSString *title = row[c];
-                    UIButton *button = [self makeButtonWithTitle:title image:nil action:@selector(keyPressed:)];
-                    [self addButtonSpec:specs button:button row:r column:c colSpan:1];
-                    if ([@"0123456789." containsString:title]) { [numbers addObject:button]; }
-                    if ([title isEqualToString:@"x"] || [title isEqualToString:@"y"]) { [variables addObject:button]; }
-                    if ([@[@"+",@"-",@"×",@"÷"] containsObject:title]) { [operators addObject:button]; }
-                    if ([@[@"="] containsObject:title]) { [relations addObject:button]; self.equalsButton = button; }
+            for (NSArray *item in items) {
+                NSString *token = item[0];
+                UIButton *button = nil;
+                if ([token isEqualToString:@"Fraction"]) {
+                    button = [self makeButtonWithTitle:nil image:@"Fraction" action:@selector(fractionPressed:)];
+                    self.fractionButton = button;
+                } else if ([token isEqualToString:@"Exponent"]) {
+                    button = [self makeButtonWithTitle:nil image:@"Exponent" action:@selector(exponentPressed:)];
+                    self.exponentButton = button;
+                } else {
+                    button = [self makeButtonWithTitle:token image:nil action:@selector(keyPressed:)];
                 }
+                [self addButtonSpec:specs button:button x:[item[1] floatValue] y:[item[2] floatValue] width:[item[3] floatValue] height:[item[4] floatValue]];
+                if ([@"0123456789." containsString:token]) { [numbers addObject:button]; }
+                if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"]) { [variables addObject:button]; }
+                if ([@[@"+",@"-",@"×",@"÷"] containsObject:token]) { [operators addObject:button]; }
+                if ([token isEqualToString:@"="]) { self.equalsButton = button; [relations addObject:button]; }
             }
-            self.fractionButton = [self makeButtonWithTitle:nil image:@"Fraction" action:@selector(fractionPressed:)];
-            self.exponentButton = [self makeButtonWithTitle:nil image:@"Exponent" action:@selector(exponentPressed:)];
             UIButton *backspace = [self makeButtonWithTitle:nil image:@"Backspace" action:@selector(backspacePressed:)];
             UIButton *dismiss = [self makeButtonWithTitle:nil image:@"Keyboard Down" action:@selector(dismissPressed:)];
             UIButton *enter = [self makeButtonWithTitle:@"Enter" image:nil action:@selector(enterPressed:)];
-            [self addButtonSpec:specs button:self.fractionButton row:3 column:0 colSpan:1];
-            [self addButtonSpec:specs button:self.exponentButton row:3 column:1 colSpan:1];
-            [self addButtonSpec:specs button:backspace row:3 column:2 colSpan:1];
-            [self addButtonSpec:specs button:dismiss row:3 column:3 colSpan:1];
-            [self addButtonSpec:specs button:enter row:3 column:4 colSpan:2];
+            [self addButtonSpec:specs button:backspace x:248 y:0 width:72 height:45];
+            [self addButtonSpec:specs button:enter x:248 y:45 width:72 height:90];
+            [self addButtonSpec:specs button:dismiss x:248 y:135 width:72 height:45];
             break;
         }
         case MTKeyboardLayoutOperations: {
-            NSArray *rows = @[
-                @[@"{",@"}",@"[",@"]",@"(",@")"],
-                @[@"<",@">",@"≤",@"≥",@"!",@"%"],
-                @[@",",@":",@"∞",@"x",@"y",@"Enter"],
+            backgroundImageName = @"Operations Keyboard";
+            NSArray *items = @[
+                @[@"x", @0, @0, @50, @45], @[@"(", @50, @0, @50, @45], @[@")", @100, @0, @50, @45], @[@"<", @150, @0, @49, @45], @[@">", @199, @0, @50, @45],
+                @[@"y", @0, @45, @50, @45], @[@"[", @50, @45, @50, @45], @[@"]", @100, @45, @50, @45], @[@"≤", @150, @45, @49, @45], @[@"≥", @199, @45, @50, @45],
+                @[@"Fraction", @0, @90, @50, @45], @[@"{", @50, @90, @50, @45], @[@"}", @100, @90, @50, @45], @[@"ABS", @150, @90, @49, @45], @[@"%", @199, @90, @50, @45],
+                @[@"Exponent", @0, @135, @50, @45], @[@"!", @50, @135, @50, @45], @[@"∞", @100, @135, @50, @45], @[@":", @150, @135, @49, @45], @[@",", @199, @135, @50, @45],
             ];
-            for (NSUInteger r = 0; r < rows.count; r++) {
-                NSArray *row = rows[r];
-                for (NSUInteger c = 0; c < row.count; c++) {
-                    NSString *title = row[c];
-                    SEL action = [title isEqualToString:@"Enter"] ? @selector(enterPressed:) : @selector(keyPressed:);
-                    UIButton *button = [self makeButtonWithTitle:title image:nil action:action];
-                    [self addButtonSpec:specs button:button row:r column:c colSpan:1];
-                    if ([title isEqualToString:@"x"] || [title isEqualToString:@"y"]) { [variables addObject:button]; }
-                    if ([@[@"<",@">",@"≤",@"≥"] containsObject:title]) { [relations addObject:button]; }
-                }
+            for (NSArray *item in items) {
+                NSString *token = item[0];
+                UIButton *button = nil;
+                if ([token isEqualToString:@"Fraction"]) { button = [self makeButtonWithTitle:nil image:@"Fraction" action:@selector(fractionPressed:)]; self.fractionButton = button; }
+                else if ([token isEqualToString:@"Exponent"]) { button = [self makeButtonWithTitle:nil image:@"Exponent" action:@selector(exponentPressed:)]; self.exponentButton = button; }
+                else if ([token isEqualToString:@"ABS"]) { button = [self makeButtonWithTitle:@"|.|" image:nil action:@selector(absValuePressed:)]; }
+                else { button = [self makeButtonWithTitle:token image:nil action:@selector(keyPressed:)]; }
+                [self addButtonSpec:specs button:button x:[item[1] floatValue] y:[item[2] floatValue] width:[item[3] floatValue] height:[item[4] floatValue]];
+                if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"]) { [variables addObject:button]; }
+                if ([@[@"<",@">",@"≤",@"≥"] containsObject:token]) { [relations addObject:button]; }
             }
-            self.fractionButton = [self makeButtonWithTitle:nil image:@"Fraction" action:@selector(fractionPressed:)];
-            self.exponentButton = [self makeButtonWithTitle:nil image:@"Exponent" action:@selector(exponentPressed:)];
-            UIButton *abs = [self makeButtonWithTitle:@"|.|" image:nil action:@selector(absValuePressed:)];
             UIButton *backspace = [self makeButtonWithTitle:nil image:@"Backspace" action:@selector(backspacePressed:)];
             UIButton *dismiss = [self makeButtonWithTitle:nil image:@"Keyboard Down" action:@selector(dismissPressed:)];
-            [self addButtonSpec:specs button:abs row:3 column:0 colSpan:1];
-            [self addButtonSpec:specs button:self.fractionButton row:3 column:1 colSpan:1];
-            [self addButtonSpec:specs button:self.exponentButton row:3 column:2 colSpan:1];
-            [self addButtonSpec:specs button:backspace row:3 column:3 colSpan:1];
-            [self addButtonSpec:specs button:dismiss row:3 column:4 colSpan:2];
+            UIButton *enter = [self makeButtonWithTitle:@"Enter" image:nil action:@selector(enterPressed:)];
+            [self addButtonSpec:specs button:backspace x:249 y:0 width:71 height:45];
+            [self addButtonSpec:specs button:enter x:249 y:45 width:71 height:90];
+            [self addButtonSpec:specs button:dismiss x:249 y:135 width:71 height:45];
             break;
         }
         case MTKeyboardLayoutFunctions: {
-            NSArray *rows = @[
-                @[@"log",@"ln",@"sin",@"cos",@"tan",@"π"],
-                @[@"sec",@"csc",@"cot",@"θ",@"∠",@"°"],
-                @[@"(",@")",@"x",@"y",@"Fraction",@"Exponent"],
-                @[@"Sqrt",@"Radical",@"log_",@"Sub",@"Back",@"Dismiss"],
+            backgroundImageName = @"Functions Keyboard";
+            NSArray *items = @[
+                @[@"x", @0, @0, @50, @45], @[@"sin", @50, @0, @50, @45], @[@"cos", @100, @0, @50, @45], @[@"tan", @150, @0, @49, @45], @[@"θ", @199, @0, @50, @45],
+                @[@"y", @0, @45, @50, @45], @[@"sec", @50, @45, @50, @45], @[@"csc", @100, @45, @50, @45], @[@"cot", @150, @45, @49, @45], @[@"π", @199, @45, @50, @45],
+                @[@"Fraction", @0, @90, @50, @45], @[@"log", @50, @90, @50, @45], @[@"ln", @100, @90, @50, @45], @[@"LOGBASE", @150, @90, @49, @45], @[@"∠", @199, @90, @50, @45],
+                @[@"Exponent", @0, @135, @50, @45], @[@"Sub", @50, @135, @50, @45], @[@"Sqrt", @100, @135, @50, @45], @[@"Radical", @150, @135, @49, @45], @[@"°", @199, @135, @50, @45],
             ];
-            for (NSUInteger r = 0; r < rows.count; r++) {
-                NSArray *row = rows[r];
-                for (NSUInteger c = 0; c < row.count; c++) {
-                    NSString *token = row[c];
-                    UIButton *button = nil;
-                    if ([token isEqualToString:@"Fraction"]) {
-                        button = [self makeButtonWithTitle:nil image:@"Fraction" action:@selector(fractionPressed:)];
-                        self.fractionButton = button;
-                    } else if ([token isEqualToString:@"Exponent"]) {
-                        button = [self makeButtonWithTitle:nil image:@"Exponent" action:@selector(exponentPressed:)];
-                        self.exponentButton = button;
-                    } else if ([token isEqualToString:@"Sqrt"]) {
-                        button = [self makeButtonWithTitle:nil image:@"Sqrt" action:@selector(squareRootPressed:)];
-                        self.squareRootButton = button;
-                    } else if ([token isEqualToString:@"Radical"]) {
-                        button = [self makeButtonWithTitle:nil image:@"Sqrt with Power" action:@selector(rootWithPowerPressed:)];
-                        self.radicalButton = button;
-                    } else if ([token isEqualToString:@"log_"]) {
-                        button = [self makeButtonWithTitle:nil image:@"Log with base" action:@selector(logWithBasePressed:)];
-                    } else if ([token isEqualToString:@"Sub"]) {
-                        button = [self makeButtonWithTitle:nil image:@"Subscript" action:@selector(subscriptPressed:)];
-                    } else if ([token isEqualToString:@"Back"]) {
-                        button = [self makeButtonWithTitle:nil image:@"Backspace" action:@selector(backspacePressed:)];
-                    } else if ([token isEqualToString:@"Dismiss"]) {
-                        button = [self makeButtonWithTitle:nil image:@"Keyboard Down" action:@selector(dismissPressed:)];
-                    } else {
-                        button = [self makeButtonWithTitle:token image:nil action:@selector(keyPressed:)];
-                        if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"]) { [variables addObject:button]; }
-                    }
-                    [self addButtonSpec:specs button:button row:r column:c colSpan:1];
-                }
+            for (NSArray *item in items) {
+                NSString *token = item[0];
+                UIButton *button = nil;
+                if ([token isEqualToString:@"Fraction"]) { button = [self makeButtonWithTitle:nil image:@"Fraction" action:@selector(fractionPressed:)]; self.fractionButton = button; }
+                else if ([token isEqualToString:@"Exponent"]) { button = [self makeButtonWithTitle:nil image:@"Exponent" action:@selector(exponentPressed:)]; self.exponentButton = button; }
+                else if ([token isEqualToString:@"Sqrt"]) { button = [self makeButtonWithTitle:nil image:@"Sqrt" action:@selector(squareRootPressed:)]; self.squareRootButton = button; }
+                else if ([token isEqualToString:@"Radical"]) { button = [self makeButtonWithTitle:nil image:@"Sqrt with Power" action:@selector(rootWithPowerPressed:)]; self.radicalButton = button; }
+                else if ([token isEqualToString:@"LOGBASE"]) { button = [self makeButtonWithTitle:nil image:@"Log with base" action:@selector(logWithBasePressed:)]; }
+                else if ([token isEqualToString:@"Sub"]) { button = [self makeButtonWithTitle:nil image:@"Subscript" action:@selector(subscriptPressed:)]; }
+                else { button = [self makeButtonWithTitle:token image:nil action:@selector(keyPressed:)]; }
+                [self addButtonSpec:specs button:button x:[item[1] floatValue] y:[item[2] floatValue] width:[item[3] floatValue] height:[item[4] floatValue]];
+                if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"]) { [variables addObject:button]; }
             }
+            UIButton *backspace = [self makeButtonWithTitle:nil image:@"Backspace" action:@selector(backspacePressed:)];
+            UIButton *dismiss = [self makeButtonWithTitle:nil image:@"Keyboard Down" action:@selector(dismissPressed:)];
+            UIButton *enter = [self makeButtonWithTitle:@"Enter" image:nil action:@selector(enterPressed:)];
+            [self addButtonSpec:specs button:backspace x:249 y:0 width:71 height:45];
+            [self addButtonSpec:specs button:enter x:249 y:45 width:71 height:90];
+            [self addButtonSpec:specs button:dismiss x:249 y:135 width:71 height:45];
             break;
         }
         case MTKeyboardLayoutLetters: {
-            self.rowCount = 6;
-            NSArray *rows = @[
-                @[@"q",@"w",@"e",@"r",@"t",@"y"],
-                @[@"u",@"i",@"o",@"p",@"a",@"s"],
-                @[@"d",@"f",@"g",@"h",@"j",@"k"],
-                @[@"l",@"z",@"x",@"c",@"v",@"b"],
-                @[@"Shift",@"n",@"m",@"α",@"Δ",@"Back"],
-                @[@"σ",@"μ",@"λ",@"Dismiss",@"Enter",@" "],
+            backgroundImageName = @"Letters Keyboard";
+            NSArray *items = @[
+                @[@"q", @0, @0, @32, @45], @[@"w", @32, @0, @32, @45], @[@"e", @64, @0, @32, @45], @[@"r", @96, @0, @32, @45], @[@"t", @128, @0, @32, @45], @[@"y", @160, @0, @32, @45], @[@"u", @192, @0, @32, @45], @[@"i", @224, @0, @32, @45], @[@"o", @256, @0, @32, @45], @[@"p", @288, @0, @32, @45],
+                @[@"a", @16, @45, @32, @45], @[@"s", @48, @45, @32, @45], @[@"d", @80, @45, @32, @45], @[@"f", @112, @45, @32, @45], @[@"g", @144, @45, @31, @45], @[@"h", @175, @45, @32, @45], @[@"j", @207, @45, @32, @45], @[@"k", @239, @45, @32, @45], @[@"l", @271, @45, @32, @45],
+                @[@"Shift", @0, @90, @48, @45], @[@"z", @48, @90, @32, @45], @[@"x", @80, @90, @32, @45], @[@"c", @112, @90, @32, @45], @[@"v", @144, @90, @31, @45], @[@"b", @175, @90, @32, @45], @[@"n", @207, @90, @32, @45], @[@"m", @239, @90, @32, @45], @[@"Back", @271, @90, @48, @45],
+                @[@"Dismiss", @0, @135, @80, @45], @[@"α", @80, @135, @32, @45], @[@"Δ", @112, @135, @32, @45], @[@"σ", @144, @135, @31, @45], @[@"μ", @175, @135, @32, @45], @[@"λ", @207, @135, @32, @45], @[@"Enter", @239, @135, @81, @45]
             ];
-            for (NSUInteger r = 0; r < rows.count; r++) {
-                NSArray *row = rows[r];
-                for (NSUInteger c = 0; c < row.count; c++) {
-                    NSString *token = row[c];
-                    if ([token isEqualToString:@" "]) { continue; }
-                    UIButton *button = nil;
-                    if ([token isEqualToString:@"Shift"]) {
-                        button = [self makeButtonWithTitle:nil image:@"Shift" action:@selector(shiftPressed:)];
-                        self.shiftButton = button;
-                    } else if ([token isEqualToString:@"Back"]) {
-                        button = [self makeButtonWithTitle:nil image:@"Backspace Small" action:@selector(backspacePressed:)];
-                    } else if ([token isEqualToString:@"Dismiss"]) {
-                        button = [self makeButtonWithTitle:nil image:@"Keyboard Down" action:@selector(dismissPressed:)];
-                    } else if ([token isEqualToString:@"Enter"]) {
-                        button = [self makeButtonWithTitle:@"Enter" image:nil action:@selector(enterPressed:)];
-                    } else {
-                        button = [self makeButtonWithTitle:token image:nil action:@selector(keyPressed:)];
-                        [letters addObject:button];
-                        [variables addObject:button];
-                    }
-                    [self addButtonSpec:specs button:button row:r column:c colSpan:1];
-                    if ([token isEqualToString:@"α"]) { self.alphaRho = button; [greekLetters addObject:button]; }
-                    if ([token isEqualToString:@"Δ"]) { self.deltaOmega = button; [greekLetters addObject:button]; }
-                    if ([token isEqualToString:@"σ"]) { self.sigmaPhi = button; [greekLetters addObject:button]; }
-                    if ([token isEqualToString:@"μ"]) { self.muNu = button; [greekLetters addObject:button]; }
-                    if ([token isEqualToString:@"λ"]) { self.lambdaBeta = button; [greekLetters addObject:button]; }
-                }
+            for (NSArray *item in items) {
+                NSString *token = item[0];
+                UIButton *button = nil;
+                if ([token isEqualToString:@"Shift"]) { button = [self makeButtonWithTitle:nil image:@"Shift" action:@selector(shiftPressed:)]; self.shiftButton = button; }
+                else if ([token isEqualToString:@"Back"]) { button = [self makeButtonWithTitle:nil image:@"Backspace Small" action:@selector(backspacePressed:)]; }
+                else if ([token isEqualToString:@"Dismiss"]) { button = [self makeButtonWithTitle:nil image:@"Keyboard Down" action:@selector(dismissPressed:)]; }
+                else if ([token isEqualToString:@"Enter"]) { button = [self makeButtonWithTitle:@"Enter" image:nil action:@selector(enterPressed:)]; }
+                else { button = [self makeButtonWithTitle:token image:nil action:@selector(keyPressed:)]; [letters addObject:button]; [variables addObject:button]; }
+                [self addButtonSpec:specs button:button x:[item[1] floatValue] y:[item[2] floatValue] width:[item[3] floatValue] height:[item[4] floatValue]];
+                if ([token isEqualToString:@"α"]) { self.alphaRho = button; [greekLetters addObject:button]; }
+                if ([token isEqualToString:@"Δ"]) { self.deltaOmega = button; [greekLetters addObject:button]; }
+                if ([token isEqualToString:@"σ"]) { self.sigmaPhi = button; [greekLetters addObject:button]; }
+                if ([token isEqualToString:@"μ"]) { self.muNu = button; [greekLetters addObject:button]; }
+                if ([token isEqualToString:@"λ"]) { self.lambdaBeta = button; [greekLetters addObject:button]; }
             }
             break;
         }
     }
+
+    NSBundle *bundle = SWIFTPM_MODULE_BUNDLE;
+    self.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:backgroundImageName inBundle:bundle compatibleWithTraitCollection:nil]];
+    self.backgroundView.contentMode = UIViewContentModeScaleToFill;
+    self.backgroundView.frame = self.bounds;
+    [self insertSubview:self.backgroundView atIndex:0];
 
     self.numbers = numbers;
     self.variables = variables;
@@ -297,24 +275,19 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    if (self.layoutButtons.count == 0 || self.rowCount == 0 || self.columnCount == 0) {
+    if (self.layoutButtons.count == 0) {
         return;
     }
-
-    CGFloat spacing = 4.0;
-    CGFloat width = CGRectGetWidth(self.bounds);
-    CGFloat height = CGRectGetHeight(self.bounds);
-    CGFloat cellWidth = (width - ((self.columnCount + 1) * spacing)) / self.columnCount;
-    CGFloat cellHeight = (height - ((self.rowCount + 1) * spacing)) / self.rowCount;
+    self.backgroundView.frame = self.bounds;
+    CGFloat sx = CGRectGetWidth(self.bounds) / 320.0;
+    CGFloat sy = CGRectGetHeight(self.bounds) / 180.0;
     for (NSDictionary *spec in self.layoutButtons) {
         UIButton *button = spec[@"button"];
-        NSUInteger row = [spec[@"row"] unsignedIntegerValue];
-        NSUInteger col = [spec[@"column"] unsignedIntegerValue];
-        NSUInteger colSpan = [spec[@"colSpan"] unsignedIntegerValue];
-        CGFloat x = spacing + (col * (cellWidth + spacing));
-        CGFloat y = spacing + (row * (cellHeight + spacing));
-        CGFloat buttonWidth = (cellWidth * colSpan) + (spacing * (colSpan - 1));
-        button.frame = CGRectMake(x, y, buttonWidth, cellHeight);
+        CGFloat x = [spec[@"x"] floatValue] * sx;
+        CGFloat y = [spec[@"y"] floatValue] * sy;
+        CGFloat width = [spec[@"width"] floatValue] * sx;
+        CGFloat height = [spec[@"height"] floatValue] * sy;
+        button.frame = CGRectMake(x, y, width, height);
     }
 }
 
