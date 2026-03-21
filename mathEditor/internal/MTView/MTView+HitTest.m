@@ -15,11 +15,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSView *)hitTestOutsideBounds:(NSPoint)point
 {
+    return [self hitTestOutsideBounds:point ignoringSubviews:@[]];
+}
+
+- (NSView *)hitTestOutsideBounds:(NSPoint)point ignoringSubviews:(NSArray<NSView *> *)ignoredSubviews
+{
     if (self.hidden) {
         return nil;
     }
     NSPoint localPoint = [self convertPoint:point fromView:self.superview];
     for (NSView *child in [self.subviews reverseObjectEnumerator]) {
+        if ([ignoredSubviews containsObject:child]) {
+            continue;
+        }
         NSView *hitView = [child hitTest:localPoint];
         if (hitView) {
             return hitView;

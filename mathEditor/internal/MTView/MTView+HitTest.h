@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSView (HitTest)
 
 - (NSView *)hitTestOutsideBounds:(NSPoint)point;
+- (NSView *)hitTestOutsideBounds:(NSPoint)point ignoringSubviews:(NSArray<NSView *> *)ignoredSubviews;
 
 @end
 

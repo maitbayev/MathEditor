@@ -8,11 +8,16 @@
 #if TARGET_OS_OSX
 
 #import "MTEditableMathLabel.h"
+#import "MTMathUILabel.h"
 #import "MTView/MTView+HitTest.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MTEditableMathLabel (NSView)
+@end
+
+@interface MTEditableMathLabel ()
+@property (nonatomic) MTMathUILabel *label;
 @end
 
 @implementation MTEditableMathLabel(NSView)
@@ -27,8 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (nullable NSView *)hitTest:(NSPoint)point {
-    // Ignore `MTMathUILabel`?
-    return [self hitTestOutsideBounds:point];
+    return [self hitTestOutsideBounds:point ignoringSubviews:@[self.label]];
 }
 
 @end
