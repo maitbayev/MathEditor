@@ -98,7 +98,8 @@
     button.translatesAutoresizingMaskIntoConstraints = YES;
     button.backgroundColor = [UIColor clearColor];
     button.titleLabel.font = [UIFont systemFontOfSize:22 weight:UIFontWeightRegular];
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor colorWithRed:0.12 green:0.16 blue:0.22 alpha:1.0] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor colorWithRed:0.55 green:0.58 blue:0.62 alpha:1.0] forState:UIControlStateDisabled];
     if (title.length > 0) {
         [button setTitle:title forState:UIControlStateNormal];
     }
