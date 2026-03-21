@@ -136,7 +136,9 @@
     }
 
     [button setTitleColor:normalTitleColor forState:UIControlStateNormal];
+    [button setTitleColor:normalTitleColor forState:UIControlStateSelected];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected|UIControlStateHighlighted];
     [button setBackgroundImage:[UIImage imageNamed:highlightBackground inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateHighlighted];
 }
 
