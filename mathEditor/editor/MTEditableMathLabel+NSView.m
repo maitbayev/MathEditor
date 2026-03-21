@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (nullable NSView *)hitTest:(NSPoint)point {
+    // Ignore `MTMathUILabel`?
     return [self hitTestOutsideBounds:point];
 }
 
