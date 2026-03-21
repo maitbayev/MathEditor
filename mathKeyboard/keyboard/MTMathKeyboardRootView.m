@@ -121,11 +121,10 @@ static NSInteger const DEFAULT_KEYBOARD = 0;
 
 - (void)setupKeyboards
 {
-    NSBundle* bundle = [MTMathKeyboardRootView getMathKeyboardResourcesBundle];
-    _tab1Keyboard = (MTKeyboard *)[[UINib nibWithNibName:@"MTKeyboard" bundle:bundle] instantiateWithOwner:self options:nil][0];
-    _tab2Keyboard = (MTKeyboard *)[[UINib nibWithNibName:@"MTKeyboardTab2" bundle:bundle] instantiateWithOwner:self options:nil][0];
-    _tab3Keyboard = (MTKeyboard *)[[UINib nibWithNibName:@"MTKeyboardTab3" bundle:bundle] instantiateWithOwner:self options:nil][0];
-    _tab4Keyboard = (MTKeyboard *)[[UINib nibWithNibName:@"MTKeyboardTab4" bundle:bundle] instantiateWithOwner:self options:nil][0];
+    _tab1Keyboard = [MTKeyboard keyboardWithLayout:MTKeyboardLayoutNumbers];
+    _tab2Keyboard = [MTKeyboard keyboardWithLayout:MTKeyboardLayoutOperations];
+    _tab3Keyboard = [MTKeyboard keyboardWithLayout:MTKeyboardLayoutFunctions];
+    _tab4Keyboard = [MTKeyboard keyboardWithLayout:MTKeyboardLayoutLetters];
 
     // TODO Use keyboard array for operations involving all tabs
     _keyboards = @[_tab1Keyboard, _tab2Keyboard, _tab3Keyboard, _tab4Keyboard];

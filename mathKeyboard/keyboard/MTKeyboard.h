@@ -15,6 +15,14 @@
 
 @interface MTKeyboard : UIView <UIInputViewAudioFeedback>
 
+typedef NS_ENUM(NSInteger, MTKeyboardLayout) {
+    MTKeyboardLayoutNumbers = 0,
+    MTKeyboardLayoutOperations = 1,
+    MTKeyboardLayoutFunctions = 2,
+    MTKeyboardLayoutLetters = 3,
+};
+
++ (instancetype)keyboardWithLayout:(MTKeyboardLayout)layout;
 
 @property (weak, nonatomic) IBOutlet UIButton *fractionButton;
 @property (nonatomic, weak) IBOutlet UIButton *multiplyButton;
