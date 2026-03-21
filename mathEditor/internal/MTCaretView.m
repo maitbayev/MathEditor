@@ -12,6 +12,7 @@
 #import "MTEditableMathLabel.h"
 #import "MTConfig.h"
 #import "MTView/MTView+Layout.h"
+#import "MTView/MTView+HitTest.h"
 #import "NSBezierPath+addLineToPoint.h"
 
 static const NSTimeInterval InitialBlinkDelay = 0.7;
@@ -74,6 +75,18 @@ static NSInteger getCaretHeight() {
     _color = [color colorWithAlphaComponent:0.7];
 }
 
+- (void)interactionBegan
+{
+    _color = [_color colorWithAlphaComponent:1.0];
+    [self setNeedsDisplay];
+}
+
+- (void)interactionEnded
+{
+    _color = [_color colorWithAlphaComponent:0.6];
+    [self setNeedsDisplay];
+}
+
 #if TARGET_OS_IPHONE
 
 - (void) layoutSubviews
@@ -84,14 +97,12 @@ static NSInteger getCaretHeight() {
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    _color = [_color colorWithAlphaComponent:1.0];
-    [self setNeedsDisplay];
+    [self interactionBegan];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    _color = [_color colorWithAlphaComponent:0.6];
-    [self setNeedsDisplay];
+    [self interactionEnded];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -107,8 +118,7 @@ static NSInteger getCaretHeight() {
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    _color = [_color colorWithAlphaComponent:0.6];
-    [self setNeedsDisplay];
+    [self interactionEnded];
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
@@ -132,6 +142,55 @@ static NSInteger getCaretHeight() {
 - (BOOL) isFlipped {
     return YES;
 }
+
+- (BOOL)acceptsFirstMouse:(NSEvent *)event
+{
+    return YES;
+}
+
+- (void)mouseDown:(NSEvent *)event
+{
+    [self interactionBegan];
+}
+
+- (void)mouseDragged:(NSEvent *)event
+{
+    NSPoint loc = [self convertPoint:[event locationInWindow] fromView:nil];
+    NSRect frame = self.frame;
+    NSPoint caretPoint = NSMakePoint(loc.x, loc.y - frame.origin.y);
+    NSPoint labelPoint = [_label convertPoint:caretPoint fromView:self];
+    [_label moveCaretToPoint:labelPoint];
+}
+
+- (void)mouseUp:(NSEvent *)event
+{
+    [self interactionEnded];
+}
+
+- (void)mouseCancelled:(NSEvent *)event {
+    [self interactionEnded];
+}
+
+- (NSView *)hitTest:(NSPoint)point
+{
+    if (self.hidden) {
+      return nil;
+    }
+    // Convert point from superview coordinates to local coordinates
+    NSPoint localPoint = [self convertPoint:point fromView:self.superview];
+    // Create a hit area around the center
+    NSSize size = self.bounds.size;
+    NSRect hitArea = NSMakeRect((size.width - kCaretHandleHitAreaSize) / 2,
+                                (size.height - kCaretHandleHitAreaSize) / 2,
+                                kCaretHandleHitAreaSize,
+                                kCaretHandleHitAreaSize);
+
+    if (NSPointInRect(localPoint, hitArea)) {
+        return self;
+    }
+    return nil;
+}
+
 #endif // TARGET_OS_OSX
 
 @end
@@ -262,7 +321,11 @@ static NSInteger getCaretHeight() {
 }
 
 - (BOOL)isFlipped {
-  return YES;
+    return YES;
+}
+
+- (NSView *)hitTest:(NSPoint)point {
+    return [self hitTestOutsideBounds:point];
 }
 #endif // TARGET_OS_OSX
 

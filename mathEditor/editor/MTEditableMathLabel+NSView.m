@@ -8,6 +8,7 @@
 #if TARGET_OS_OSX
 
 #import "MTEditableMathLabel.h"
+#import "MTView/MTView+HitTest.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,6 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)isFlipped {
     return YES;
+}
+
+- (nullable NSView *)hitTest:(NSPoint)point {
+    return [self hitTestOutsideBounds:point];
 }
 
 @end
