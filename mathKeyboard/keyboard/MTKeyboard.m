@@ -140,6 +140,7 @@
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected|UIControlStateHighlighted];
     [button setBackgroundImage:[UIImage imageNamed:highlightBackground inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateHighlighted];
+    [button setBackgroundImage:[UIImage imageNamed:highlightBackground inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateSelected|UIControlStateHighlighted];
 }
 
 - (void)applyTypographyForToken:(NSString *)token button:(UIButton *)button
