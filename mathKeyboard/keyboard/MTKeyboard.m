@@ -138,6 +138,31 @@
     [button setBackgroundImage:[UIImage imageNamed:highlightBackground inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateHighlighted];
 }
 
+- (void)applyTypographyForToken:(NSString *)token button:(UIButton *)button
+{
+    UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:20];
+    UIEdgeInsets insets = UIEdgeInsetsZero;
+
+    NSSet *letterLike = [NSSet setWithArray:@[@"x",@"y",@"q",@"w",@"e",@"r",@"t",@"u",@"i",@"o",@"p",@"a",@"s",@"d",@"f",@"g",@"h",@"j",@"k",@"l",@"z",@"c",@"v",@"b",@"n",@"m",@"α",@"Δ",@"σ",@"μ",@"λ"]];
+    if ([letterLike containsObject:token]) {
+        font = [UIFont fontWithName:@"HelveticaNeue" size:20];
+        insets = UIEdgeInsetsMake(0, 0, 10, 0);
+    } else if ([token isEqualToString:@"π"] || [token isEqualToString:@"θ"]) {
+        font = [UIFont fontWithName:@"TimesNewRomanPSMT" size:20];
+    } else if ([token isEqualToString:@"Enter"]) {
+        font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
+    } else if ([token isEqualToString:@"Fraction"]) {
+        insets = UIEdgeInsetsMake(5, 0, 5, 0);
+    } else if ([token isEqualToString:@"Dismiss"]) {
+        insets = UIEdgeInsetsMake(0, 0, 5, 0);
+    }
+
+    if (font) {
+        button.titleLabel.font = font;
+    }
+    button.contentEdgeInsets = insets;
+}
+
 - (void)addButtonSpec:(NSMutableArray<NSDictionary *> *)specs
                button:(UIButton *)button
                     x:(CGFloat)x
@@ -192,6 +217,7 @@
                     }
                 }
                 [self addButtonSpec:specs button:button x:[item[1] floatValue] y:[item[2] floatValue] width:[item[3] floatValue] height:[item[4] floatValue]];
+                [self applyTypographyForToken:token button:button];
                 if ([@"0123456789." containsString:token]) { [numbers addObject:button]; }
                 if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"]) { [variables addObject:button]; }
                 if ([@[@"+",@"-",@"×",@"÷"] containsObject:token]) { [operators addObject:button]; }
@@ -208,6 +234,8 @@
             [self applyStyle:@"control" toButton:backspace];
             [self applyStyle:@"control" toButton:dismiss];
             [self applyStyle:@"control" toButton:enter];
+            [self applyTypographyForToken:@"Enter" button:enter];
+            [self applyTypographyForToken:@"Dismiss" button:dismiss];
             [self addButtonSpec:specs button:backspace x:248 y:0 width:72 height:45];
             [self addButtonSpec:specs button:enter x:248 y:45 width:72 height:90];
             [self addButtonSpec:specs button:dismiss x:248 y:135 width:72 height:45];
@@ -231,6 +259,7 @@
                 if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"] || [token isEqualToString:@"Fraction"] || [token isEqualToString:@"Exponent"]) { [self applyStyle:@"marine" toButton:button]; }
                 else { [self applyStyle:@"orange" toButton:button]; }
                 [self addButtonSpec:specs button:button x:[item[1] floatValue] y:[item[2] floatValue] width:[item[3] floatValue] height:[item[4] floatValue]];
+                [self applyTypographyForToken:token button:button];
                 if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"]) { [variables addObject:button]; }
                 if ([@[@"<",@">",@"≤",@"≥"] containsObject:token]) { [relations addObject:button]; }
                 if ([token isEqualToString:@":"]) {
@@ -244,6 +273,8 @@
             [self applyStyle:@"control" toButton:backspace];
             [self applyStyle:@"control" toButton:dismiss];
             [self applyStyle:@"control" toButton:enter];
+            [self applyTypographyForToken:@"Enter" button:enter];
+            [self applyTypographyForToken:@"Dismiss" button:dismiss];
             [self addButtonSpec:specs button:backspace x:249 y:0 width:71 height:45];
             [self addButtonSpec:specs button:enter x:249 y:45 width:71 height:90];
             [self addButtonSpec:specs button:dismiss x:249 y:135 width:71 height:45];
@@ -270,6 +301,7 @@
                 if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"] || [token isEqualToString:@"Fraction"] || [token isEqualToString:@"Exponent"]) { [self applyStyle:@"marine" toButton:button]; }
                 else { [self applyStyle:@"green" toButton:button]; }
                 [self addButtonSpec:specs button:button x:[item[1] floatValue] y:[item[2] floatValue] width:[item[3] floatValue] height:[item[4] floatValue]];
+                [self applyTypographyForToken:token button:button];
                 if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"]) { [variables addObject:button]; }
             }
             UIButton *backspace = [self makeButtonWithTitle:nil image:@"Backspace" action:@selector(backspacePressed:)];
@@ -278,6 +310,8 @@
             [self applyStyle:@"control" toButton:backspace];
             [self applyStyle:@"control" toButton:dismiss];
             [self applyStyle:@"control" toButton:enter];
+            [self applyTypographyForToken:@"Enter" button:enter];
+            [self applyTypographyForToken:@"Dismiss" button:dismiss];
             [self addButtonSpec:specs button:backspace x:249 y:0 width:71 height:45];
             [self addButtonSpec:specs button:enter x:249 y:45 width:71 height:90];
             [self addButtonSpec:specs button:dismiss x:249 y:135 width:71 height:45];
@@ -302,6 +336,7 @@
                 if ([token isEqualToString:@"Shift"] || [token isEqualToString:@"Back"] || [token isEqualToString:@"Dismiss"] || [token isEqualToString:@"Enter"]) { [self applyStyle:@"control" toButton:button]; }
                 else { [self applyStyle:@"azure" toButton:button]; }
                 [self addButtonSpec:specs button:button x:[item[1] floatValue] y:[item[2] floatValue] width:[item[3] floatValue] height:[item[4] floatValue]];
+                [self applyTypographyForToken:token button:button];
                 if ([token isEqualToString:@"α"]) { self.alphaRho = button; [greekLetters addObject:button]; }
                 if ([token isEqualToString:@"Δ"]) { self.deltaOmega = button; [greekLetters addObject:button]; }
                 if ([token isEqualToString:@"σ"]) { self.sigmaPhi = button; [greekLetters addObject:button]; }
