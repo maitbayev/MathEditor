@@ -8,8 +8,6 @@
 //  MIT license. See the LICENSE file for details.
 //
 
-#if TARGET_OS_IPHONE
-
 #import <QuartzCore/QuartzCore.h>
 
 #import "MTEditableMathLabel.h"
@@ -21,18 +19,20 @@
 #import "MTTapGestureRecognizer.h"
 #import "MTMathList+Editing.h"
 #import "MTDisplay+Editing.h"
+#import "MTView/MTView+AutoLayout.h"
+#import "MTView/MTView+Layout.h"
+#import "MTView/MTView+FirstResponder.h"
 
 #import "MTUnicode.h"
 #import "MTMathListBuilder.h"
 
-@interface MTEditableMathLabel() 
+@interface MTEditableMathLabel()
 
 @property (nonatomic) MTMathUILabel* label;
 @property (nonatomic) MTTapGestureRecognizer* tapGestureRecognizer;
 
 @end
 @implementation MTEditableMathLabel {
-    MTCaretView* _caretView;
     MTMathListIndex* _insertionIndex;
     CGAffineTransform _flipTransform;
     NSMutableArray* _indicesToHighlight;
@@ -74,20 +74,20 @@
     // Create our text storage.
     
     self.mathList =  [MTMathList new];
-    
-    self.userInteractionEnabled = YES;
-    self.autoresizesSubviews = YES;
-    
+
     // Create and set up the APLSimpleCoreTextView that will do the drawing.
     MTMathUILabel *label = [[MTMathUILabel alloc] initWithFrame:self.bounds];
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self addSubview:label];
+    [label pinToSuperview];
     label.fontSize = 30;
     label.backgroundColor = self.backgroundColor;
+
+    #if TARGET_OS_IPHONE
     label.userInteractionEnabled = NO;
+    #endif
     label.textAlignment = kMTTextAlignmentCenter;
     self.label = label;
-     [self createCancelImage];
+    // [self createCancelImage];
     CGAffineTransform transform = CGAffineTransformMakeTranslation(0, self.bounds.size.height);
     _flipTransform = CGAffineTransformConcat(CGAffineTransformMakeScale(1.0, -1.0), transform);
 
@@ -102,10 +102,7 @@
     self.mathList = [MTMathList new];
 }
 
--(void)layoutSubviews
-{
-    [super layoutSubviews];
-    
+-(void)doLayout {
     CGRect frame = CGRectMake(self.frame.size.width - 55, (self.frame.size.height - 45)/2, 45, 45);
     self.cancelImage.frame = frame;
     
@@ -173,64 +170,43 @@
 
 #pragma mark - Custom user interaction
 
-- (UIView *)inputView
-{
-    return self.keyboard;
-}
 
-/**
- UIResponder protocol override.
- Our view can become first responder to receive user text input.
- */
-- (BOOL)canBecomeFirstResponder
+- (void)doBecomeFirstResponder
 {
-    return YES;
-}
-
-- (BOOL)becomeFirstResponder
-{
-    BOOL canBecome = [super becomeFirstResponder];
-    if (canBecome) {
-        if (_insertionIndex == nil) {
-            _insertionIndex = [MTMathListIndex level0Index:self.mathList.atoms.count];
-        }
-
-        [self.keyboard startedEditing:self];
-        
-        [self insertionPointChanged];
-        if ([self.delegate respondsToSelector:@selector(didBeginEditing:)]) {
-            [self.delegate didBeginEditing:self];
-        }
-    } else {
-        // Sometimes it takes some time
-        // [self performSelector:@selector(startEditing) withObject:nil afterDelay:0.0];
+    if (_insertionIndex == nil) {
+        _insertionIndex = [MTMathListIndex level0Index:self.mathList.atoms.count];
     }
-    return canBecome;
+
+    [self.keyboard startedEditing:self];
+
+    [self insertionPointChanged];
+    if ([self.delegate respondsToSelector:@selector(didBeginEditing:)]) {
+        [self.delegate didBeginEditing:self];
+    }
 }
 
 /**
  UIResponder protocol override.
  Called when our view is being asked to resign first responder state.
  */
-- (BOOL)resignFirstResponder
+- (void)doResignFirstResponder
 {
-    BOOL val = YES;
-    if ([self isFirstResponder]) {
-        [self.keyboard finishedEditing:self];
-         val = [super resignFirstResponder];
-        [self insertionPointChanged];
-        if ([self.delegate respondsToSelector:@selector(didEndEditing:)]) {
-            [self.delegate didEndEditing:self];
-        }
+    [self.keyboard finishedEditing:self];
+    [self insertionPointChanged];
+    if ([self.delegate respondsToSelector:@selector(didEndEditing:)]) {
+        [self.delegate didEndEditing:self];
     }
-    return val;
 }
 
 - (void) startEditing
 {
     if (![self isFirstResponder]) {
 		// Become first responder state (which shows software keyboard, if applicable).
+        #if TARGET_OS_OSX
+        [self.window makeFirstResponder:self];
+        #else
         [self becomeFirstResponder];
+        #endif
     }
 }
 
@@ -239,7 +215,7 @@
  */
 - (void)tap:(MTTapGestureRecognizer *)tap
 {
-    [self handleTapAtPoint:MTTapGestureLocationInView(tap, self)];
+    [self handleTapAtPoint:[tap locationInView:self]];
 }
 
 - (void)handleTapAtPoint:(CGPoint)tapPoint
@@ -263,12 +239,13 @@
 {
     self.mathList = [MTMathList new];
     [self insertionPointChanged];
+    [_caretView showHandle:NO];
 }
 
 - (void)moveCaretToPoint:(CGPoint)point
 {
     _insertionIndex = [self closestIndexToPoint:point];
-    [_caretView showHandle:NO];
+//    [_caretView showHandle:NO];
     [self insertionPointChanged];
 }
 
@@ -858,16 +835,6 @@ static const unichar kMTUnicodeGreekCapitalEnd = 0x03A9;
     return [self.label.displayList caretPositionForIndex:index];
 }
 
-- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
-{
-    BOOL inside = [super pointInside:point withEvent:event];
-    if (inside) {
-        return YES;
-    }
-    // check if a point is in the caret view.
-    return [_caretView pointInside:[self convertPoint:point toView:_caretView] withEvent:event];
-}
-
 #pragma mark - Highlighting
 
 - (void)highlightCharacterAtIndex:(MTMathListIndex *)index
@@ -891,5 +858,3 @@ static const unichar kMTUnicodeGreekCapitalEnd = 0x03A9;
 }
 
 @end
-
-#endif

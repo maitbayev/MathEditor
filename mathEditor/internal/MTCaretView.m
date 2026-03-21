@@ -8,11 +8,12 @@
 //  MIT license. See the LICENSE file for details.
 //
 
-#if TARGET_OS_IPHONE
-
 #import "MTCaretView.h"
 #import "MTEditableMathLabel.h"
 #import "MTConfig.h"
+#import "MTView/MTView+Layout.h"
+#import "MTView/MTView+HitTest.h"
+#import "NSBezierPath+addLineToPoint.h"
 
 static const NSTimeInterval InitialBlinkDelay = 0.7;
 static const NSTimeInterval BlinkRate = 0.5;
@@ -37,7 +38,7 @@ static NSInteger getCaretHeight() {
 @end
 
 @implementation MTCaretHandle {
-    UIBezierPath* _path;
+    MTBezierPath* _path;
     MTColor* _color;
 }
 
@@ -50,9 +51,9 @@ static NSInteger getCaretHeight() {
     return self;
 }
 
-- (UIBezierPath*) createHandlePath
+- (MTBezierPath*) createHandlePath
 {
-    UIBezierPath* path = [UIBezierPath bezierPath];
+    MTBezierPath* path = [MTBezierPath bezierPath];
     CGSize size = self.bounds.size;
     [path moveToPoint:CGPointMake(size.width/2, 0)];
     [path addLineToPoint:CGPointMake(size.width, size.height/4)];
@@ -63,11 +64,6 @@ static NSInteger getCaretHeight() {
     return path;
 }
 
-- (void) layoutSubviews
-{
-    _path = [self createHandlePath];
-}
-
 - (void)drawRect:(CGRect)rect
 {
     [_color setFill];
@@ -76,43 +72,128 @@ static NSInteger getCaretHeight() {
 
 - (void) setColor:(MTColor*) color
 {
-    _color = [color colorWithAlphaComponent:0.6];
+    _color = [color colorWithAlphaComponent:0.7];
+}
+
+- (void)interactionBegan
+{
+    _color = [_color colorWithAlphaComponent:1.0];
+    [self setNeedsDisplay];
+}
+
+- (void)interactionEnded
+{
+    _color = [_color colorWithAlphaComponent:0.6];
+    [self setNeedsDisplay];
+}
+
+- (void)handleDragAtLocalPoint:(CGPoint)loc
+{
+    CGPoint caretPoint = CGPointMake(loc.x, loc.y - self.frame.origin.y);
+    CGPoint labelPoint = [_label convertPoint:caretPoint fromView:self];
+    [_label moveCaretToPoint:labelPoint]; // puts the point at the top to the top of the current caret
+}
+
+- (CGRect)hitArea
+{
+    // Create a hit area around the center.
+    CGSize size = self.bounds.size;
+    return CGRectMake((size.width - kCaretHandleHitAreaSize) / 2,
+                      (size.height - kCaretHandleHitAreaSize) / 2,
+                      kCaretHandleHitAreaSize,
+                      kCaretHandleHitAreaSize);
+}
+
+#if TARGET_OS_IPHONE
+
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    _path = [self createHandlePath];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    [self interactionBegan];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
+    [self interactionEnded];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     // From apple documentation
     UITouch *aTouch = [touches anyObject];
-    CGPoint loc = [aTouch locationInView:self];
-    CGRect frame = self.frame;
-    CGPoint caretPoint = CGPointMake(loc.x, loc.y - frame.origin.y);  // puts the point at the top to the top of the current caret
-    CGPoint labelPoint = [_label convertPoint:caretPoint fromView:self];
-    [_label moveCaretToPoint:labelPoint];
+    [self handleDragAtLocalPoint:[aTouch locationInView:self]];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
+    [self interactionEnded];
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {
-    // Create a hit area around the center.
-    CGSize size = self.bounds.size;
-    CGRect hitArea = CGRectMake((size.width - kCaretHandleHitAreaSize)/2, (size.height - kCaretHandleHitAreaSize)/2, kCaretHandleHitAreaSize, kCaretHandleHitAreaSize);
-    return CGRectContainsPoint(hitArea, point);
+    return CGRectContainsPoint([self hitArea], point);
 }
 
+#endif
+
+
+#if TARGET_OS_OSX
+- (void) layout
+{
+    [super layout];
+    _path = [self createHandlePath];
+}
+
+- (BOOL) isFlipped {
+    return YES;
+}
+
+- (BOOL)acceptsFirstMouse:(NSEvent *)event
+{
+    return YES;
+}
+
+- (void)mouseDown:(NSEvent *)event
+{
+    [self interactionBegan];
+}
+
+- (void)mouseDragged:(NSEvent *)event
+{
+    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
+    [self handleDragAtLocalPoint:point];
+}
+
+- (void)mouseUp:(NSEvent *)event
+{
+    [self interactionEnded];
+}
+
+- (void)mouseCancelled:(NSEvent *)event {
+    [self interactionEnded];
+}
+
+- (NSView *)hitTest:(NSPoint)point
+{
+    if (self.hidden) {
+        return nil;
+    }
+    CGPoint localPoint = [self convertPoint:point fromView:self.superview];
+    if (CGRectContainsPoint([self hitArea], localPoint)) {
+        return self;
+    }
+    return nil;
+}
+
+#endif // TARGET_OS_OSX
+
 @end
+
 
 @interface MTCaretView ()
 
@@ -122,7 +203,7 @@ static NSInteger getCaretHeight() {
 
 
 @implementation MTCaretView {
-    UIView *_blinker;
+    MTView *_blinker;
     MTCaretHandle *_handle;
     CGFloat _scale;
 }
@@ -132,7 +213,7 @@ static NSInteger getCaretHeight() {
     self = [super initWithFrame:CGRectZero];
     if (self) {
         _scale = label.fontSize / kCaretFontSize;
-        _blinker = [[UIView alloc] initWithFrame:CGRectZero];
+        _blinker = [[MTView alloc] initWithFrame:CGRectZero];
         _blinker.backgroundColor = self.caretColor;
         [self addSubview:_blinker];
         _handle = [[MTCaretHandle alloc] initWithFrame:CGRectMake(0, 0, kCaretHandleWidth * _scale, kCaretHandleHeight *_scale)];
@@ -157,7 +238,7 @@ static NSInteger getCaretHeight() {
     [self setNeedsLayout];
 }
 
-- (void) layoutSubviews
+- (void) doLayout
 {
     _blinker.frame = CGRectMake(0, 0, kCaretWidth * _scale, getCaretHeight() *_scale);
     _handle.frame = CGRectMake(-(kCaretHandleWidth - kCaretWidth) * _scale/2, (getCaretHeight() + kCaretHandleDescent) *_scale, kCaretHandleWidth *_scale, kCaretHandleHeight *_scale);
@@ -174,7 +255,6 @@ static NSInteger getCaretHeight() {
     _blinker.hidden = !_blinker.hidden;
 }
 
-
 // UIView didMoveToSuperview override to set up blink timers after caret view created in superview.
 - (void)didMoveToSuperview
 {
@@ -189,7 +269,6 @@ static NSInteger getCaretHeight() {
         self.blinkTimer = nil;
     }
 }
-
 
 // Helper method to set an initial blink delay
 - (void)delayBlink
@@ -212,6 +291,7 @@ static NSInteger getCaretHeight() {
     _blinker.backgroundColor = self.caretColor;
 }
 
+#if TARGET_OS_IPHONE
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event{
     if (!_handle.hidden) {
         return [_handle pointInside:[self convertPoint:point toView:_handle] withEvent:event];
@@ -220,7 +300,32 @@ static NSInteger getCaretHeight() {
     }
 }
 
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    [self doLayout];
+}
+#endif // TARGET_OS_IPHONE
+
+#if TARGET_OS_OSX
+- (void)viewDidMoveToSuperview
+{
+    [super viewDidMoveToSuperview];
+    [self didMoveToSuperview];
+}
+
+- (void) layout {
+    [super layout];
+    [self doLayout];
+}
+
+- (BOOL)isFlipped {
+    return YES;
+}
+
+- (NSView *)hitTest:(NSPoint)point {
+    return [self hitTestOutsideBounds:point];
+}
+#endif // TARGET_OS_OSX
 
 @end
-
-#endif

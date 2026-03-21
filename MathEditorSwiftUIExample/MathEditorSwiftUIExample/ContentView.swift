@@ -1,44 +1,67 @@
 // Copyright © 2025 Snap, Inc. All rights reserved.
 
-import SwiftUI
 import MathEditor
-
+import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-      MathEditorView()
-        .padding()
-    }
+  var body: some View {
+    MathEditorView()
+      .frame(maxHeight: 100)
+      .padding()
+  }
 }
 
 #Preview {
-    ContentView()
+  ContentView()
 }
 
 #if os(iOS)
-import MathKeyboard
+  import MathKeyboard
 
-struct MathEditorView : UIViewRepresentable {
-  typealias UIViewType = MTEditableMathLabel
-  
-  func makeUIView(context: Context) -> MTEditableMathLabel {
-    let mathLabel = MTEditableMathLabel()
-    mathLabel.backgroundColor = .clear
-    mathLabel.keyboard = MTMathKeyboardRootView.sharedInstance();
-    return mathLabel
+  struct MathEditorView: UIViewRepresentable {
+    typealias UIViewType = MTEditableMathLabel
+
+    func makeUIView(context: Context) -> MTEditableMathLabel {
+      let mathLabel = MTEditableMathLabel()
+      mathLabel.backgroundColor = .clear
+      mathLabel.keyboard = MTMathKeyboardRootView.sharedInstance()
+      return mathLabel
+    }
+
+    func updateUIView(_ uiView: MTEditableMathLabel, context: Context) {
+
+    }
   }
-  
-  func updateUIView(_ uiView: MTEditableMathLabel, context: Context) {
-    
-  }
-}
-#endif
+#endif  // os(iOS)
 
 #if os(macOS)
-struct MathEditorView: View {
-  var body: some View {
-    Text("MathEditor is not wired up for macOS in this example yet.")
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+  struct MathEditorView: NSViewRepresentable {
+    typealias UIViewType = NSView
+
+    func makeNSView(context: Context) -> NSView {
+      let mathLabel = MTEditableMathLabel()
+      mathLabel.backgroundColor = .clear
+      mathLabel.caretColor = NSColor.labelColor
+      mathLabel.textColor = NSColor.labelColor
+      //    mathLabel.keyboard = MTMathKeyboardRootView.sharedInstance();
+
+      let wrapper = NSView()
+      wrapper.addSubview(mathLabel)
+      mathLabel.translatesAutoresizingMaskIntoConstraints = false
+      NSLayoutConstraint.activate([
+        mathLabel.topAnchor.constraint(equalTo: wrapper.topAnchor),
+        mathLabel.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor),
+        mathLabel.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor),
+        mathLabel.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor, constant: -44),
+      ])
+      wrapper.backgroundColor = .clear
+      return wrapper
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+
+    }
   }
-}
+
 #endif

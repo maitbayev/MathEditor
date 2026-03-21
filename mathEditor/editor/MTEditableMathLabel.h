@@ -15,6 +15,7 @@
 @class MTEditableMathLabel;
 @class MTMathListIndex;
 @class MTCancelView;
+@class MTCaretView;
 
 /** Delegate for the `MTEditableMathLabel`. All methods are optional. */
 @protocol MTEditableMathLabelDelegate <NSObject>
@@ -72,6 +73,7 @@
 @property (nonatomic) MTColor* caretColor;
 
 @property (nonatomic) MTCancelView* cancelImage;
+@property (nonatomic) MTCaretView* caretView;
 @property (nonatomic, weak) id<MTEditableMathLabelDelegate> delegate;
 @property (nonatomic, weak) MTView<MTMathKeyboard>* keyboard;
 @property (nonatomic) CGFloat fontSize;
@@ -90,4 +92,8 @@
 
 - (CGSize) mathDisplaySize;
 
+// Compatibility?
+- (void)doLayout;
+- (void)doBecomeFirstResponder;
+- (void)doResignFirstResponder;
 @end

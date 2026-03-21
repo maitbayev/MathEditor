@@ -4,9 +4,9 @@ import SwiftUI
 
 @main
 struct MathEditorSwiftUIExampleApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
     }
+  }
 }
