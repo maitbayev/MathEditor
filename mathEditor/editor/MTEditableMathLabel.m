@@ -26,11 +26,6 @@
 #import "MTUnicode.h"
 #import "MTMathListBuilder.h"
 
-// TODO: move this method declaration to iosMath.
-@interface MTMathUILabel (SizeThatFits)
-- (CGSize)sizeThatFits:(CGSize)size;
-@end
-
 @interface MTEditableMathLabel()
 
 @property (nonatomic) MTMathUILabel* label;
@@ -176,7 +171,7 @@
 #pragma mark - Custom user interaction
 
 
-- (BOOL)doBecomeFirstResponder
+- (void)doBecomeFirstResponder
 {
     if (_insertionIndex == nil) {
         _insertionIndex = [MTMathListIndex level0Index:self.mathList.atoms.count];
@@ -194,7 +189,7 @@
  UIResponder protocol override.
  Called when our view is being asked to resign first responder state.
  */
-- (BOOL)doResignFirstResponder
+- (void)doResignFirstResponder
 {
     [self.keyboard finishedEditing:self];
     [self insertionPointChanged];
