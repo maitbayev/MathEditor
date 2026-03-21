@@ -267,28 +267,14 @@
                 [self applyTypographyForToken:token button:button];
                 if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"]) { [variables addObject:button]; }
                 if ([@[@"<",@">",@"≤",@"≥"] containsObject:token]) { [relations addObject:button]; }
-                if ([token isEqualToString:@":"]) {
-                    NSBundle *bundle = SWIFTPM_MODULE_BUNDLE;
-                    [button setBackgroundImage:[UIImage imageNamed:@"num-button-disabled" inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateDisabled];
-                }
-            }
-            UIButton *backspace = [self makeButtonWithTitle:nil image:@"Backspace" action:@selector(backspacePressed:)];
-            UIButton *dismiss = [self makeButtonWithTitle:nil image:@"Keyboard Down" action:@selector(dismissPressed:)];
-            UIButton *enter = [self makeButtonWithTitle:@"Enter" image:nil action:@selector(enterPressed:)];
-            [self applyStyle:@"control" toButton:backspace];
-            [self applyStyle:@"control" toButton:dismiss];
-            [self applyStyle:@"control" toButton:enter];
-            [self applyTypographyForToken:@"Enter" button:enter];
-            [self applyTypographyForToken:@"Dismiss" button:dismiss];
-            [self addButtonSpec:specs button:backspace x:249 y:0 width:71 height:45];
-            [self addButtonSpec:specs button:enter x:249 y:45 width:71 height:90];
-            [self addButtonSpec:specs button:dismiss x:249 y:135 width:71 height:45];
-            break;
-        }
-        case MTKeyboardLayoutFunctions: {
-            backgroundImageName = @"Functions Keyboard";
-            NSArray *items = @[
-                @[@"x", @0, @0, @50, @45], @[@"sin", @50, @0, @50, @45], @[@"cos", @100, @0, @50, @45], @[@"tan", @150, @0, @49, @45], @[@"θ", @199, @0, @50, @45],
+    [self addTrailingControlsToSpecs:specs
+                   backspaceFrame:CGRectMake(248, 0, 72, 45)
+                       enterFrame:CGRectMake(248, 45, 72, 90)
+                     dismissFrame:CGRectMake(248, 135, 72, 45)];
+    [self addTrailingControlsToSpecs:specs
+                   backspaceFrame:CGRectMake(249, 0, 71, 45)
+                       enterFrame:CGRectMake(249, 45, 71, 90)
+                     dismissFrame:CGRectMake(249, 135, 71, 45)];
                 @[@"y", @0, @45, @50, @45], @[@"sec", @50, @45, @50, @45], @[@"csc", @100, @45, @50, @45], @[@"cot", @150, @45, @49, @45], @[@"π", @199, @45, @50, @45],
                 @[@"Fraction", @0, @90, @50, @45], @[@"log", @50, @90, @50, @45], @[@"ln", @100, @90, @50, @45], @[@"LOGBASE", @150, @90, @49, @45], @[@"∠", @199, @90, @50, @45],
                 @[@"Exponent", @0, @135, @50, @45], @[@"Sub", @50, @135, @50, @45], @[@"Sqrt", @100, @135, @50, @45], @[@"Radical", @150, @135, @49, @45], @[@"°", @199, @135, @50, @45],
@@ -390,16 +376,29 @@
         CGFloat height = [spec[@"height"] floatValue] * sy;
         button.frame = CGRectMake(x, y, width, height);
     }
-}
+    [self addTrailingControlsToSpecs:specs
+                   backspaceFrame:CGRectMake(249, 0, 71, 45)
+                       enterFrame:CGRectMake(249, 45, 71, 90)
+                     dismissFrame:CGRectMake(249, 135, 71, 45)];
 
-
-- (void)keyPressed:(id)sender
+- (void)addTrailingControlsToSpecs:(NSMutableArray<NSDictionary *> *)specs
+                     backspaceFrame:(CGRect)backspaceFrame
+                         enterFrame:(CGRect)enterFrame
+                       dismissFrame:(CGRect)dismissFrame
 {
-    [self playClickForCustomKeyTap];
-    
-    UIButton *button = sender;
-    NSString* str = button.currentTitle;
-    [self.textView insertText:str];
+    UIButton *backspace = [self makeButtonWithTitle:nil image:@"Backspace" action:@selector(backspacePressed:)];
+    UIButton *dismiss = [self makeButtonWithTitle:nil image:@"Keyboard Down" action:@selector(dismissPressed:)];
+    UIButton *enter = [self makeButtonWithTitle:@"Enter" image:nil action:@selector(enterPressed:)];
+
+    [self applyStyle:MTKeyboardStyleControl toButton:backspace];
+    [self applyStyle:MTKeyboardStyleControl toButton:dismiss];
+    [self applyStyle:MTKeyboardStyleControl toButton:enter];
+    [self applyTypographyForToken:@"Enter" button:enter];
+    [self applyTypographyForToken:@"Dismiss" button:dismiss];
+
+    [self addButtonSpec:specs button:backspace x:backspaceFrame.origin.x y:backspaceFrame.origin.y width:backspaceFrame.size.width height:backspaceFrame.size.height];
+    [self addButtonSpec:specs button:enter x:enterFrame.origin.x y:enterFrame.origin.y width:enterFrame.size.width height:enterFrame.size.height];
+    [self addButtonSpec:specs button:dismiss x:dismissFrame.origin.x y:dismissFrame.origin.y width:dismissFrame.size.width height:dismissFrame.size.height];
 }
 
 - (void)enterPressed:(id)sender
