@@ -113,6 +113,31 @@
     return button;
 }
 
+- (void)applyStyle:(NSString *)style toButton:(UIButton *)button
+{
+    NSBundle *bundle = SWIFTPM_MODULE_BUNDLE;
+    UIColor *normalTitleColor = [UIColor colorWithRed:0.12 green:0.16 blue:0.22 alpha:1.0];
+    NSString *highlightBackground = @"Keyboard-grey-pressed";
+
+    if ([style isEqualToString:@"marine"]) {
+        normalTitleColor = [UIColor whiteColor];
+        highlightBackground = @"Keyboard-marine-pressed";
+    } else if ([style isEqualToString:@"orange"]) {
+        highlightBackground = @"Keyboard-orange-pressed";
+    } else if ([style isEqualToString:@"green"]) {
+        highlightBackground = @"Keyboard-green-pressed";
+    } else if ([style isEqualToString:@"azure"]) {
+        highlightBackground = @"Keyboard-azure-pressed";
+    } else if ([style isEqualToString:@"control"]) {
+        normalTitleColor = [UIColor whiteColor];
+        highlightBackground = @"Keyboard-grey-pressed";
+    }
+
+    [button setTitleColor:normalTitleColor forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    [button setBackgroundImage:[UIImage imageNamed:highlightBackground inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateHighlighted];
+}
+
 - (void)addButtonSpec:(NSMutableArray<NSDictionary *> *)specs
                button:(UIButton *)button
                     x:(CGFloat)x
@@ -149,21 +174,40 @@
                 if ([token isEqualToString:@"Fraction"]) {
                     button = [self makeButtonWithTitle:nil image:@"Fraction" action:@selector(fractionPressed:)];
                     self.fractionButton = button;
+                    [self applyStyle:@"marine" toButton:button];
                 } else if ([token isEqualToString:@"Exponent"]) {
                     button = [self makeButtonWithTitle:nil image:@"Exponent" action:@selector(exponentPressed:)];
                     self.exponentButton = button;
+                    [self applyStyle:@"marine" toButton:button];
+                    NSBundle *bundle = SWIFTPM_MODULE_BUNDLE;
+                    [button setBackgroundImage:[UIImage imageNamed:@"blue-button-highlighted" inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateSelected];
                 } else {
                     button = [self makeButtonWithTitle:token image:nil action:@selector(keyPressed:)];
+                    if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"]) {
+                        [self applyStyle:@"marine" toButton:button];
+                    } else if ([@[@"+",@"-",@"×",@"÷"] containsObject:token]) {
+                        [self applyStyle:@"orange" toButton:button];
+                    } else {
+                        [self applyStyle:@"gray" toButton:button];
+                    }
                 }
                 [self addButtonSpec:specs button:button x:[item[1] floatValue] y:[item[2] floatValue] width:[item[3] floatValue] height:[item[4] floatValue]];
                 if ([@"0123456789." containsString:token]) { [numbers addObject:button]; }
                 if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"]) { [variables addObject:button]; }
                 if ([@[@"+",@"-",@"×",@"÷"] containsObject:token]) { [operators addObject:button]; }
-                if ([token isEqualToString:@"="]) { self.equalsButton = button; [relations addObject:button]; }
+                if ([token isEqualToString:@"="]) {
+                    self.equalsButton = button;
+                    [relations addObject:button];
+                    NSBundle *bundle = SWIFTPM_MODULE_BUNDLE;
+                    [button setBackgroundImage:[UIImage imageNamed:@"num-button-disabled" inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateDisabled];
+                }
             }
             UIButton *backspace = [self makeButtonWithTitle:nil image:@"Backspace" action:@selector(backspacePressed:)];
             UIButton *dismiss = [self makeButtonWithTitle:nil image:@"Keyboard Down" action:@selector(dismissPressed:)];
             UIButton *enter = [self makeButtonWithTitle:@"Enter" image:nil action:@selector(enterPressed:)];
+            [self applyStyle:@"control" toButton:backspace];
+            [self applyStyle:@"control" toButton:dismiss];
+            [self applyStyle:@"control" toButton:enter];
             [self addButtonSpec:specs button:backspace x:248 y:0 width:72 height:45];
             [self addButtonSpec:specs button:enter x:248 y:45 width:72 height:90];
             [self addButtonSpec:specs button:dismiss x:248 y:135 width:72 height:45];
@@ -181,16 +225,25 @@
                 NSString *token = item[0];
                 UIButton *button = nil;
                 if ([token isEqualToString:@"Fraction"]) { button = [self makeButtonWithTitle:nil image:@"Fraction" action:@selector(fractionPressed:)]; self.fractionButton = button; }
-                else if ([token isEqualToString:@"Exponent"]) { button = [self makeButtonWithTitle:nil image:@"Exponent" action:@selector(exponentPressed:)]; self.exponentButton = button; }
+                else if ([token isEqualToString:@"Exponent"]) { button = [self makeButtonWithTitle:nil image:@"Exponent" action:@selector(exponentPressed:)]; self.exponentButton = button; NSBundle *bundle = SWIFTPM_MODULE_BUNDLE; [button setBackgroundImage:[UIImage imageNamed:@"blue-button-highlighted" inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateSelected]; }
                 else if ([token isEqualToString:@"ABS"]) { button = [self makeButtonWithTitle:@"|.|" image:nil action:@selector(absValuePressed:)]; }
                 else { button = [self makeButtonWithTitle:token image:nil action:@selector(keyPressed:)]; }
+                if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"] || [token isEqualToString:@"Fraction"] || [token isEqualToString:@"Exponent"]) { [self applyStyle:@"marine" toButton:button]; }
+                else { [self applyStyle:@"orange" toButton:button]; }
                 [self addButtonSpec:specs button:button x:[item[1] floatValue] y:[item[2] floatValue] width:[item[3] floatValue] height:[item[4] floatValue]];
                 if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"]) { [variables addObject:button]; }
                 if ([@[@"<",@">",@"≤",@"≥"] containsObject:token]) { [relations addObject:button]; }
+                if ([token isEqualToString:@":"]) {
+                    NSBundle *bundle = SWIFTPM_MODULE_BUNDLE;
+                    [button setBackgroundImage:[UIImage imageNamed:@"num-button-disabled" inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateDisabled];
+                }
             }
             UIButton *backspace = [self makeButtonWithTitle:nil image:@"Backspace" action:@selector(backspacePressed:)];
             UIButton *dismiss = [self makeButtonWithTitle:nil image:@"Keyboard Down" action:@selector(dismissPressed:)];
             UIButton *enter = [self makeButtonWithTitle:@"Enter" image:nil action:@selector(enterPressed:)];
+            [self applyStyle:@"control" toButton:backspace];
+            [self applyStyle:@"control" toButton:dismiss];
+            [self applyStyle:@"control" toButton:enter];
             [self addButtonSpec:specs button:backspace x:249 y:0 width:71 height:45];
             [self addButtonSpec:specs button:enter x:249 y:45 width:71 height:90];
             [self addButtonSpec:specs button:dismiss x:249 y:135 width:71 height:45];
@@ -208,18 +261,23 @@
                 NSString *token = item[0];
                 UIButton *button = nil;
                 if ([token isEqualToString:@"Fraction"]) { button = [self makeButtonWithTitle:nil image:@"Fraction" action:@selector(fractionPressed:)]; self.fractionButton = button; }
-                else if ([token isEqualToString:@"Exponent"]) { button = [self makeButtonWithTitle:nil image:@"Exponent" action:@selector(exponentPressed:)]; self.exponentButton = button; }
-                else if ([token isEqualToString:@"Sqrt"]) { button = [self makeButtonWithTitle:nil image:@"Sqrt" action:@selector(squareRootPressed:)]; self.squareRootButton = button; }
-                else if ([token isEqualToString:@"Radical"]) { button = [self makeButtonWithTitle:nil image:@"Sqrt with Power" action:@selector(rootWithPowerPressed:)]; self.radicalButton = button; }
-                else if ([token isEqualToString:@"LOGBASE"]) { button = [self makeButtonWithTitle:nil image:@"Log with base" action:@selector(logWithBasePressed:)]; }
-                else if ([token isEqualToString:@"Sub"]) { button = [self makeButtonWithTitle:nil image:@"Subscript" action:@selector(subscriptPressed:)]; }
+                else if ([token isEqualToString:@"Exponent"]) { button = [self makeButtonWithTitle:nil image:@"Exponent" action:@selector(exponentPressed:)]; self.exponentButton = button; NSBundle *bundle = SWIFTPM_MODULE_BUNDLE; [button setBackgroundImage:[UIImage imageNamed:@"Keyboard-marine-pressed" inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateSelected]; }
+                else if ([token isEqualToString:@"Sqrt"]) { button = [self makeButtonWithTitle:nil image:@"Sqrt" action:@selector(squareRootPressed:)]; self.squareRootButton = button; NSBundle *bundle = SWIFTPM_MODULE_BUNDLE; UIImage *inv=[UIImage imageNamed:@"Sqrt Inverted" inBundle:bundle compatibleWithTraitCollection:nil]; UIImage *bg=[UIImage imageNamed:@"Keyboard-green-pressed" inBundle:bundle compatibleWithTraitCollection:nil]; [button setImage:inv forState:UIControlStateSelected]; [button setImage:inv forState:UIControlStateHighlighted]; [button setBackgroundImage:bg forState:UIControlStateSelected]; }
+                else if ([token isEqualToString:@"Radical"]) { button = [self makeButtonWithTitle:nil image:@"Sqrt with Power" action:@selector(rootWithPowerPressed:)]; self.radicalButton = button; NSBundle *bundle = SWIFTPM_MODULE_BUNDLE; UIImage *inv=[UIImage imageNamed:@"Sqrt Power Inverted" inBundle:bundle compatibleWithTraitCollection:nil]; UIImage *bg=[UIImage imageNamed:@"Keyboard-green-pressed" inBundle:bundle compatibleWithTraitCollection:nil]; [button setImage:inv forState:UIControlStateSelected]; [button setImage:inv forState:UIControlStateHighlighted]; [button setBackgroundImage:bg forState:UIControlStateSelected]; [button setBackgroundImage:[UIImage imageNamed:@"num-button-disabled" inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateDisabled]; }
+                else if ([token isEqualToString:@"LOGBASE"]) { button = [self makeButtonWithTitle:nil image:@"Log with base" action:@selector(logWithBasePressed:)]; NSBundle *bundle = SWIFTPM_MODULE_BUNDLE; [button setImage:[UIImage imageNamed:@"Log Inverted" inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateHighlighted]; }
+                else if ([token isEqualToString:@"Sub"]) { button = [self makeButtonWithTitle:nil image:@"Subscript" action:@selector(subscriptPressed:)]; NSBundle *bundle = SWIFTPM_MODULE_BUNDLE; [button setImage:[UIImage imageNamed:@"Subscript Inverted" inBundle:bundle compatibleWithTraitCollection:nil] forState:UIControlStateHighlighted]; }
                 else { button = [self makeButtonWithTitle:token image:nil action:@selector(keyPressed:)]; }
+                if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"] || [token isEqualToString:@"Fraction"] || [token isEqualToString:@"Exponent"]) { [self applyStyle:@"marine" toButton:button]; }
+                else { [self applyStyle:@"green" toButton:button]; }
                 [self addButtonSpec:specs button:button x:[item[1] floatValue] y:[item[2] floatValue] width:[item[3] floatValue] height:[item[4] floatValue]];
                 if ([token isEqualToString:@"x"] || [token isEqualToString:@"y"]) { [variables addObject:button]; }
             }
             UIButton *backspace = [self makeButtonWithTitle:nil image:@"Backspace" action:@selector(backspacePressed:)];
             UIButton *dismiss = [self makeButtonWithTitle:nil image:@"Keyboard Down" action:@selector(dismissPressed:)];
             UIButton *enter = [self makeButtonWithTitle:@"Enter" image:nil action:@selector(enterPressed:)];
+            [self applyStyle:@"control" toButton:backspace];
+            [self applyStyle:@"control" toButton:dismiss];
+            [self applyStyle:@"control" toButton:enter];
             [self addButtonSpec:specs button:backspace x:249 y:0 width:71 height:45];
             [self addButtonSpec:specs button:enter x:249 y:45 width:71 height:90];
             [self addButtonSpec:specs button:dismiss x:249 y:135 width:71 height:45];
@@ -241,6 +299,8 @@
                 else if ([token isEqualToString:@"Dismiss"]) { button = [self makeButtonWithTitle:nil image:@"Keyboard Down" action:@selector(dismissPressed:)]; }
                 else if ([token isEqualToString:@"Enter"]) { button = [self makeButtonWithTitle:@"Enter" image:nil action:@selector(enterPressed:)]; }
                 else { button = [self makeButtonWithTitle:token image:nil action:@selector(keyPressed:)]; [letters addObject:button]; [variables addObject:button]; }
+                if ([token isEqualToString:@"Shift"] || [token isEqualToString:@"Back"] || [token isEqualToString:@"Dismiss"] || [token isEqualToString:@"Enter"]) { [self applyStyle:@"control" toButton:button]; }
+                else { [self applyStyle:@"azure" toButton:button]; }
                 [self addButtonSpec:specs button:button x:[item[1] floatValue] y:[item[2] floatValue] width:[item[3] floatValue] height:[item[4] floatValue]];
                 if ([token isEqualToString:@"α"]) { self.alphaRho = button; [greekLetters addObject:button]; }
                 if ([token isEqualToString:@"Δ"]) { self.deltaOmega = button; [greekLetters addObject:button]; }
