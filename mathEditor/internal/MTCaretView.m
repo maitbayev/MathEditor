@@ -87,6 +87,23 @@ static NSInteger getCaretHeight() {
     [self setNeedsDisplay];
 }
 
+- (void)handleDragAtLocalPoint:(CGPoint)loc
+{
+    CGPoint caretPoint = CGPointMake(loc.x, loc.y - self.frame.origin.y);
+    CGPoint labelPoint = [_label convertPoint:caretPoint fromView:self];
+    [_label moveCaretToPoint:labelPoint]; // puts the point at the top to the top of the current caret
+}
+
+- (CGRect)hitArea
+{
+    // Create a hit area around the center.
+    CGSize size = self.bounds.size;
+    return CGRectMake((size.width - kCaretHandleHitAreaSize) / 2,
+                      (size.height - kCaretHandleHitAreaSize) / 2,
+                      kCaretHandleHitAreaSize,
+                      kCaretHandleHitAreaSize);
+}
+
 #if TARGET_OS_IPHONE
 
 - (void) layoutSubviews
@@ -109,11 +126,7 @@ static NSInteger getCaretHeight() {
 {
     // From apple documentation
     UITouch *aTouch = [touches anyObject];
-    CGPoint loc = [aTouch locationInView:self];
-    CGRect frame = self.frame;
-    CGPoint caretPoint = CGPointMake(loc.x, loc.y - frame.origin.y);  // puts the point at the top to the top of the current caret
-    CGPoint labelPoint = [_label convertPoint:caretPoint fromView:self];
-    [_label moveCaretToPoint:labelPoint];
+    [self handleDragAtLocalPoint:[aTouch locationInView:self]];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
@@ -123,10 +136,7 @@ static NSInteger getCaretHeight() {
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {
-    // Create a hit area around the center.
-    CGSize size = self.bounds.size;
-    CGRect hitArea = CGRectMake((size.width - kCaretHandleHitAreaSize)/2, (size.height - kCaretHandleHitAreaSize)/2, kCaretHandleHitAreaSize, kCaretHandleHitAreaSize);
-    return CGRectContainsPoint(hitArea, point);
+    return CGRectContainsPoint([self hitArea], point);
 }
 
 #endif
@@ -155,11 +165,8 @@ static NSInteger getCaretHeight() {
 
 - (void)mouseDragged:(NSEvent *)event
 {
-    NSPoint loc = [self convertPoint:[event locationInWindow] fromView:nil];
-    NSRect frame = self.frame;
-    NSPoint caretPoint = NSMakePoint(loc.x, loc.y - frame.origin.y);
-    NSPoint labelPoint = [_label convertPoint:caretPoint fromView:self];
-    [_label moveCaretToPoint:labelPoint];
+    NSPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
+    [self handleDragAtLocalPoint:point];
 }
 
 - (void)mouseUp:(NSEvent *)event
@@ -174,18 +181,10 @@ static NSInteger getCaretHeight() {
 - (NSView *)hitTest:(NSPoint)point
 {
     if (self.hidden) {
-      return nil;
+        return nil;
     }
-    // Convert point from superview coordinates to local coordinates
-    NSPoint localPoint = [self convertPoint:point fromView:self.superview];
-    // Create a hit area around the center
-    NSSize size = self.bounds.size;
-    NSRect hitArea = NSMakeRect((size.width - kCaretHandleHitAreaSize) / 2,
-                                (size.height - kCaretHandleHitAreaSize) / 2,
-                                kCaretHandleHitAreaSize,
-                                kCaretHandleHitAreaSize);
-
-    if (NSPointInRect(localPoint, hitArea)) {
+    CGPoint localPoint = [self convertPoint:point fromView:self.superview];
+    if (CGRectContainsPoint([self hitArea], localPoint)) {
         return self;
     }
     return nil;
