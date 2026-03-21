@@ -1,5 +1,6 @@
 module MathKeyboard {
   header "../keyboard/MTMathKeyboardRootView.h"
+  header "../keyboard/MTKeyboard.h"
   
   export *
 }
