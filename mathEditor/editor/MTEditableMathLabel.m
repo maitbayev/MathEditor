@@ -202,7 +202,11 @@
 {
     if (![self isFirstResponder]) {
 		// Become first responder state (which shows software keyboard, if applicable).
+        #if TARGET_OS_OSX
+        [self.window makeFirstResponder:self];
+        #else
         [self becomeFirstResponder];
+        #endif
     }
 }
 
