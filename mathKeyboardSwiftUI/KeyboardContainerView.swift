@@ -5,6 +5,8 @@
 //  Created by Madiyar Aitbayev on 22/03/2026.
 //
 
+#if os(iOS)
+
 import MathEditor
 import MathKeyboard
 import SwiftUI
@@ -80,3 +82,5 @@ final class KeyboardContainerUIView: UIView {
     return keyboard
   }
 }
+
+#endif // os(iOS)

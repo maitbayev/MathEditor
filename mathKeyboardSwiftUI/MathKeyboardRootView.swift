@@ -8,6 +8,8 @@
 import MathKeyboard
 import SwiftUI
 
+#if os(iOS)
+
 public struct MathKeyboardRootView: View {
   let state: KeyboardState
   weak var textInput: (any UIView & UIKeyInput)?
@@ -60,3 +62,5 @@ public struct MathKeyboardRootView: View {
     ) ?? UIImage()
   }
 }
+
+#endif // os(iOS)
