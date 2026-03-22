@@ -10,6 +10,7 @@
 		862D28F82E2D525900F9B6FE /* MathEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 862D28F72E2D525900F9B6FE /* MathEditor */; };
 		862D28FB2E2D527100F9B6FE /* MathEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 862D28FA2E2D527100F9B6FE /* MathEditor */; };
 		C1489ED52F6CB33A00AB2993 /* MathKeyboard in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = C1489ED42F6CB33A00AB2993 /* MathKeyboard */; };
+		C1DAAE012F70231100E4E983 /* MathKeyboardSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = C1DAAE002F70231100E4E983 /* MathKeyboardSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1489ED52F6CB33A00AB2993 /* MathKeyboard in Frameworks */,
+				C1DAAE012F70231100E4E983 /* MathKeyboardSwiftUI in Frameworks */,
 				862D28F82E2D525900F9B6FE /* MathEditor in Frameworks */,
 				862D28FB2E2D527100F9B6FE /* MathEditor in Frameworks */,
 			);
@@ -85,6 +87,7 @@
 				862D28F72E2D525900F9B6FE /* MathEditor */,
 				862D28FA2E2D527100F9B6FE /* MathEditor */,
 				C1489ED42F6CB33A00AB2993 /* MathKeyboard */,
+				C1DAAE002F70231100E4E983 /* MathKeyboardSwiftUI */,
 			);
 			productName = MathEditorSwiftUIExample;
 			productReference = 862D28E72E2D51E100F9B6FE /* MathEditorSwiftUIExample.app */;
@@ -385,6 +388,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 862D28F92E2D527100F9B6FE /* XCLocalSwiftPackageReference "../../MathEditor" */;
 			productName = MathKeyboard;
+		};
+		C1DAAE002F70231100E4E983 /* MathKeyboardSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 862D28F92E2D527100F9B6FE /* XCLocalSwiftPackageReference "../../MathEditor" */;
+			productName = MathKeyboardSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
