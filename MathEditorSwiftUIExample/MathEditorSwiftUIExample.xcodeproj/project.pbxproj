@@ -119,6 +119,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				862D28F92E2D527100F9B6FE /* XCLocalSwiftPackageReference "../../MathEditor" */,
+				C1C5F2D42FF0000000000001 /* XCLocalSwiftPackageReference "../../MathEditor/MathKeyboardSwiftUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 862D28E82E2D51E100F9B6FE /* Products */;
@@ -289,7 +290,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14;
+				IPHONEOS_DEPLOYMENT_TARGET = 16;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11;
@@ -328,7 +329,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14;
+				IPHONEOS_DEPLOYMENT_TARGET = 16;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11;
@@ -373,6 +374,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../MathEditor;
 		};
+		C1C5F2D42FF0000000000001 /* XCLocalSwiftPackageReference "../../MathEditor/MathKeyboardSwiftUI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../MathEditor/MathKeyboardSwiftUI;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -391,7 +396,7 @@
 		};
 		C1DAAE002F70231100E4E983 /* MathKeyboardSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 862D28F92E2D527100F9B6FE /* XCLocalSwiftPackageReference "../../MathEditor" */;
+			package = C1C5F2D42FF0000000000001 /* XCLocalSwiftPackageReference "../../MathEditor/MathKeyboardSwiftUI" */;
 			productName = MathKeyboardSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
