@@ -223,6 +223,7 @@
               if let pressedAsset = cell.pressedAsset {
                 assetImage(pressedAsset)
                   .resizable()
+                  .opacity(0.65)
               } else {
                 Color.clear
               }
