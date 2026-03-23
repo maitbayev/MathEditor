@@ -36,7 +36,8 @@
   final class KeyboardContainerUIView: UIView {
     private weak var currentKeyboard: UIView?
     private lazy var keyboards: [KeyboardTab: (UIView & KeyboardConfigurable)] = [
-      .numbers: makeNumbersKeyboard(),
+      .numbers: makeNumbersKeyboard(layout: .legacy),
+      .numbersGrid: makeNumbersKeyboard(layout: .equalGrid),
       .legacyNumbers: makeKeyboard(named: KeyboardTab.legacyNumbers.nibName),
       .operations: makeKeyboard(named: KeyboardTab.operations.nibName),
       .functions: makeKeyboard(named: KeyboardTab.functions.nibName),
@@ -74,8 +75,8 @@
       ])
     }
 
-    private func makeNumbersKeyboard() -> UIView & KeyboardConfigurable {
-      let keyboard = NumbersKeyboardHostView()
+    private func makeNumbersKeyboard(layout: NumbersKeyboardLayout) -> UIView & KeyboardConfigurable {
+      let keyboard = NumbersKeyboardHostView(layout: layout)
       keyboard.translatesAutoresizingMaskIntoConstraints = false
       return keyboard
     }

@@ -7,6 +7,7 @@
 
 enum KeyboardTab: CaseIterable, Hashable, Equatable, Identifiable {
   case numbers
+  case numbersGrid
   case legacyNumbers
   case operations
   case functions
@@ -19,6 +20,7 @@ extension KeyboardTab {
   var imageNames: (normal: String, selected: String)? {
     switch self {
     case .numbers: return ("Numbers Symbol wbg", "Number Symbol")
+    case .numbersGrid: return nil
     case .legacyNumbers: return nil
     case .operations: return ("Operations Symbol wbg", "Operations Symbol")
     case .functions: return ("Functions Symbol wbg", "Functions Symbol")
@@ -29,6 +31,7 @@ extension KeyboardTab {
   var nibName: String {
     switch self {
     case .numbers: return "MTKeyboard"
+    case .numbersGrid: return "MTKeyboard"
     case .legacyNumbers: return "MTKeyboard"
     case .operations: return "MTKeyboardTab2"
     case .functions: return "MTKeyboardTab3"
@@ -38,6 +41,7 @@ extension KeyboardTab {
 
   var title: String? {
     switch self {
+    case .numbersGrid: return "Grid"
     case .legacyNumbers: return "Old"
     default: return nil
     }

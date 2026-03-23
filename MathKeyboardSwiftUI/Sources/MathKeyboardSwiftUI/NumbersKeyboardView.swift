@@ -36,6 +36,11 @@
     var exponentHighlighted = false
   }
 
+  enum NumbersKeyboardLayout {
+    case legacy
+    case equalGrid
+  }
+
   private enum KeyboardFontRegistry {
     static let variableFontName: String = {
       guard let bundle = MTMathKeyboardRootView.getMathKeyboardResourcesBundle() else {
@@ -58,22 +63,18 @@
 
   final class NumbersKeyboardHostView: UIView, KeyboardConfigurable, UIInputViewAudioFeedback {
     private let model = NumbersKeyboardModel()
+    private let layout: NumbersKeyboardLayout
     private weak var editingTarget: (any UIView & UIKeyInput)?
-    private lazy var hostingController = UIHostingController(
-      rootView: NumbersKeyboardView(
-        model: model,
-        onInsertText: { [weak self] text in self?.insert(text) },
-        onBackspace: { [weak self] in self?.backspace() },
-        onDismiss: { [weak self] in self?.dismissKeyboard() }
-      )
-    )
+    private lazy var hostingController = UIHostingController(rootView: makeRootView())
 
-    override init(frame: CGRect) {
+    init(layout: NumbersKeyboardLayout, frame: CGRect = .zero) {
+      self.layout = layout
       super.init(frame: frame)
       commonInit()
     }
 
     required init?(coder: NSCoder) {
+      layout = .legacy
       super.init(coder: coder)
       commonInit()
     }
@@ -131,6 +132,16 @@
       ])
     }
 
+    private func makeRootView() -> NumbersKeyboardView {
+      NumbersKeyboardView(
+        model: model,
+        layout: layout,
+        onInsertText: { [weak self] text in self?.insert(text) },
+        onBackspace: { [weak self] in self?.backspace() },
+        onDismiss: { [weak self] in self?.dismissKeyboard() }
+      )
+    }
+
     private func insert(_ text: String) {
       playClickForCustomKeyTap()
       editingTarget?.insertText(text)
@@ -165,6 +176,7 @@
 
   struct NumbersKeyboardView: View {
     let model: NumbersKeyboardModel
+    let layout: NumbersKeyboardLayout
     let onInsertText: (String) -> Void
     let onBackspace: () -> Void
     let onDismiss: () -> Void
@@ -187,8 +199,7 @@
 
         if model.exponentHighlighted {
           stretchedOverlayImage(
-            "blue-button-highlighted",
-            frame: keyboardFrame(column: .feature, row: .bottom, width: 50), in: size)
+            "blue-button-highlighted", frame: keyboardFrame(column: .feature, row: .bottom), in: size)
         }
 
         if !model.equalsAllowed {
@@ -376,9 +387,9 @@
       width: CGFloat? = nil
     ) -> CGRect {
       CGRect(
-        x: column.x,
+        x: column.layout(layout).x,
         y: row.y,
-        width: width ?? column.width,
+        width: width ?? column.layout(layout).width,
         height: row.height * rowSpan
       )
     }
@@ -498,22 +509,31 @@
     case operators
     case utility
 
-    var x: CGFloat {
-      switch self {
-      case .feature: 0
-      case .numbersLeft: 50
-      case .numbersMiddle: 99.6667
-      case .numbersRight: 149.3333
-      case .operators: 199
-      case .utility: 248
-      }
+    struct Frame {
+      let x: CGFloat
+      let width: CGFloat
     }
 
-    var width: CGFloat {
-      switch self {
-      case .feature, .numbersMiddle, .numbersRight: 49.6667
-      case .numbersLeft, .operators: 49
-      case .utility: 72
+    func layout(_ mode: NumbersKeyboardLayout) -> Frame {
+      switch mode {
+      case .legacy:
+        switch self {
+        case .feature: Frame(x: 0, width: 49.6667)
+        case .numbersLeft: Frame(x: 50, width: 49)
+        case .numbersMiddle: Frame(x: 99.6667, width: 49.6667)
+        case .numbersRight: Frame(x: 149.3333, width: 49.6667)
+        case .operators: Frame(x: 199, width: 49)
+        case .utility: Frame(x: 248, width: 72)
+        }
+      case .equalGrid:
+        switch self {
+        case .feature: Frame(x: 0, width: 49.6)
+        case .numbersLeft: Frame(x: 49.6, width: 49.6)
+        case .numbersMiddle: Frame(x: 99.2, width: 49.6)
+        case .numbersRight: Frame(x: 148.8, width: 49.6)
+        case .operators: Frame(x: 198.4, width: 49.6)
+        case .utility: Frame(x: 248, width: 72)
+        }
       }
     }
   }
