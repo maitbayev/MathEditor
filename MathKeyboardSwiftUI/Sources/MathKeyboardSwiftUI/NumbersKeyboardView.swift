@@ -193,7 +193,7 @@
             assetImage(overlayAsset)
               .resizable()
           }
-          cell.label
+          cellContentView(cell)
         }
       }
       .buttonStyle(
@@ -219,11 +219,11 @@
     private var featureItems: [KeyboardCell] {
       [
         .text(
-          label: "x", foreground: .white, fontName: KeyboardFontRegistry.variableFontName,
+          label: "x", tone: .light, fontName: KeyboardFontRegistry.variableFontName,
           action: { onInsertText("x") }, enabled: keyboardState.variablesAllowed,
           pressedAsset: "Keyboard-marine-pressed"),
         .text(
-          label: "y", foreground: .white, fontName: KeyboardFontRegistry.variableFontName,
+          label: "y", tone: .light, fontName: KeyboardFontRegistry.variableFontName,
           action: { onInsertText("y") }, enabled: keyboardState.variablesAllowed,
           pressedAsset: "Keyboard-marine-pressed"),
         .image(
@@ -241,29 +241,29 @@
 
     private var numbersLeftItems: [KeyboardCell] {
       [
-        .text(label: "7", foreground: .black, action: { onInsertText("7") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
-        .text(label: "4", foreground: .black, action: { onInsertText("4") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
-        .text(label: "1", foreground: .black, action: { onInsertText("1") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
-        .text(label: "0", foreground: .black, action: { onInsertText("0") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
+        .text(label: "7", tone: .dark, action: { onInsertText("7") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
+        .text(label: "4", tone: .dark, action: { onInsertText("4") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
+        .text(label: "1", tone: .dark, action: { onInsertText("1") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
+        .text(label: "0", tone: .dark, action: { onInsertText("0") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
       ]
     }
 
     private var numbersMiddleItems: [KeyboardCell] {
       [
-        .text(label: "8", foreground: .black, action: { onInsertText("8") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
-        .text(label: "5", foreground: .black, action: { onInsertText("5") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
-        .text(label: "2", foreground: .black, action: { onInsertText("2") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
-        .text(label: ".", foreground: .black, action: { onInsertText(".") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
+        .text(label: "8", tone: .dark, action: { onInsertText("8") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
+        .text(label: "5", tone: .dark, action: { onInsertText("5") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
+        .text(label: "2", tone: .dark, action: { onInsertText("2") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
+        .text(label: ".", tone: .dark, action: { onInsertText(".") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
       ]
     }
 
     private var numbersRightItems: [KeyboardCell] {
       [
-        .text(label: "9", foreground: .black, action: { onInsertText("9") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
-        .text(label: "6", foreground: .black, action: { onInsertText("6") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
-        .text(label: "3", foreground: .black, action: { onInsertText("3") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
+        .text(label: "9", tone: .dark, action: { onInsertText("9") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
+        .text(label: "6", tone: .dark, action: { onInsertText("6") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
+        .text(label: "3", tone: .dark, action: { onInsertText("3") }, enabled: keyboardState.numbersAllowed, pressedAsset: "Keyboard-grey-pressed"),
         .text(
-          label: "=", foreground: keyboardState.equalsAllowed ? .black : Color(white: 0.67),
+          label: "=", tone: keyboardState.equalsAllowed ? .dark : .disabled,
           action: { onInsertText("=") }, enabled: keyboardState.equalsAllowed,
           pressedAsset: "Keyboard-grey-pressed",
           overlayAsset: keyboardState.equalsAllowed ? nil : "num-button-disabled"),
@@ -272,10 +272,10 @@
 
     private var operatorItems: [KeyboardCell] {
       [
-        .text(label: "÷", foreground: .black, action: { onInsertText("÷") }, enabled: keyboardState.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed"),
-        .text(label: "×", foreground: .black, action: { onInsertText("×") }, enabled: keyboardState.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed"),
-        .text(label: "-", foreground: .black, action: { onInsertText("-") }, enabled: keyboardState.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed"),
-        .text(label: "+", foreground: .black, action: { onInsertText("+") }, enabled: keyboardState.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed"),
+        .text(label: "÷", tone: .dark, action: { onInsertText("÷") }, enabled: keyboardState.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed"),
+        .text(label: "×", tone: .dark, action: { onInsertText("×") }, enabled: keyboardState.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed"),
+        .text(label: "-", tone: .dark, action: { onInsertText("-") }, enabled: keyboardState.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed"),
+        .text(label: "+", tone: .dark, action: { onInsertText("+") }, enabled: keyboardState.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed"),
       ]
     }
 
@@ -288,7 +288,7 @@
 
     private var utilityEnter: KeyboardCell {
       .text(
-        label: "Enter", foreground: .white,
+        label: "Enter", tone: .light,
         action: { onInsertText("\n") }, enabled: true, pressedAsset: "Keyboard-grey-pressed")
     }
 
@@ -309,12 +309,67 @@
       }
       return Image(systemName: "questionmark.square.dashed")
     }
+    
+    @ViewBuilder
+    private func cellContentView(_ cell: KeyboardCell) -> some View {
+      switch cell.content {
+      case .text(let text):
+        Text(text.value)
+          .font(.custom(text.fontName, size: text.fontSize))
+          .foregroundColor(textColor(for: text.tone))
+      case .image(let image):
+        if let uiImage = UIImage(
+          named: image.name,
+          in: MTMathKeyboardRootView.getMathKeyboardResourcesBundle(),
+          compatibleWith: nil
+        ) {
+          Image(uiImage: uiImage)
+            .renderingMode(.original)
+            .resizable()
+            .scaledToFit()
+            .padding(image.padding)
+        } else {
+          Image(systemName: "questionmark.square.dashed")
+        }
+      }
+    }
+    
+    private func textColor(for tone: KeyboardCell.TextTone) -> Color {
+      switch tone {
+      case .light: .white
+      case .dark: .black
+      case .disabled: Color(white: 0.67)
+      }
+    }
 
   }
 
   private struct KeyboardCell: Identifiable {
+    enum Content {
+      case text(TextContent)
+      case image(ImageContent)
+    }
+
+    struct TextContent {
+      let value: String
+      let fontName: String
+      let fontSize: CGFloat
+      let tone: TextTone
+    }
+
+    struct ImageContent {
+      let name: String
+      let padding: CGFloat
+    }
+
+    enum TextTone {
+      case light
+      case dark
+      case disabled
+    }
+
     let id = UUID()
-    let label: AnyView
+    let content: Content
     let action: () -> Void
     let enabled: Bool
     let accessibilityLabel: String
@@ -323,7 +378,7 @@
 
     static func text(
       label: String,
-      foreground: Color,
+      tone: TextTone,
       fontName: String = "HelveticaNeue-Thin",
       fontSize: CGFloat = 20,
       action: @escaping () -> Void,
@@ -333,10 +388,13 @@
       overlayAsset: String? = nil
     ) -> KeyboardCell {
       KeyboardCell(
-        label: AnyView(
-          Text(label)
-            .font(.custom(fontName, size: fontSize))
-            .foregroundColor(foreground)
+        content: .text(
+          TextContent(
+            value: label,
+            fontName: fontName,
+            fontSize: fontSize,
+            tone: tone
+          )
         ),
         action: action,
         enabled: enabled,
@@ -355,23 +413,7 @@
       overlayAsset: String? = nil
     ) -> KeyboardCell {
       KeyboardCell(
-        label: AnyView(
-          Group {
-            if let uiImage = UIImage(
-              named: imageName,
-              in: MTMathKeyboardRootView.getMathKeyboardResourcesBundle(),
-              compatibleWith: nil
-            ) {
-              Image(uiImage: uiImage)
-                .renderingMode(.original)
-                .resizable()
-                .scaledToFit()
-                .padding(8)
-            } else {
-              Image(systemName: "questionmark.square.dashed")
-            }
-          }
-        ),
+        content: .image(ImageContent(name: imageName, padding: 8)),
         action: action,
         enabled: enabled,
         accessibilityLabel: accessibilityLabel,
