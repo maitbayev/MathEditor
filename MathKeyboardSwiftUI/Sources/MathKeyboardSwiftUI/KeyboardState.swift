@@ -5,7 +5,7 @@
 //  Created by Madiyar Aitbayev on 22/03/2026.
 //
 
-struct KeyboardState {
+struct KeyboardState: Equatable {
   var currentTab: KeyboardTab = .numbers
   var equalsAllowed = true
   var fractionsAllowed = true

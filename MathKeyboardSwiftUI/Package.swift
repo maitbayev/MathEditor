@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
   name: "MathKeyboardSwiftUI",
   defaultLocalization: "en",
-  platforms: [.iOS(.v17), .macOS(.v11)],
+  platforms: [.iOS(.v17), .macOS(.v13)],
   products: [
     .library(
       name: "MathKeyboardSwiftUI",
@@ -19,7 +19,7 @@ let package = Package(
     .target(
       name: "MathKeyboardSwiftUI",
       dependencies: [
-        .product(name: "MathKeyboard", package: "MathEditor"),
+        .product(name: "MathKeyboard", package: "MathEditor", condition: .when(platforms: [.iOS])),
         .product(name: "MathEditor", package: "MathEditor"),
       ],
       path: "Sources/MathKeyboardSwiftUI"

@@ -5,10 +5,10 @@
 //  Created by Madiyar Aitbayev on 22/03/2026.
 //
 
-import MathKeyboard
 import SwiftUI
 
 #if os(iOS)
+  import MathKeyboard
 
   public struct MathKeyboardRootView: View {
     let state: KeyboardState
