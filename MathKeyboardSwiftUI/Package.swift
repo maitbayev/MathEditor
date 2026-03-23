@@ -1,11 +1,11 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.9
 
 import PackageDescription
 
 let package = Package(
   name: "MathKeyboardSwiftUI",
   defaultLocalization: "en",
-  platforms: [.iOS(.v16), .macOS(.v11)],
+  platforms: [.iOS(.v17), .macOS(.v11)],
   products: [
     .library(
       name: "MathKeyboardSwiftUI",

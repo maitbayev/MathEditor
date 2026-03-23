@@ -2,6 +2,7 @@
 
   import MathEditor
   import MathKeyboard
+  import Observation
   import SwiftUI
   import CoreText
   import Foundation
@@ -25,13 +26,14 @@
     }
   }
 
-  final class NumbersKeyboardModel: ObservableObject {
-    @Published var numbersAllowed = true
-    @Published var operatorsAllowed = true
-    @Published var variablesAllowed = true
-    @Published var fractionsAllowed = true
-    @Published var equalsAllowed = true
-    @Published var exponentHighlighted = false
+  @Observable
+  final class NumbersKeyboardModel {
+    var numbersAllowed = true
+    var operatorsAllowed = true
+    var variablesAllowed = true
+    var fractionsAllowed = true
+    var equalsAllowed = true
+    var exponentHighlighted = false
   }
 
   private enum KeyboardFontRegistry {
@@ -162,7 +164,7 @@
   }
 
   struct NumbersKeyboardView: View {
-    @ObservedObject var model: NumbersKeyboardModel
+    let model: NumbersKeyboardModel
     let onInsertText: (String) -> Void
     let onBackspace: () -> Void
     let onDismiss: () -> Void
