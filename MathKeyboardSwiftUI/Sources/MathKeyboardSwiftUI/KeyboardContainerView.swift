@@ -46,14 +46,7 @@
     fileprivate func sync(state: KeyboardState, editingTarget: (any UIView & UIKeyInput)?) {
       for keyboard in keyboards.values {
         keyboard.setEditingTarget(editingTarget)
-        keyboard.setEqualsState(state.equalsAllowed)
-        keyboard.setFractionState(state.fractionsAllowed)
-        keyboard.setVariablesState(state.variablesAllowed)
-        keyboard.setNumbersState(state.numbersAllowed)
-        keyboard.setOperatorState(state.operatorsAllowed)
-        keyboard.setExponentState(state.exponentHighlighted)
-        keyboard.setSquareRootState(state.squareRootHighlighted)
-        keyboard.setRadicalState(state.radicalHighlighted)
+        keyboard.applyKeyboardState(state)
       }
 
       display(keyboard: keyboards[state.currentTab]!)

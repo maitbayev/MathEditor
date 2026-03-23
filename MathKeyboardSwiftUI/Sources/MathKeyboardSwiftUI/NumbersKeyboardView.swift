@@ -9,19 +9,23 @@
 
   protocol KeyboardConfigurable: AnyObject {
     func setEditingTarget(_ textView: (any UIView & UIKeyInput)?)
-    func setNumbersState(_ enabled: Bool)
-    func setOperatorState(_ enabled: Bool)
-    func setVariablesState(_ enabled: Bool)
-    func setFractionState(_ enabled: Bool)
-    func setEqualsState(_ enabled: Bool)
-    func setExponentState(_ highlighted: Bool)
-    func setSquareRootState(_ highlighted: Bool)
-    func setRadicalState(_ highlighted: Bool)
+    func applyKeyboardState(_ state: KeyboardState)
   }
 
   extension MTKeyboard: KeyboardConfigurable {
     func setEditingTarget(_ textView: (any UIView & UIKeyInput)?) {
       self.textView = textView
+    }
+
+    func applyKeyboardState(_ state: KeyboardState) {
+      numbersAllowed = state.numbersAllowed
+      operatorsAllowed = state.operatorsAllowed
+      variablesAllowed = state.variablesAllowed
+      fractionsAllowed = state.fractionsAllowed
+      equalsAllowed = state.equalsAllowed
+      exponentHighlighted = state.exponentHighlighted
+      squareRootHighlighted = state.squareRootHighlighted
+      radicalHighlighted = state.radicalHighlighted
     }
   }
 
@@ -64,33 +68,9 @@
       editingTarget = textView
     }
 
-    func setNumbersState(_ enabled: Bool) {
-      updateState { $0.numbersAllowed = enabled }
+    func applyKeyboardState(_ state: KeyboardState) {
+      updateState { $0 = state }
     }
-
-    func setOperatorState(_ enabled: Bool) {
-      updateState { $0.operatorsAllowed = enabled }
-    }
-
-    func setVariablesState(_ enabled: Bool) {
-      updateState { $0.variablesAllowed = enabled }
-    }
-
-    func setFractionState(_ enabled: Bool) {
-      updateState { $0.fractionsAllowed = enabled }
-    }
-
-    func setEqualsState(_ enabled: Bool) {
-      updateState { $0.equalsAllowed = enabled }
-    }
-
-    func setExponentState(_ highlighted: Bool) {
-      updateState { $0.exponentHighlighted = highlighted }
-    }
-
-    func setSquareRootState(_ highlighted: Bool) {}
-
-    func setRadicalState(_ highlighted: Bool) {}
 
     var enableInputClicksWhenVisible: Bool { true }
 
