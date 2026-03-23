@@ -1,0 +1,18 @@
+//
+//  KeyboardState.swift
+//  MathEditor
+//
+//  Created by Madiyar Aitbayev on 22/03/2026.
+//
+
+struct KeyboardState {
+  var currentTab: KeyboardTab = .numbers
+  var equalsAllowed = true
+  var fractionsAllowed = true
+  var variablesAllowed = true
+  var numbersAllowed = true
+  var operatorsAllowed = true
+  var exponentHighlighted = false
+  var squareRootHighlighted = false
+  var radicalHighlighted = false
+}

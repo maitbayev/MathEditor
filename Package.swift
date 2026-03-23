@@ -13,6 +13,9 @@ let package = Package(
     .library(
       name: "MathKeyboard",
       targets: ["MathKeyboard"]),
+    .library(
+      name: "MathKeyboardSwiftUI",
+      targets: ["MathKeyboardSwiftUI"]),
   ],
   dependencies: [
     .package(url: "https://github.com/maitbayev/iosMath.git", branch: "master")
@@ -35,6 +38,11 @@ let package = Package(
       cSettings: [
         .headerSearchPath("./keyboard")
       ]
+    ),
+    .target(
+      name: "MathKeyboardSwiftUI",
+      dependencies: ["MathKeyboard", "MathEditor"],
+      path: "./mathKeyboardSwiftUI"
     ),
     .testTarget(
       name: "MathEditorTests",
