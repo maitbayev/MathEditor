@@ -185,52 +185,35 @@
             .frame(width: totalWidth, height: totalHeight)
 
           HStack(spacing: 0) {
-            featureSection(columnWidth: standardColumnWidth, rowHeight: rowHeight)
+            VStack(spacing: 0) {
+              keyButton(featureItems[0]).frame(width: standardColumnWidth, height: rowHeight)
+              keyButton(featureItems[1]).frame(width: standardColumnWidth, height: rowHeight)
+              keyButton(featureItems[2]).frame(width: standardColumnWidth, height: rowHeight)
+              keyButton(featureItems[3]).frame(width: standardColumnWidth, height: rowHeight)
+            }
             mainColumnsSection(columnWidth: standardColumnWidth, rowHeight: rowHeight)
-            utilitySection(width: utilityWidth, rowHeight: rowHeight)
+            VStack(spacing: 0) {
+              keyButton(utilityBackspace).frame(width: utilityWidth, height: rowHeight)
+              keyButton(utilityEnter).frame(width: utilityWidth, height: rowHeight * 2)
+              keyButton(utilityDismiss).frame(width: utilityWidth, height: rowHeight)
+            }
           }
         }
         .frame(width: totalWidth, height: totalHeight)
       }
     }
 
-    // 1) Feature column
-    private func featureSection(columnWidth: CGFloat, rowHeight: CGFloat) -> some View {
-      keyboardColumn(items: featureItems, width: columnWidth, rowHeight: rowHeight)
-    }
-
-    // 2) Reusable main four-column block (numbers left/middle/right + operators)
+    // 2) Main four-column block (numbers left/middle/right + operators) using Grid
     private func mainColumnsSection(columnWidth: CGFloat, rowHeight: CGFloat) -> some View {
-      KeyboardColumnsSection(
-        columns: [numbersLeftItems, numbersMiddleItems, numbersRightItems, operatorItems],
-        columnWidth: columnWidth,
-        rowHeight: rowHeight,
-        cellContent: { keyButton($0) }
-      )
-    }
-
-    // 3) Utility column
-    private func utilitySection(width: CGFloat, rowHeight: CGFloat) -> some View {
-      utilityColumn(width: width, rowHeight: rowHeight)
-    }
-
-    private func keyboardColumn(items: [KeyboardCell], width: CGFloat, rowHeight: CGFloat) -> some View {
-      VStack(spacing: 0) {
-        ForEach(items) { item in
-          keyButton(item)
-            .frame(width: width, height: rowHeight)
+      Grid(horizontalSpacing: 0, verticalSpacing: 0) {
+        ForEach(0..<4, id: \.self) { row in
+          GridRow {
+            ForEach(0..<4, id: \.self) { column in
+              keyButton(mainColumns[column][row])
+                .frame(width: columnWidth, height: rowHeight)
+            }
+          }
         }
-      }
-    }
-
-    private func utilityColumn(width: CGFloat, rowHeight: CGFloat) -> some View {
-      VStack(spacing: 0) {
-        keyButton(utilityBackspace)
-          .frame(width: width, height: rowHeight)
-        keyButton(utilityEnter)
-          .frame(width: width, height: rowHeight * 2)
-        keyButton(utilityDismiss)
-          .frame(width: width, height: rowHeight)
       }
     }
 
@@ -297,6 +280,10 @@
         .operator("-", action: { onInsertText("-") }, enabled: model.operatorsAllowed),
         .operator("+", action: { onInsertText("+") }, enabled: model.operatorsAllowed),
       ]
+    }
+
+    private var mainColumns: [[KeyboardCell]] {
+      [numbersLeftItems, numbersMiddleItems, numbersRightItems, operatorItems]
     }
 
     private var utilityBackspace: KeyboardCell {
@@ -415,26 +402,6 @@
         action: action,
         enabled: enabled
       )
-    }
-  }
-
-  private struct KeyboardColumnsSection<CellContent: View>: View {
-    let columns: [[KeyboardCell]]
-    let columnWidth: CGFloat
-    let rowHeight: CGFloat
-    let cellContent: (KeyboardCell) -> CellContent
-
-    var body: some View {
-      HStack(spacing: 0) {
-        ForEach(Array(columns.enumerated()), id: \.offset) { _, column in
-          VStack(spacing: 0) {
-            ForEach(column) { cell in
-              cellContent(cell)
-                .frame(width: columnWidth, height: rowHeight)
-            }
-          }
-        }
-      }
     }
   }
 
