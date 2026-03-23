@@ -407,10 +407,10 @@
 
     func makeBody(configuration: Configuration) -> some View {
       ZStack {
-        configuration.label
         if configuration.isPressed {
           pressedOverlay
         }
+        configuration.label
       }
     }
   }
