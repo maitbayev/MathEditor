@@ -18,14 +18,14 @@
     }
 
     func applyKeyboardState(_ state: KeyboardState) {
-      numbersAllowed = state.numbersAllowed
-      operatorsAllowed = state.operatorsAllowed
-      variablesAllowed = state.variablesAllowed
-      fractionsAllowed = state.fractionsAllowed
-      equalsAllowed = state.equalsAllowed
-      exponentHighlighted = state.exponentHighlighted
-      squareRootHighlighted = state.squareRootHighlighted
-      radicalHighlighted = state.radicalHighlighted
+      setNumbersState(state.numbersAllowed)
+      setOperatorState(state.operatorsAllowed)
+      setVariablesState(state.variablesAllowed)
+      setFractionState(state.fractionsAllowed)
+      setEqualsState(state.equalsAllowed)
+      setExponentState(state.exponentHighlighted)
+      setSquareRootState(state.squareRootHighlighted)
+      setRadicalState(state.radicalHighlighted)
     }
   }
 
