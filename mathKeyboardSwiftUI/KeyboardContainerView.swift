@@ -35,15 +35,17 @@ struct KeyboardContainerView: UIViewRepresentable {
 
 final class KeyboardContainerUIView: UIView {
   private weak var currentKeyboard: UIView?
-  private lazy var keyboards: [KeyboardTab: MTKeyboard] = Dictionary(
-    uniqueKeysWithValues: KeyboardTab.allCases.map { tab in
-      (tab, makeKeyboard(named: tab.nibName))
-    }
-  )
+  private lazy var keyboards: [KeyboardTab: (UIView & KeyboardConfigurable)] = [
+    .numbers: makeNumbersKeyboard(),
+    .legacyNumbers: makeKeyboard(named: KeyboardTab.legacyNumbers.nibName),
+    .operations: makeKeyboard(named: KeyboardTab.operations.nibName),
+    .functions: makeKeyboard(named: KeyboardTab.functions.nibName),
+    .letters: makeKeyboard(named: KeyboardTab.letters.nibName),
+  ]
 
   fileprivate func sync(state: KeyboardState, editingTarget: (any UIView & UIKeyInput)?) {
     for keyboard in keyboards.values {
-      keyboard.textView = editingTarget
+      keyboard.setEditingTarget(editingTarget)
       keyboard.setEqualsState(state.equalsAllowed)
       keyboard.setFractionState(state.fractionsAllowed)
       keyboard.setVariablesState(state.variablesAllowed)
@@ -72,7 +74,13 @@ final class KeyboardContainerUIView: UIView {
     ])
   }
 
-  private func makeKeyboard(named nibName: String) -> MTKeyboard {
+  private func makeNumbersKeyboard() -> UIView & KeyboardConfigurable {
+    let keyboard = NumbersKeyboardHostView()
+    keyboard.translatesAutoresizingMaskIntoConstraints = false
+    return keyboard
+  }
+
+  private func makeKeyboard(named nibName: String) -> UIView & KeyboardConfigurable {
     let bundle = MTMathKeyboardRootView.getMathKeyboardResourcesBundle()
     let keyboard = UINib(nibName: nibName, bundle: bundle)
       .instantiate(withOwner: nil, options: nil)

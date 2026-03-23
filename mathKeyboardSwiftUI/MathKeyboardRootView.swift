@@ -27,13 +27,20 @@ public struct MathKeyboardRootView: View {
             Button {
               onTabSelected(tab)
             } label: {
-              Image(uiImage: tabImage(for: tab))
-                .renderingMode(.original)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 6)
+              if let image = tabImage(for: tab) {
+                Image(uiImage: image)
+                  .renderingMode(.original)
+                  .resizable()
+                  .scaledToFit()
+                  .frame(maxWidth: .infinity, maxHeight: .infinity)
+                  .padding(.horizontal, 8)
+                  .padding(.vertical, 6)
+              } else {
+                Text(tab.title ?? "")
+                  .font(.system(size: 14, weight: state.currentTab == tab ? .semibold : .regular))
+                  .foregroundColor(.black)
+                  .frame(maxWidth: .infinity, maxHeight: .infinity)
+              }
             }
             .buttonStyle(.plain)
             .background(Color(white: 0.768627451))
@@ -52,14 +59,16 @@ public struct MathKeyboardRootView: View {
     }
   }
 
-  private func tabImage(for tab: KeyboardTab) -> UIImage {
-    let names = tab.imageNames
+  private func tabImage(for tab: KeyboardTab) -> UIImage? {
+    guard let names = tab.imageNames else {
+      return nil
+    }
     let name = state.currentTab == tab ? names.selected : names.normal
     return UIImage(
       named: name,
       in: MTMathKeyboardRootView.getMathKeyboardResourcesBundle(),
       compatibleWith: nil
-    ) ?? UIImage()
+    )
   }
 }
 
