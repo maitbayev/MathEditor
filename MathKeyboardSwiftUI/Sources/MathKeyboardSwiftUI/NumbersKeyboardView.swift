@@ -205,11 +205,12 @@
 
     // 2) Main four-column block (numbers left/middle/right + operators) using Grid
     private func mainColumnsSection(columnWidth: CGFloat, rowHeight: CGFloat) -> some View {
+      let columns = [numbersLeftItems, numbersMiddleItems, numbersRightItems, operatorItems]
       Grid(horizontalSpacing: 0, verticalSpacing: 0) {
         ForEach(0..<4, id: \.self) { row in
           GridRow {
             ForEach(0..<4, id: \.self) { column in
-              keyButton(mainColumns[column][row])
+              keyButton(columns[column][row])
                 .frame(width: columnWidth, height: rowHeight)
             }
           }
@@ -254,18 +255,28 @@
     }
 
     private var numbersLeftItems: [KeyboardCell] {
-      numberColumn(["7", "4", "1", "0"])
+      [
+        .text(label: "7", foreground: .black, action: { onInsertText("7") }, enabled: model.numbersAllowed),
+        .text(label: "4", foreground: .black, action: { onInsertText("4") }, enabled: model.numbersAllowed),
+        .text(label: "1", foreground: .black, action: { onInsertText("1") }, enabled: model.numbersAllowed),
+        .text(label: "0", foreground: .black, action: { onInsertText("0") }, enabled: model.numbersAllowed),
+      ]
     }
 
     private var numbersMiddleItems: [KeyboardCell] {
-      numberColumn(["8", "5", "2", "."])
+      [
+        .text(label: "8", foreground: .black, action: { onInsertText("8") }, enabled: model.numbersAllowed),
+        .text(label: "5", foreground: .black, action: { onInsertText("5") }, enabled: model.numbersAllowed),
+        .text(label: "2", foreground: .black, action: { onInsertText("2") }, enabled: model.numbersAllowed),
+        .text(label: ".", foreground: .black, action: { onInsertText(".") }, enabled: model.numbersAllowed),
+      ]
     }
 
     private var numbersRightItems: [KeyboardCell] {
       [
-        .number("9", action: { onInsertText("9") }, enabled: model.numbersAllowed),
-        .number("6", action: { onInsertText("6") }, enabled: model.numbersAllowed),
-        .number("3", action: { onInsertText("3") }, enabled: model.numbersAllowed),
+        .text(label: "9", foreground: .black, action: { onInsertText("9") }, enabled: model.numbersAllowed),
+        .text(label: "6", foreground: .black, action: { onInsertText("6") }, enabled: model.numbersAllowed),
+        .text(label: "3", foreground: .black, action: { onInsertText("3") }, enabled: model.numbersAllowed),
         .text(
           label: "=", foreground: model.equalsAllowed ? .black : Color(white: 0.67),
           action: { onInsertText("=") }, enabled: model.equalsAllowed,
@@ -275,15 +286,11 @@
 
     private var operatorItems: [KeyboardCell] {
       [
-        .operator("÷", action: { onInsertText("÷") }, enabled: model.operatorsAllowed),
-        .operator("×", action: { onInsertText("×") }, enabled: model.operatorsAllowed),
-        .operator("-", action: { onInsertText("-") }, enabled: model.operatorsAllowed),
-        .operator("+", action: { onInsertText("+") }, enabled: model.operatorsAllowed),
+        .text(label: "÷", foreground: .black, action: { onInsertText("÷") }, enabled: model.operatorsAllowed),
+        .text(label: "×", foreground: .black, action: { onInsertText("×") }, enabled: model.operatorsAllowed),
+        .text(label: "-", foreground: .black, action: { onInsertText("-") }, enabled: model.operatorsAllowed),
+        .text(label: "+", foreground: .black, action: { onInsertText("+") }, enabled: model.operatorsAllowed),
       ]
-    }
-
-    private var mainColumns: [[KeyboardCell]] {
-      [numbersLeftItems, numbersMiddleItems, numbersRightItems, operatorItems]
     }
 
     private var utilityBackspace: KeyboardCell {
@@ -302,12 +309,6 @@
       .image(
         imageName: "Keyboard Down",
         action: onDismiss, enabled: true, accessibilityLabel: "Dismiss keyboard")
-    }
-
-    private func numberColumn(_ values: [String]) -> [KeyboardCell] {
-      values.map { value in
-        .number(value, action: { onInsertText(value) }, enabled: model.numbersAllowed)
-      }
     }
 
     private func assetImage(_ name: String) -> Image {
@@ -386,23 +387,6 @@
       )
     }
 
-    static func number(_ value: String, action: @escaping () -> Void, enabled: Bool) -> KeyboardCell {
-      .text(
-        label: value,
-        foreground: .black,
-        action: action,
-        enabled: enabled
-      )
-    }
-
-    static func `operator`(_ value: String, action: @escaping () -> Void, enabled: Bool) -> KeyboardCell {
-      .text(
-        label: value,
-        foreground: .black,
-        action: action,
-        enabled: enabled
-      )
-    }
   }
 
 #endif
