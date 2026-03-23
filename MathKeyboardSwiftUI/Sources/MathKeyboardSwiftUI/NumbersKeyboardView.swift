@@ -170,6 +170,20 @@
     let onInsertText: (String) -> Void
     let onBackspace: () -> Void
     let onDismiss: () -> Void
+    
+    private var keyboardState: KeyboardState {
+      KeyboardState(
+        currentTab: .numbers,
+        equalsAllowed: model.equalsAllowed,
+        fractionsAllowed: model.fractionsAllowed,
+        variablesAllowed: model.variablesAllowed,
+        numbersAllowed: model.numbersAllowed,
+        operatorsAllowed: model.operatorsAllowed,
+        exponentHighlighted: model.exponentHighlighted,
+        squareRootHighlighted: false,
+        radicalHighlighted: false
+      )
+    }
 
     var body: some View {
       GeometryReader { proxy in
@@ -239,57 +253,57 @@
       [
         .text(
           label: "x", foreground: .white, fontName: KeyboardFontRegistry.variableFontName,
-          action: { onInsertText("x") }, enabled: model.variablesAllowed),
+          action: { onInsertText("x") }, enabled: keyboardState.variablesAllowed),
         .text(
           label: "y", foreground: .white, fontName: KeyboardFontRegistry.variableFontName,
-          action: { onInsertText("y") }, enabled: model.variablesAllowed),
+          action: { onInsertText("y") }, enabled: keyboardState.variablesAllowed),
         .image(
           imageName: "Fraction",
-          action: { onInsertText(MTSymbolFractionSlash) }, enabled: model.fractionsAllowed,
+          action: { onInsertText(MTSymbolFractionSlash) }, enabled: keyboardState.fractionsAllowed,
           accessibilityLabel: "Fraction"),
         .image(
           imageName: "Exponent",
           action: { onInsertText("^") }, enabled: true, accessibilityLabel: "Exponent",
-          overlayAsset: model.exponentHighlighted ? "blue-button-highlighted" : nil),
+          overlayAsset: keyboardState.exponentHighlighted ? "blue-button-highlighted" : nil),
       ]
     }
 
     private var numbersLeftItems: [KeyboardCell] {
       [
-        .text(label: "7", foreground: .black, action: { onInsertText("7") }, enabled: model.numbersAllowed),
-        .text(label: "4", foreground: .black, action: { onInsertText("4") }, enabled: model.numbersAllowed),
-        .text(label: "1", foreground: .black, action: { onInsertText("1") }, enabled: model.numbersAllowed),
-        .text(label: "0", foreground: .black, action: { onInsertText("0") }, enabled: model.numbersAllowed),
+        .text(label: "7", foreground: .black, action: { onInsertText("7") }, enabled: keyboardState.numbersAllowed),
+        .text(label: "4", foreground: .black, action: { onInsertText("4") }, enabled: keyboardState.numbersAllowed),
+        .text(label: "1", foreground: .black, action: { onInsertText("1") }, enabled: keyboardState.numbersAllowed),
+        .text(label: "0", foreground: .black, action: { onInsertText("0") }, enabled: keyboardState.numbersAllowed),
       ]
     }
 
     private var numbersMiddleItems: [KeyboardCell] {
       [
-        .text(label: "8", foreground: .black, action: { onInsertText("8") }, enabled: model.numbersAllowed),
-        .text(label: "5", foreground: .black, action: { onInsertText("5") }, enabled: model.numbersAllowed),
-        .text(label: "2", foreground: .black, action: { onInsertText("2") }, enabled: model.numbersAllowed),
-        .text(label: ".", foreground: .black, action: { onInsertText(".") }, enabled: model.numbersAllowed),
+        .text(label: "8", foreground: .black, action: { onInsertText("8") }, enabled: keyboardState.numbersAllowed),
+        .text(label: "5", foreground: .black, action: { onInsertText("5") }, enabled: keyboardState.numbersAllowed),
+        .text(label: "2", foreground: .black, action: { onInsertText("2") }, enabled: keyboardState.numbersAllowed),
+        .text(label: ".", foreground: .black, action: { onInsertText(".") }, enabled: keyboardState.numbersAllowed),
       ]
     }
 
     private var numbersRightItems: [KeyboardCell] {
       [
-        .text(label: "9", foreground: .black, action: { onInsertText("9") }, enabled: model.numbersAllowed),
-        .text(label: "6", foreground: .black, action: { onInsertText("6") }, enabled: model.numbersAllowed),
-        .text(label: "3", foreground: .black, action: { onInsertText("3") }, enabled: model.numbersAllowed),
+        .text(label: "9", foreground: .black, action: { onInsertText("9") }, enabled: keyboardState.numbersAllowed),
+        .text(label: "6", foreground: .black, action: { onInsertText("6") }, enabled: keyboardState.numbersAllowed),
+        .text(label: "3", foreground: .black, action: { onInsertText("3") }, enabled: keyboardState.numbersAllowed),
         .text(
-          label: "=", foreground: model.equalsAllowed ? .black : Color(white: 0.67),
-          action: { onInsertText("=") }, enabled: model.equalsAllowed,
-          overlayAsset: model.equalsAllowed ? nil : "num-button-disabled"),
+          label: "=", foreground: keyboardState.equalsAllowed ? .black : Color(white: 0.67),
+          action: { onInsertText("=") }, enabled: keyboardState.equalsAllowed,
+          overlayAsset: keyboardState.equalsAllowed ? nil : "num-button-disabled"),
       ]
     }
 
     private var operatorItems: [KeyboardCell] {
       [
-        .text(label: "÷", foreground: .black, action: { onInsertText("÷") }, enabled: model.operatorsAllowed),
-        .text(label: "×", foreground: .black, action: { onInsertText("×") }, enabled: model.operatorsAllowed),
-        .text(label: "-", foreground: .black, action: { onInsertText("-") }, enabled: model.operatorsAllowed),
-        .text(label: "+", foreground: .black, action: { onInsertText("+") }, enabled: model.operatorsAllowed),
+        .text(label: "÷", foreground: .black, action: { onInsertText("÷") }, enabled: keyboardState.operatorsAllowed),
+        .text(label: "×", foreground: .black, action: { onInsertText("×") }, enabled: keyboardState.operatorsAllowed),
+        .text(label: "-", foreground: .black, action: { onInsertText("-") }, enabled: keyboardState.operatorsAllowed),
+        .text(label: "+", foreground: .black, action: { onInsertText("+") }, enabled: keyboardState.operatorsAllowed),
       ]
     }
 
