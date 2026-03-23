@@ -193,7 +193,7 @@
     // 2) Main four-column block (numbers left/middle/right + operators) using Grid
     private func mainColumnsSection(columnWidth: CGFloat, rowHeight: CGFloat) -> some View {
       let columns = [numbersLeftItems, numbersMiddleItems, numbersRightItems, operatorItems]
-      Grid(horizontalSpacing: 0, verticalSpacing: 0) {
+      return Grid(horizontalSpacing: 0, verticalSpacing: 0) {
         ForEach(0..<4, id: \.self) { row in
           GridRow {
             ForEach(0..<4, id: \.self) { column in
