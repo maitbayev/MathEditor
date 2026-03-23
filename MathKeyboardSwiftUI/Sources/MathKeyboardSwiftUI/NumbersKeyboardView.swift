@@ -2,7 +2,6 @@
 
   import MathEditor
   import MathKeyboard
-  import Observation
   import SwiftUI
   import CoreText
   import Foundation
@@ -26,16 +25,6 @@
     }
   }
 
-  @Observable
-  final class NumbersKeyboardModel {
-    var numbersAllowed = true
-    var operatorsAllowed = true
-    var variablesAllowed = true
-    var fractionsAllowed = true
-    var equalsAllowed = true
-    var exponentHighlighted = false
-  }
-
   private enum KeyboardFontRegistry {
     static let variableFontName: String = {
       guard let bundle = MTMathKeyboardRootView.getMathKeyboardResourcesBundle() else {
@@ -57,7 +46,7 @@
   }
 
   final class NumbersKeyboardHostView: UIView, KeyboardConfigurable, UIInputViewAudioFeedback {
-    private let model = NumbersKeyboardModel()
+    private var keyboardState = KeyboardState()
     private weak var editingTarget: (any UIView & UIKeyInput)?
     private lazy var hostingController = UIHostingController(rootView: makeRootView())
 
@@ -76,27 +65,27 @@
     }
 
     func setNumbersState(_ enabled: Bool) {
-      updateModel(\.numbersAllowed, to: enabled)
+      updateState { $0.numbersAllowed = enabled }
     }
 
     func setOperatorState(_ enabled: Bool) {
-      updateModel(\.operatorsAllowed, to: enabled)
+      updateState { $0.operatorsAllowed = enabled }
     }
 
     func setVariablesState(_ enabled: Bool) {
-      updateModel(\.variablesAllowed, to: enabled)
+      updateState { $0.variablesAllowed = enabled }
     }
 
     func setFractionState(_ enabled: Bool) {
-      updateModel(\.fractionsAllowed, to: enabled)
+      updateState { $0.fractionsAllowed = enabled }
     }
 
     func setEqualsState(_ enabled: Bool) {
-      updateModel(\.equalsAllowed, to: enabled)
+      updateState { $0.equalsAllowed = enabled }
     }
 
     func setExponentState(_ highlighted: Bool) {
-      updateModel(\.exponentHighlighted, to: highlighted)
+      updateState { $0.exponentHighlighted = highlighted }
     }
 
     func setSquareRootState(_ highlighted: Bool) {}
@@ -126,7 +115,7 @@
 
     private func makeRootView() -> NumbersKeyboardView {
       NumbersKeyboardView(
-        model: model,
+        keyboardState: keyboardState,
         onInsertText: { [weak self] text in self?.insert(text) },
         onBackspace: { [weak self] in self?.backspace() },
         onDismiss: { [weak self] in self?.dismissKeyboard() }
@@ -152,38 +141,22 @@
       UIDevice.current.playInputClick()
     }
 
-    private func updateModel(
-      _ keyPath: ReferenceWritableKeyPath<NumbersKeyboardModel, Bool>,
-      to value: Bool
-    ) {
-      guard model[keyPath: keyPath] != value else { return }
-
+    private func updateState(_ update: @escaping (inout KeyboardState) -> Void) {
       DispatchQueue.main.async { [weak self] in
-        guard let self, self.model[keyPath: keyPath] != value else { return }
-        self.model[keyPath: keyPath] = value
+        guard let self else { return }
+        let previousState = self.keyboardState
+        update(&self.keyboardState)
+        guard self.keyboardState != previousState else { return }
+        self.hostingController.rootView = self.makeRootView()
       }
     }
   }
 
   struct NumbersKeyboardView: View {
-    let model: NumbersKeyboardModel
+    let keyboardState: KeyboardState
     let onInsertText: (String) -> Void
     let onBackspace: () -> Void
     let onDismiss: () -> Void
-    
-    private var keyboardState: KeyboardState {
-      KeyboardState(
-        currentTab: .numbers,
-        equalsAllowed: model.equalsAllowed,
-        fractionsAllowed: model.fractionsAllowed,
-        variablesAllowed: model.variablesAllowed,
-        numbersAllowed: model.numbersAllowed,
-        operatorsAllowed: model.operatorsAllowed,
-        exponentHighlighted: model.exponentHighlighted,
-        squareRootHighlighted: false,
-        radicalHighlighted: false
-      )
-    }
 
     var body: some View {
       GeometryReader { proxy in
