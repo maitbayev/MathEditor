@@ -179,16 +179,21 @@
         let standardColumnWidth = (totalWidth - utilityWidth) / 5
         let rowHeight = totalHeight / 4
 
-        HStack(spacing: 0) {
-          keyboardColumn(items: featureItems, width: standardColumnWidth, rowHeight: rowHeight)
-          keyboardColumn(items: numbersLeftItems, width: standardColumnWidth, rowHeight: rowHeight)
-          keyboardColumn(items: numbersMiddleItems, width: standardColumnWidth, rowHeight: rowHeight)
-          keyboardColumn(items: numbersRightItems, width: standardColumnWidth, rowHeight: rowHeight)
-          keyboardColumn(items: operatorItems, width: standardColumnWidth, rowHeight: rowHeight)
-          utilityColumn(width: utilityWidth, rowHeight: rowHeight)
+        ZStack {
+          assetImage("Numbers Keyboard")
+            .resizable()
+            .frame(width: totalWidth, height: totalHeight)
+
+          HStack(spacing: 0) {
+            keyboardColumn(items: featureItems, width: standardColumnWidth, rowHeight: rowHeight)
+            keyboardColumn(items: numbersLeftItems, width: standardColumnWidth, rowHeight: rowHeight)
+            keyboardColumn(items: numbersMiddleItems, width: standardColumnWidth, rowHeight: rowHeight)
+            keyboardColumn(items: numbersRightItems, width: standardColumnWidth, rowHeight: rowHeight)
+            keyboardColumn(items: operatorItems, width: standardColumnWidth, rowHeight: rowHeight)
+            utilityColumn(width: utilityWidth, rowHeight: rowHeight)
+          }
         }
         .frame(width: totalWidth, height: totalHeight)
-        .background(.white)
       }
     }
 
@@ -215,35 +220,36 @@
     private func keyButton(_ cell: KeyboardCell) -> some View {
       Button(action: cell.action) {
         ZStack {
-          Rectangle().fill(cell.backgroundColor)
+          Rectangle().fill(Color.white.opacity(0.001))
+          if let overlayAsset = cell.overlayAsset {
+            assetImage(overlayAsset)
+              .resizable()
+          }
           cell.label
         }
       }
       .buttonStyle(.plain)
       .disabled(!cell.enabled)
-      .opacity(cell.enabled ? 1 : 0.6)
-      .overlay(
-        Rectangle()
-          .stroke(Color.black.opacity(0.08), lineWidth: 0.5)
-      )
+      .opacity(cell.enabled ? 1 : 0.75)
       .accessibilityLabel(cell.accessibilityLabel)
     }
 
     private var featureItems: [KeyboardCell] {
       [
         .text(
-          label: "x", foreground: .white, background: .blueKey, fontName: KeyboardFontRegistry.variableFontName,
+          label: "x", foreground: .white, fontName: KeyboardFontRegistry.variableFontName,
           action: { onInsertText("x") }, enabled: model.variablesAllowed),
         .text(
-          label: "y", foreground: .white, background: .blueKey, fontName: KeyboardFontRegistry.variableFontName,
+          label: "y", foreground: .white, fontName: KeyboardFontRegistry.variableFontName,
           action: { onInsertText("y") }, enabled: model.variablesAllowed),
         .image(
-          imageName: "Fraction", background: .blueKey,
+          imageName: "Fraction",
           action: { onInsertText(MTSymbolFractionSlash) }, enabled: model.fractionsAllowed,
           accessibilityLabel: "Fraction"),
         .image(
-          imageName: "Exponent", background: model.exponentHighlighted ? .highlightBlue : .blueKey,
-          action: { onInsertText("^") }, enabled: true, accessibilityLabel: "Exponent"),
+          imageName: "Exponent",
+          action: { onInsertText("^") }, enabled: true, accessibilityLabel: "Exponent",
+          overlayAsset: model.exponentHighlighted ? "blue-button-highlighted" : nil),
       ]
     }
 
@@ -261,8 +267,9 @@
         .number("6", action: { onInsertText("6") }, enabled: model.numbersAllowed),
         .number("3", action: { onInsertText("3") }, enabled: model.numbersAllowed),
         .text(
-          label: "=", foreground: model.equalsAllowed ? .black : Color(white: 0.67), background: .numberKey,
-          action: { onInsertText("=") }, enabled: model.equalsAllowed),
+          label: "=", foreground: model.equalsAllowed ? .black : Color(white: 0.67),
+          action: { onInsertText("=") }, enabled: model.equalsAllowed,
+          overlayAsset: model.equalsAllowed ? nil : "num-button-disabled"),
       ]
     }
 
@@ -277,19 +284,19 @@
 
     private var utilityBackspace: KeyboardCell {
       .image(
-        imageName: "Backspace", background: .utilityKey,
+        imageName: "Backspace",
         action: onBackspace, enabled: true, accessibilityLabel: "Backspace")
     }
 
     private var utilityEnter: KeyboardCell {
       .text(
-        label: "Enter", foreground: .white, background: .utilityKey,
+        label: "Enter", foreground: .white,
         action: { onInsertText("\n") }, enabled: true)
     }
 
     private var utilityDismiss: KeyboardCell {
       .image(
-        imageName: "Keyboard Down", background: .utilityKey,
+        imageName: "Keyboard Down",
         action: onDismiss, enabled: true, accessibilityLabel: "Dismiss keyboard")
     }
 
@@ -299,25 +306,36 @@
       }
     }
 
+    private func assetImage(_ name: String) -> Image {
+      if let image = UIImage(
+        named: name,
+        in: MTMathKeyboardRootView.getMathKeyboardResourcesBundle(),
+        compatibleWith: nil
+      ) {
+        return Image(uiImage: image)
+      }
+      return Image(systemName: "questionmark.square.dashed")
+    }
+
   }
 
   private struct KeyboardCell: Identifiable {
     let id = UUID()
     let label: AnyView
-    let backgroundColor: Color
     let action: () -> Void
     let enabled: Bool
     let accessibilityLabel: String
+    let overlayAsset: String?
 
     static func text(
       label: String,
       foreground: Color,
-      background: Color,
       fontName: String = "HelveticaNeue-Thin",
       fontSize: CGFloat = 20,
       action: @escaping () -> Void,
       enabled: Bool,
-      accessibilityLabel: String? = nil
+      accessibilityLabel: String? = nil,
+      overlayAsset: String? = nil
     ) -> KeyboardCell {
       KeyboardCell(
         label: AnyView(
@@ -325,19 +343,19 @@
             .font(.custom(fontName, size: fontSize))
             .foregroundColor(foreground)
         ),
-        backgroundColor: background,
         action: action,
         enabled: enabled,
-        accessibilityLabel: accessibilityLabel ?? label
+        accessibilityLabel: accessibilityLabel ?? label,
+        overlayAsset: overlayAsset
       )
     }
 
     static func image(
       imageName: String,
-      background: Color,
       action: @escaping () -> Void,
       enabled: Bool,
-      accessibilityLabel: String
+      accessibilityLabel: String,
+      overlayAsset: String? = nil
     ) -> KeyboardCell {
       KeyboardCell(
         label: AnyView(
@@ -357,10 +375,10 @@
             }
           }
         ),
-        backgroundColor: background,
         action: action,
         enabled: enabled,
-        accessibilityLabel: accessibilityLabel
+        accessibilityLabel: accessibilityLabel,
+        overlayAsset: overlayAsset
       )
     }
 
@@ -368,7 +386,6 @@
       .text(
         label: value,
         foreground: .black,
-        background: .numberKey,
         action: action,
         enabled: enabled
       )
@@ -378,19 +395,10 @@
       .text(
         label: value,
         foreground: .black,
-        background: .operatorKey,
         action: action,
         enabled: enabled
       )
     }
-  }
-
-  private extension Color {
-    static let numberKey = Color(white: 0.95)
-    static let operatorKey = Color(red: 0.99, green: 0.90, blue: 0.78)
-    static let blueKey = Color(red: 0.57, green: 0.78, blue: 0.95)
-    static let highlightBlue = Color(red: 0.41, green: 0.65, blue: 0.90)
-    static let utilityKey = Color(red: 0.53, green: 0.53, blue: 0.55)
   }
 
 #endif
