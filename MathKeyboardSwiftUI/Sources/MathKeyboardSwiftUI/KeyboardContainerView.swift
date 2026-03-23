@@ -38,7 +38,7 @@
     private lazy var keyboards: [KeyboardTab: (UIView & KeyboardConfigurable)] = [
       .numbers: makeNumbersKeyboard(),
       .legacyNumbers: makeKeyboard(named: KeyboardTab.legacyNumbers.nibName),
-      .operations: makeKeyboard(named: KeyboardTab.operations.nibName),
+      .operations: makeOperationsKeyboard(),
       .functions: makeKeyboard(named: KeyboardTab.functions.nibName),
       .letters: makeKeyboard(named: KeyboardTab.letters.nibName),
     ]
@@ -67,10 +67,26 @@
       ])
     }
 
-    private func makeNumbersKeyboard() -> UIView & KeyboardConfigurable {
-      let keyboard = NumbersKeyboardHostView()
+    private func makeSwiftUIKeyboard(
+      @ViewBuilder content: @escaping (KeyboardState, @escaping (KeyboardAction) -> Void) -> some View
+    ) -> UIView & KeyboardConfigurable {
+      let keyboard = SwiftUIKeyboardHostView { state, onAction in
+        AnyView(content(state, onAction))
+      }
       keyboard.translatesAutoresizingMaskIntoConstraints = false
       return keyboard
+    }
+
+    private func makeNumbersKeyboard() -> UIView & KeyboardConfigurable {
+      makeSwiftUIKeyboard { state, onAction in
+        NumbersKeyboardView(keyboardState: state, onAction: onAction)
+      }
+    }
+
+    private func makeOperationsKeyboard() -> UIView & KeyboardConfigurable {
+      makeSwiftUIKeyboard { state, onAction in
+        OperationsKeyboardView(keyboardState: state, onAction: onAction)
+      }
     }
 
     private func makeKeyboard(named nibName: String) -> UIView & KeyboardConfigurable {
