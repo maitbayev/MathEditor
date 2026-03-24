@@ -14,11 +14,8 @@
 #import "MTMathList.h"
 #import "MTMathUILabel.h"
 #import "MTMathAtomFactory.h"
-#import "MTCancelView.h"
 #import "MTCaretView.h"
 #import "MTTapGestureRecognizer.h"
-#import "MTMathList+Editing.h"
-#import "MTDisplay+Editing.h"
 #import "MTUnicode.h"
 #import "MTMathListBuilder.h"
 
@@ -85,7 +82,7 @@
     #endif
     label.textAlignment = kMTTextAlignmentCenter;
     self.label = label;
-    // [self createCancelImage];
+    [self createCancelImage];
     CGAffineTransform transform = CGAffineTransformMakeTranslation(0, self.bounds.size.height);
     _flipTransform = CGAffineTransformConcat(CGAffineTransformMakeScale(1.0, -1.0), transform);
 
