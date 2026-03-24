@@ -3,8 +3,9 @@ import SwiftUI
 
 struct LettersKeyboardView: View {
   let state: KeyboardState
+  let isLowercase: Bool
+  let onShift: () -> Void
   let onAction: (KeyboardAction) -> Void
-  @State private var isLowercase = true
 
   private var topRow: [String] {
     makeLetterRow(["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"])
@@ -142,7 +143,7 @@ struct LettersKeyboardView: View {
   private var shiftCell: KeyboardCell {
     .image(
       imageName: "Shift",
-      action: { isLowercase.toggle() },
+      action: onShift,
       enabled: true,
       accessibilityLabel: "Shift",
       pressedAsset: "Keyboard-grey-pressed"

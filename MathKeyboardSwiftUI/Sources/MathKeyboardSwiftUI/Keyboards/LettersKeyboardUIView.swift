@@ -5,6 +5,7 @@
 
   final class LettersKeyboardUIView: UIView, KeyboardConfigurable {
     private var keyboardState = KeyboardState()
+    private var isLowercase = true
     private weak var textInput: (any UIView & UIKeyInput)?
     private lazy var hostingController = UIHostingController(rootView: makeRootView())
 
@@ -44,6 +45,12 @@
     private func makeRootView() -> LettersKeyboardView {
       LettersKeyboardView(
         state: keyboardState,
+        isLowercase: isLowercase,
+        onShift: { [weak self] in
+          guard let self else { return }
+          self.isLowercase.toggle()
+          self.hostingController.rootView = self.makeRootView()
+        },
         onAction: { [weak self] action in self?.handle(action) }
       )
     }

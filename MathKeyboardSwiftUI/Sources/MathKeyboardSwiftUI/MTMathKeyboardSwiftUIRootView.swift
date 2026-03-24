@@ -84,8 +84,10 @@
     }
 
     public func finishedEditing(_ label: (any UIView & UIKeyInput)!) {
-      textInput = nil
-      updateRootView()
+      if textInput === label {
+        textInput = nil
+        updateRootView()
+      }
     }
 
     private func updateState(_ update: (inout KeyboardState) -> Void) {
