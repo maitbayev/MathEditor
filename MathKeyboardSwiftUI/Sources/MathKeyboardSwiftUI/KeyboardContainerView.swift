@@ -39,7 +39,7 @@
       .numbers: makeNumbersKeyboard(),
       .legacyNumbers: makeKeyboard(named: KeyboardTab.legacyNumbers.nibName),
       .operations: makeOperationsKeyboard(),
-      .functions: makeKeyboard(named: KeyboardTab.functions.nibName),
+      .functions: makeFunctionsKeyboard(),
       .letters: makeKeyboard(named: KeyboardTab.letters.nibName),
     ]
 
@@ -76,6 +76,12 @@
     private func makeOperationsKeyboard() -> UIView & KeyboardConfigurable {
       MainKeyboardUIView { state, onAction in
         operationsKeyboardView(state: state, onAction: onAction)
+      }
+    }
+
+    private func makeFunctionsKeyboard() -> UIView & KeyboardConfigurable {
+      MainKeyboardUIView { state, onAction in
+        functionsKeyboardView(state: state, onAction: onAction)
       }
     }
 
