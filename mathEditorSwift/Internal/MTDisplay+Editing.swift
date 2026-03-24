@@ -10,6 +10,7 @@ import Foundation
 import iosMath
 
 private let invalidPosition = CGPoint(x: -1, y: -1)
+// Number of pixels outside the bounds to still consider a point as part of that bounds.
 private let pixelDelta: CGFloat = 2
 
 private func codePointIndexToStringIndex(_ str: String, _ codePointIndex: UInt) -> Int {
@@ -34,6 +35,7 @@ private func codePointIndexToStringIndex(_ str: String, _ codePointIndex: UInt) 
 }
 
 private func distanceFromPointToRect(_ point: CGPoint, _ rect: CGRect) -> CGFloat {
+  // Manhattan distance from the point to the nearest rectangle boundary.
   var distance: CGFloat = 0
 
   if point.x < rect.origin.x {
@@ -52,6 +54,7 @@ private func distanceFromPointToRect(_ point: CGPoint, _ rect: CGRect) -> CGFloa
 }
 
 extension MTDisplay {
+  // Empty implementations for the base class.
   @objc(closestIndexToPoint:)
   public func closestIndex(to point: CGPoint) -> MTMathListIndex? {
     nil
@@ -72,12 +75,14 @@ extension MTDisplay {
 extension MTCTLineDisplay {
   @objc(closestIndexToPoint:)
   public override func closestIndex(to point: CGPoint) -> MTMathListIndex? {
+    // Convert the point to the reference of the CTLine.
     let relativePoint = CGPoint(x: point.x - position.x, y: point.y - position.y)
     let idx = CTLineGetStringIndexForPosition(line, relativePoint)
     if idx == kCFNotFound {
       return nil
     }
 
+    // The CoreText index is UTF-16 based. Convert to a math-list atom index.
     let mlIndex = convertToMathListIndex(UInt(idx))
     assert(mlIndex <= UInt(range.length), "Returned index out of range: \(idx)")
     return MTMathListIndex.level0Index(UInt(range.location) + mlIndex)
@@ -130,6 +135,7 @@ extension MTCTLineDisplay {
 
   @objc(convertToMathListIndex:)
   public func convertToMathListIndex(_ strIndex: UInt) -> UInt {
+    // A single math atom may map to multiple UTF-16 code units.
     var strLenCovered: UInt = 0
     for mlIndex in 0..<atoms.count {
       if strLenCovered >= strIndex {
@@ -138,6 +144,7 @@ extension MTCTLineDisplay {
       guard let atom = atoms[mlIndex] as? MTMathAtom else { continue }
       strLenCovered += UInt(atom.nucleus.count)
     }
+    // By the end we should have covered all characters that can be addressed.
     assert(strLenCovered >= strIndex, "StrIndex should not be more than the len covered")
     return UInt(atoms.count)
   }
@@ -158,6 +165,7 @@ extension MTCTLineDisplay {
 extension MTFractionDisplay {
   @objc(closestIndexToPoint:)
   public override func closestIndex(to point: CGPoint) -> MTMathListIndex? {
+    // We can be before the fraction, inside the fraction, or after it.
     if point.x < position.x - pixelDelta {
       return MTMathListIndex.level0Index(UInt(range.location))
     } else if point.x > position.x + width + pixelDelta {
@@ -179,6 +187,7 @@ extension MTFractionDisplay {
 
   @objc(caretPositionForIndex:)
   public override func caretPosition(for index: MTMathListIndex) -> CGPoint {
+    // Draw a caret before the fraction.
     assert(index.subIndexType == .subIndexTypeNone)
     return CGPoint(x: position.x, y: position.y)
   }
@@ -212,6 +221,7 @@ extension MTFractionDisplay {
 extension MTRadicalDisplay {
   @objc(closestIndexToPoint:)
   public override func closestIndex(to point: CGPoint) -> MTMathListIndex? {
+    // We can be before the radical, inside the radical, or after it.
     if point.x < position.x - pixelDelta {
       return MTMathListIndex.level0Index(UInt(range.location))
     } else if point.x > position.x + width + pixelDelta {
@@ -234,6 +244,7 @@ extension MTRadicalDisplay {
 
   @objc(caretPositionForIndex:)
   public override func caretPosition(for index: MTMathListIndex) -> CGPoint {
+    // Draw a caret before the radical.
     assert(index.subIndexType == .subIndexTypeNone)
     return CGPoint(x: position.x, y: position.y)
   }
@@ -266,6 +277,7 @@ extension MTRadicalDisplay {
 extension MTMathListDisplay {
   @objc(closestIndexToPoint:)
   public override func closestIndex(to point: CGPoint) -> MTMathListIndex? {
+    // Subdisplay origins are relative to this display's position.
     let translatedPoint = CGPoint(x: point.x - position.x, y: point.y - position.y)
 
     var closest: MTDisplay?
@@ -288,16 +300,20 @@ extension MTMathListDisplay {
     let atomWithPoint: MTDisplay?
     if xbounds.isEmpty {
       if translatedPoint.x <= -pixelDelta {
+        // Far to the left.
         return MTMathListIndex.level0Index(UInt(range.location))
       } else if translatedPoint.x >= width + pixelDelta {
+        // Far to the right.
         return MTMathListIndex.level0Index(UInt(NSMaxRange(range)))
       } else {
+        // Within mathlist bounds but not in any x-range; use nearest subdisplay.
         atomWithPoint = closest
       }
     } else if xbounds.count == 1 {
       atomWithPoint = xbounds[0]
       if translatedPoint.x >= width - pixelDelta,
          translatedPoint.y <= atomWithPoint!.displayBounds().minY - pixelDelta {
+        // Near the end but too high for this atom; place caret at end of list.
         return MTMathListIndex.level0Index(UInt(NSMaxRange(range)))
       }
     } else {
@@ -311,11 +327,13 @@ extension MTMathListDisplay {
     if let closestLine = atomWithPoint as? MTMathListDisplay {
       assert(closestLine.type == .subscript || closestLine.type == .superscript,
              "MTLine type regular inside an MTLine - shouldn't happen")
+      // Subscript/superscript line: wrap the returned index as a nested sub-index.
       let type: MTMathListSubIndexType = (closestLine.type == .subscript) ? .subIndexTypeSubscript : .subIndexTypeSuperscript
       let lineIndex = Int(closestLine.index)
       guard lineIndex != NSNotFound else { return nil }
       return MTMathListIndex(atLocation: UInt(lineIndex), withSubIndex: index, type: type)
     } else if atomWithPoint.hasScript, let index {
+      // If we landed at atom end, caret should be before scripts, not after them.
       if Int(index.atomIndex) == NSMaxRange(atomWithPoint.range) {
         return MTMathListIndex(atLocation: index.atomIndex - 1,
                                withSubIndex: MTMathListIndex.level0Index(1),
@@ -328,6 +346,7 @@ extension MTMathListDisplay {
 
   @objc(subAtomForIndex:)
   public func subAtom(for index: MTMathListIndex) -> MTDisplay? {
+    // Sub/superscripts are represented as MTMathListDisplay entries in subDisplays.
     if index.subIndexType == .subIndexTypeSuperscript || index.subIndexType == .subIndexTypeSubscript {
       for atom in subDisplays {
         if let lineAtom = atom as? MTMathListDisplay,
@@ -341,6 +360,7 @@ extension MTMathListDisplay {
     } else {
       for atom in subDisplays {
         if !(atom is MTMathListDisplay) && NSLocationInRange(Int(index.atomIndex), atom.range) {
+          // Found the display that covers the requested index.
           switch index.subIndexType {
           case .subIndexTypeNone, .subIndexTypeNucleus:
             return atom
@@ -375,6 +395,7 @@ extension MTMathListDisplay {
     var pos = invalidPosition
 
     if Int(index.atomIndex) == NSMaxRange(range) {
+      // Special-case right edge of the range.
       pos = CGPoint(x: width, y: 0)
     } else if NSLocationInRange(Int(index.atomIndex), range) {
       guard let atom = subAtom(for: index) else { return invalidPosition }
@@ -385,6 +406,7 @@ extension MTMathListDisplay {
       } else if index.subIndexType == .subIndexTypeNone {
         pos = atom.caretPosition(for: index)
       } else {
+        // Recurse into nested substructures.
         guard let subIndex = index.sub else { return invalidPosition }
         pos = atom.caretPosition(for: subIndex)
       }
@@ -393,9 +415,11 @@ extension MTMathListDisplay {
     }
 
     if pos == invalidPosition {
+      // Position could not be resolved by subdisplays.
       return pos
     }
 
+    // Convert from local coordinates before returning.
     return CGPoint(x: pos.x + position.x, y: pos.y + position.y)
   }
 
@@ -405,6 +429,7 @@ extension MTMathListDisplay {
       if index.subIndexType == .subIndexTypeNucleus || index.subIndexType == .subIndexTypeNone {
         atom.highlightCharacter(at: index, color: color)
       } else if let subIndex = index.sub {
+        // Recurse into nested substructures.
         atom.highlightCharacter(at: subIndex, color: color)
       }
     }

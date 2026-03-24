@@ -43,6 +43,7 @@ extension MTMathList {
     case .subIndexTypeDegree, .subIndexTypeRadicand:
       let atomIndex = Int(index.atomIndex)
       guard let radical = atoms[atomIndex] as? MTRadical, radical.type == .radical else {
+        // Not radical, quit.
         assertionFailure("No radical found at index \(index.atomIndex)")
         return
       }
@@ -56,6 +57,7 @@ extension MTMathList {
     case .subIndexTypeDenominator, .subIndexTypeNumerator:
       let atomIndex = Int(index.atomIndex)
       guard let frac = atoms[atomIndex] as? MTFraction, frac.type == .fraction else {
+        // Not a fraction, quit.
         assertionFailure("No fraction found at index \(index.atomIndex)")
         return
       }
@@ -120,12 +122,14 @@ extension MTMathList {
         previous.subScript = currentAtom.subScript
         removeAtom(at: index.atomIndex)
       } else {
+        // No previous atom, or the previous atom already has a sub/superscript.
         currentAtom.nucleus = ""
       }
 
     case .subIndexTypeRadicand, .subIndexTypeDegree:
       let atomIndex = Int(index.atomIndex)
       guard let radical = atoms[atomIndex] as? MTRadical, radical.type == .radical else {
+        // Not radical, quit.
         assertionFailure("No radical found at index \(index.atomIndex)")
         return
       }
@@ -139,6 +143,7 @@ extension MTMathList {
     case .subIndexTypeDenominator, .subIndexTypeNumerator:
       let atomIndex = Int(index.atomIndex)
       guard let frac = atoms[atomIndex] as? MTFraction, frac.type == .fraction else {
+        // Not a fraction, quit.
         assertionFailure("No fraction found at index \(index.atomIndex)")
         return
       }
@@ -185,6 +190,7 @@ extension MTMathList {
     case .subIndexTypeRadicand, .subIndexTypeDegree:
       let atomIndex = Int(start.atomIndex)
       guard let radical = atoms[atomIndex] as? MTRadical, radical.type == .radical else {
+        // Not radical, quit.
         assertionFailure("No radical found at index \(start.atomIndex)")
         return
       }
@@ -198,6 +204,7 @@ extension MTMathList {
     case .subIndexTypeDenominator, .subIndexTypeNumerator:
       let atomIndex = Int(start.atomIndex)
       guard let frac = atoms[atomIndex] as? MTFraction, frac.type == .fraction else {
+        // Not a fraction, quit.
         assertionFailure("No fraction found at index \(start.atomIndex)")
         return
       }
@@ -250,6 +257,7 @@ extension MTMathList {
 
     case .subIndexTypeRadicand, .subIndexTypeDegree:
       guard let radical = atom as? MTRadical, atom.type == .radical else {
+        // No radical at this index.
         return nil
       }
       guard let subIndex = index.sub else { return nil }
@@ -261,6 +269,7 @@ extension MTMathList {
 
     case .subIndexTypeNumerator, .subIndexTypeDenominator:
       guard let frac = atom as? MTFraction, atom.type == .fraction else {
+        // No fraction at this index.
         return nil
       }
       guard let subIndex = index.sub else { return nil }
