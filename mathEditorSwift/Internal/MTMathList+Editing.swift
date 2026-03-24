@@ -23,7 +23,7 @@ extension MTMathList {
 
     switch index.subIndexType {
     case .subIndexTypeNone:
-      insert(atom, at: index.atomIndex)
+      insertAtom(atom, at: index.atomIndex)
 
     case .subIndexTypeNucleus:
       let atomIndex = Int(index.atomIndex)
@@ -38,7 +38,7 @@ extension MTMathList {
       atom.superScript = currentAtom.superScript
       currentAtom.subScript = nil
       currentAtom.superScript = nil
-      insert(atom, at: index.atomIndex + subIndex.atomIndex)
+      insertAtom(atom, at: index.atomIndex + subIndex.atomIndex)
 
     case .subIndexTypeDegree, .subIndexTypeRadicand:
       let atomIndex = Int(index.atomIndex)
@@ -48,9 +48,9 @@ extension MTMathList {
       }
       guard let subIndex = index.sub else { return }
       if index.subIndexType == .subIndexTypeDegree {
-        radical.degree.insert(atom, atListIndex: subIndex)
+        radical.degree?.insert(atom, atListIndex: subIndex)
       } else {
-        radical.radicand.insert(atom, atListIndex: subIndex)
+        radical.radicand?.insert(atom, atListIndex: subIndex)
       }
 
     case .subIndexTypeDenominator, .subIndexTypeNumerator:
@@ -131,9 +131,9 @@ extension MTMathList {
       }
       guard let subIndex = index.sub else { return }
       if index.subIndexType == .subIndexTypeDegree {
-        radical.degree.removeAtom(atListIndex: subIndex)
+        radical.degree?.removeAtom(atListIndex: subIndex)
       } else {
-        radical.radicand.removeAtom(atListIndex: subIndex)
+        radical.radicand?.removeAtom(atListIndex: subIndex)
       }
 
     case .subIndexTypeDenominator, .subIndexTypeNumerator:
@@ -190,9 +190,9 @@ extension MTMathList {
       }
       guard let subIndexRange = range.subIndex() else { return }
       if start.subIndexType == .subIndexTypeDegree {
-        radical.degree.removeAtoms(inListIndexRange: subIndexRange)
+        radical.degree?.removeAtoms(inListIndexRange: subIndexRange)
       } else {
-        radical.radicand.removeAtoms(inListIndexRange: subIndexRange)
+        radical.radicand?.removeAtoms(inListIndexRange: subIndexRange)
       }
 
     case .subIndexTypeDenominator, .subIndexTypeNumerator:
@@ -254,9 +254,9 @@ extension MTMathList {
       }
       guard let subIndex = index.sub else { return nil }
       if index.subIndexType == .subIndexTypeDegree {
-        return radical.degree.atom(atListIndex: subIndex)
+        return radical.degree?.atom(atListIndex: subIndex)
       } else {
-        return radical.radicand.atom(atListIndex: subIndex)
+        return radical.radicand?.atom(atListIndex: subIndex)
       }
 
     case .subIndexTypeNumerator, .subIndexTypeDenominator:
