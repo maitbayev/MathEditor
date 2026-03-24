@@ -62,9 +62,14 @@ private func makeFunctionsGrid(
     .text(
       label: "cot", tone: .dark, action: { onAction(.insertText("cot")) }, enabled: true,
       pressedAsset: "Keyboard-green-pressed"),
-    .text(
-      label: "π", tone: .dark, fontName: "TimesNewRomanPSMT",
-      action: { onAction(.insertText("π")) }, enabled: true,
+    .image(
+      imageName: "Log with base",
+      action: {
+        onAction(.insertText("log"))
+        onAction(.insertText("_"))
+      },
+      enabled: true,
+      accessibilityLabel: "Log with base",
       pressedAsset: "Keyboard-green-pressed"),
     .image(
       imageName: "Sqrt with Power",
@@ -85,13 +90,13 @@ private func makeFunctionsGrid(
       action: { onAction(.insertText("π")) }, enabled: true,
       pressedAsset: "Keyboard-green-pressed"),
     .text(
-      label: "", tone: .dark,
-      action: {}, enabled: false,
-      accessibilityLabel: "Unused"),
+      label: "∠", tone: .dark, fontName: "Apple SD Gothic Neo",
+      action: { onAction(.insertText("∠")) }, enabled: true,
+      pressedAsset: "Keyboard-green-pressed"),
     .text(
-      label: "", tone: .dark,
-      action: {}, enabled: false,
-      accessibilityLabel: "Unused"),
+      label: "°", tone: .dark, fontName: "HelveticaNeue-ThinItalic",
+      action: { onAction(.insertText("°")) }, enabled: true,
+      pressedAsset: "Keyboard-green-pressed"),
   ]
 
   return [trigLeftItems, trigMiddleItems, trigRightItems, constantsItems]
