@@ -9,7 +9,8 @@
 
 #import "MTEditableMathLabel.h"
 #import "MTMathUILabel.h"
-#import "MTView/MTView+HitTest.h"
+
+@import MathEditorSwift;
 
 NS_ASSUME_NONNULL_BEGIN
 

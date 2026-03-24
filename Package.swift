@@ -32,7 +32,8 @@ let package = Package(
     ),
     .target(
       name: "MathEditorSwift",
-      path: "./mathEditorSwift"
+      dependencies: [.product(name: "iosMath", package: "iosMath")],
+      path: "./mathEditorSwift",
     ),
     .target(
       name: "MathKeyboard",

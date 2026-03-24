@@ -6,7 +6,8 @@
 
 #import "MTCancelView.h"
 #import "MTTapGestureRecognizer.h"
-#import "MTView/MTView+AutoLayout.h"
+
+@import MathEditorSwift;
 
 @interface MTCancelView ()
 

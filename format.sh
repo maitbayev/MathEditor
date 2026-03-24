@@ -24,4 +24,3 @@ lint() {
 format .
 lint . 
 
-clang_format ./mathEditor/internal/MTView
