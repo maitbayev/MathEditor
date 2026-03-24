@@ -19,10 +19,10 @@ let package = Package(
     .target(
       name: "MathKeyboardSwiftUI",
       dependencies: [
-        .product(name: "MathKeyboard", package: "MathEditor", condition: .when(platforms: [.iOS])),
-        .product(name: "MathEditor", package: "MathEditor"),
+        .product(name: "MathEditor", package: "MathEditor")
       ],
-      path: "Sources/MathKeyboardSwiftUI"
+      path: "Sources/MathKeyboardSwiftUI",
+      resources: [.process("Resources")],
     )
   ]
 )

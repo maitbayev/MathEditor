@@ -19,7 +19,7 @@ struct KeyButton: View {
       ZStack {
         Rectangle().fill(Color.white.opacity(0.001))
         if let overlayAsset = cell.overlayAsset {
-          mtMathImage(overlayAsset)
+          Image(overlayAsset, bundle: .module)
             .resizable()
         }
         switch cell.content {
@@ -29,7 +29,7 @@ struct KeyButton: View {
             .foregroundColor(textColor(for: text.tone))
             .padding(cell.padding)
         case .image(let image):
-          mtMathImage(image.name)
+          Image(image.name, bundle: .module)
             .renderingMode(.original)
             .scaledToFill()
             .padding(cell.padding)
@@ -60,7 +60,7 @@ private struct KeyboardPressStyle: ButtonStyle {
     ZStack {
       if configuration.isPressed {
         if let pressedAsset {
-          mtMathImage(pressedAsset)
+          Image(pressedAsset, bundle: .module)
             .resizable()
             .opacity(1.0)
         } else {
