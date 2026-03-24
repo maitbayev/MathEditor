@@ -67,25 +67,15 @@
       ])
     }
 
-    private func makeSwiftUIKeyboard(
-      @ViewBuilder content: @escaping (KeyboardState, @escaping (KeyboardAction) -> Void) -> some View
-    ) -> UIView & KeyboardConfigurable {
-      let keyboard = SwiftUIKeyboardHostView { state, onAction in
-        AnyView(content(state, onAction))
-      }
-      keyboard.translatesAutoresizingMaskIntoConstraints = false
-      return keyboard
-    }
-
     private func makeNumbersKeyboard() -> UIView & KeyboardConfigurable {
-      makeSwiftUIKeyboard { state, onAction in
-        NumbersKeyboardView(keyboardState: state, onAction: onAction)
+      MainKeyboardUIView { state, onAction in
+        numbersKeyboardView(state: state, onAction: onAction)
       }
     }
 
     private func makeOperationsKeyboard() -> UIView & KeyboardConfigurable {
-      makeSwiftUIKeyboard { state, onAction in
-        OperationsKeyboardView(keyboardState: state, onAction: onAction)
+      MainKeyboardUIView { state, onAction in
+        operationsKeyboardView(state: state, onAction: onAction)
       }
     }
 

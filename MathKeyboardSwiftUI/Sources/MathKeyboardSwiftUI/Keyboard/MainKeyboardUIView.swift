@@ -3,13 +3,14 @@
   import SwiftUI
   import UIKit
 
-  final class SwiftUIKeyboardHostView: UIView, KeyboardConfigurable, UIInputViewAudioFeedback {
-    typealias RootViewBuilder = (KeyboardState, @escaping (KeyboardAction) -> Void) -> AnyView
+  final class MainKeyboardUIView: UIView, KeyboardConfigurable {
+    typealias RootViewBuilder = (KeyboardState, @escaping (KeyboardAction) -> Void) ->
+      MainKeyboardView
 
     private var keyboardState = KeyboardState()
-    private weak var editingTarget: (any UIView & UIKeyInput)?
+    private weak var textInput: (any UIView & UIKeyInput)?
     private let rootViewBuilder: RootViewBuilder
-    private lazy var hostingController = UIHostingController(rootView: AnyView(EmptyView()))
+    private lazy var hostingController = UIHostingController(rootView: makeRootView())
 
     init(rootViewBuilder: @escaping RootViewBuilder) {
       self.rootViewBuilder = rootViewBuilder
@@ -23,22 +24,19 @@
     }
 
     func setEditingTarget(_ textView: (any UIView & UIKeyInput)?) {
-      editingTarget = textView
+      textInput = textView
     }
 
     func applyKeyboardState(_ state: KeyboardState) {
       updateState { $0 = state }
     }
 
-    var enableInputClicksWhenVisible: Bool { true }
-
     private func commonInit() {
+      translatesAutoresizingMaskIntoConstraints = false
       backgroundColor = .white
 
       let hostedView = hostingController.view!
-      if #available(iOS 16.4, *) {
-        hostingController.safeAreaRegions = []
-      }
+      hostingController.safeAreaRegions = []
       hostedView.backgroundColor = .clear
       hostedView.translatesAutoresizingMaskIntoConstraints = false
       addSubview(hostedView)
@@ -53,8 +51,8 @@
       hostingController.rootView = makeRootView()
     }
 
-    private func makeRootView() -> AnyView {
-      rootViewBuilder(keyboardState, { [weak self] action in self?.handle(action) })
+    private func makeRootView() -> MainKeyboardView {
+      rootViewBuilder(keyboardState) { [weak self] action in self?.handle(action) }
     }
 
     private func handle(_ action: KeyboardAction) {
@@ -62,11 +60,11 @@
 
       switch action {
       case .insertText(let text):
-        editingTarget?.insertText(text)
+        textInput?.insertText(text)
       case .backspace:
-        editingTarget?.deleteBackward()
+        textInput?.deleteBackward()
       case .dismiss:
-        editingTarget?.resignFirstResponder()
+        textInput?.resignFirstResponder()
       }
     }
 
