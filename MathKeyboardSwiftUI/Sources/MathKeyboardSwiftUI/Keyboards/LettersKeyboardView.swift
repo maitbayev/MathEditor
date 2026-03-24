@@ -45,7 +45,7 @@ struct LettersKeyboardView: View {
       let rowHeight = proxy.size.height / 4
 
       ZStack {
-        mtMathImage("Letters Keyboard")
+        Image("Letters Keyboard", bundle: .module)
           .resizable()
           .frame(width: proxy.size.width, height: proxy.size.height)
 

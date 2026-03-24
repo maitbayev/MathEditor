@@ -1,7 +1,6 @@
 #if os(iOS)
 
   import MathEditor
-  import MathKeyboard
   import SwiftUI
   import UIKit
 
