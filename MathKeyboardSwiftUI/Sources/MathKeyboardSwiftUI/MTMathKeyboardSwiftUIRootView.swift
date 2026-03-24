@@ -112,15 +112,8 @@
         hostingController.safeAreaRegions = []
       }
       hostedView.backgroundColor = .clear
-      hostedView.translatesAutoresizingMaskIntoConstraints = false
       addSubview(hostedView)
-
-      NSLayoutConstraint.activate([
-        hostedView.topAnchor.constraint(equalTo: topAnchor),
-        hostedView.leadingAnchor.constraint(equalTo: leadingAnchor),
-        hostedView.trailingAnchor.constraint(equalTo: trailingAnchor),
-        hostedView.bottomAnchor.constraint(equalTo: bottomAnchor),
-      ])
+      hostedView.pinToSuperview()
 
       updateRootView()
     }

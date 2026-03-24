@@ -40,7 +40,7 @@
       .legacyNumbers: makeKeyboard(named: KeyboardTab.legacyNumbers.nibName),
       .operations: makeOperationsKeyboard(),
       .functions: makeFunctionsKeyboard(),
-      .letters: makeKeyboard(named: KeyboardTab.letters.nibName),
+      .letters: makeLettersKeyboard(),
     ]
 
     fileprivate func sync(state: KeyboardState, editingTarget: (any UIView & UIKeyInput)?) {
@@ -58,13 +58,7 @@
       currentKeyboard?.removeFromSuperview()
       currentKeyboard = keyboard
       addSubview(keyboard)
-
-      NSLayoutConstraint.activate([
-        keyboard.topAnchor.constraint(equalTo: topAnchor),
-        keyboard.leadingAnchor.constraint(equalTo: leadingAnchor),
-        keyboard.trailingAnchor.constraint(equalTo: trailingAnchor),
-        keyboard.bottomAnchor.constraint(equalTo: bottomAnchor),
-      ])
+      keyboard.pinToSuperview()
     }
 
     private func makeNumbersKeyboard() -> UIView & KeyboardConfigurable {
@@ -83,6 +77,10 @@
       MainKeyboardUIView { state, onAction in
         functionsKeyboardView(state: state, onAction: onAction)
       }
+    }
+
+    private func makeLettersKeyboard() -> UIView & KeyboardConfigurable {
+      LettersKeyboardUIView()
     }
 
     private func makeKeyboard(named nibName: String) -> UIView & KeyboardConfigurable {
