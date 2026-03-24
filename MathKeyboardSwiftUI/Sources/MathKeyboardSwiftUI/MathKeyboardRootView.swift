@@ -8,7 +8,6 @@
 import SwiftUI
 
 #if os(iOS)
-  import MathKeyboard
 
   public struct MathKeyboardRootView: View {
     let state: KeyboardState
@@ -57,7 +56,7 @@ import SwiftUI
       let name = state.currentTab == tab ? names.selected : names.normal
       return UIImage(
         named: name,
-        in: MTMathKeyboardRootView.getMathKeyboardResourcesBundle(),
+        in: .module,
         compatibleWith: nil
       ) ?? UIImage()
     }

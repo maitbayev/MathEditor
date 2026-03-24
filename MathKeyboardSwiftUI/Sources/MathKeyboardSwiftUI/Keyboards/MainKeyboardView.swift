@@ -17,7 +17,7 @@ struct MainKeyboardView: View {
       let rowHeight = totalHeight / 4
 
       ZStack {
-        mtMathImage(backgroundImageName)
+        Image(backgroundImageName, bundle: .module)
           .resizable()
           .frame(width: totalWidth, height: totalHeight)
 
