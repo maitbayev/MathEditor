@@ -11,12 +11,12 @@
   import UIKit
 
   protocol KeyboardConfigurable: AnyObject {
-    func setEditingTarget(_ textView: (any UIView & UIKeyInput)?)
+    func setTextInput(_ textView: (any UIView & UIKeyInput)?)
     func applyKeyboardState(_ state: KeyboardState)
   }
 
   extension MTKeyboard: KeyboardConfigurable {
-    func setEditingTarget(_ textView: (any UIView & UIKeyInput)?) {
+    func setTextInput(_ textView: (any UIView & UIKeyInput)?) {
       self.textView = textView
     }
 

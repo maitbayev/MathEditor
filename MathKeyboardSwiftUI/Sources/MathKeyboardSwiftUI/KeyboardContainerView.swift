@@ -45,7 +45,7 @@
 
     fileprivate func sync(state: KeyboardState, editingTarget: (any UIView & UIKeyInput)?) {
       for keyboard in keyboards.values {
-        keyboard.setEditingTarget(editingTarget)
+        keyboard.setTextInput(editingTarget)
         keyboard.applyKeyboardState(state)
       }
 

@@ -23,7 +23,7 @@
       fatalError("init(coder:) has not been implemented")
     }
 
-    func setEditingTarget(_ textView: (any UIView & UIKeyInput)?) {
+    func setTextInput(_ textView: (any UIView & UIKeyInput)?) {
       textInput = textView
     }
 
