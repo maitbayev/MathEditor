@@ -5,7 +5,8 @@
   import SwiftUI
   import UIKit
 
-  public final class MTMathKeyboardSwiftUIRootView: UIView, MTMathKeyboard {
+  public final class MTMathKeyboardSwiftUIRootView: UIView, MTMathKeyboard, UIInputViewAudioFeedback
+  {
     private static let defaultTab: KeyboardTab = .numbers
     private static let shared = MTMathKeyboardSwiftUIRootView()
 
@@ -14,6 +15,10 @@
     private lazy var hostingController = UIHostingController(
       rootView: makeRootView()
     )
+
+    public var enableInputClicksWhenVisible: Bool {
+      true
+    }
 
     public override init(frame: CGRect) {
       super.init(frame: frame)
@@ -107,15 +112,8 @@
         hostingController.safeAreaRegions = []
       }
       hostedView.backgroundColor = .clear
-      hostedView.translatesAutoresizingMaskIntoConstraints = false
       addSubview(hostedView)
-
-      NSLayoutConstraint.activate([
-        hostedView.topAnchor.constraint(equalTo: topAnchor),
-        hostedView.leadingAnchor.constraint(equalTo: leadingAnchor),
-        hostedView.trailingAnchor.constraint(equalTo: trailingAnchor),
-        hostedView.bottomAnchor.constraint(equalTo: bottomAnchor),
-      ])
+      hostedView.pinToSuperview()
 
       updateRootView()
     }
