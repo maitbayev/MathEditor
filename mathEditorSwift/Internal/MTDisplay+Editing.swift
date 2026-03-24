@@ -90,7 +90,8 @@ extension MTCTLineDisplay {
 
   @objc(caretPositionForIndex:)
   public override func caretPosition(for index: MTMathListIndex) -> CGPoint {
-    assert(index.subIndexType == .subIndexTypeNone, "Index in a CTLineDisplay cannot have sub indexes.")
+    assert(
+      index.subIndexType == .subIndexTypeNone, "Index in a CTLineDisplay cannot have sub indexes.")
 
     let offset: CGFloat
     if Int(index.atomIndex) == NSMaxRange(range) {
@@ -113,23 +114,26 @@ extension MTCTLineDisplay {
       assertionFailure("Nucleus highlighting not supported yet")
     }
 
-    let charIndex = codePointIndexToStringIndex(attributedString.string, index.atomIndex - UInt(range.location))
+    let charIndex = codePointIndexToStringIndex(
+      attributedString.string, index.atomIndex - UInt(range.location))
     assert(charIndex != NSNotFound)
 
     let attrStr = NSMutableAttributedString(attributedString: attributedString)
     let seqRange = (attrStr.string as NSString).rangeOfComposedCharacterSequence(at: charIndex)
-    attrStr.addAttribute(kCTForegroundColorAttributeName as NSAttributedString.Key,
-                         value: color.cgColor,
-                         range: seqRange)
+    attrStr.addAttribute(
+      kCTForegroundColorAttributeName as NSAttributedString.Key,
+      value: color.cgColor,
+      range: seqRange)
     attributedString = attrStr
   }
 
   @objc(highlightWithColor:)
   public override func highlight(with color: MTColor) {
     let attrStr = NSMutableAttributedString(attributedString: attributedString)
-    attrStr.addAttribute(kCTForegroundColorAttributeName as NSAttributedString.Key,
-                         value: color.cgColor,
-                         range: NSRange(location: 0, length: attrStr.length))
+    attrStr.addAttribute(
+      kCTForegroundColorAttributeName as NSAttributedString.Key,
+      value: color.cgColor,
+      range: NSRange(location: 0, length: attrStr.length))
     attributedString = attrStr
   }
 
@@ -174,13 +178,15 @@ extension MTFractionDisplay {
       let numeratorDistance = distanceFromPointToRect(point, numerator.displayBounds())
       let denominatorDistance = distanceFromPointToRect(point, denominator.displayBounds())
       if numeratorDistance < denominatorDistance {
-        return MTMathListIndex(atLocation: UInt(range.location),
-                               withSubIndex: numerator.closestIndex(to: point),
-                               type: .subIndexTypeNumerator)
+        return MTMathListIndex(
+          atLocation: UInt(range.location),
+          withSubIndex: numerator.closestIndex(to: point),
+          type: .subIndexTypeNumerator)
       } else {
-        return MTMathListIndex(atLocation: UInt(range.location),
-                               withSubIndex: denominator.closestIndex(to: point),
-                               type: .subIndexTypeDenominator)
+        return MTMathListIndex(
+          atLocation: UInt(range.location),
+          withSubIndex: denominator.closestIndex(to: point),
+          type: .subIndexTypeDenominator)
       }
     }
   }
@@ -231,13 +237,15 @@ extension MTRadicalDisplay {
       let radicandDistance = distanceFromPointToRect(point, radicand.displayBounds())
 
       if degreeDistance < radicandDistance {
-        return MTMathListIndex(atLocation: UInt(range.location),
-                               withSubIndex: degree?.closestIndex(to: point),
-                               type: .subIndexTypeDegree)
+        return MTMathListIndex(
+          atLocation: UInt(range.location),
+          withSubIndex: degree?.closestIndex(to: point),
+          type: .subIndexTypeDegree)
       } else {
-        return MTMathListIndex(atLocation: UInt(range.location),
-                               withSubIndex: radicand.closestIndex(to: point),
-                               type: .subIndexTypeRadicand)
+        return MTMathListIndex(
+          atLocation: UInt(range.location),
+          withSubIndex: radicand.closestIndex(to: point),
+          type: .subIndexTypeRadicand)
       }
     }
   }
@@ -286,7 +294,9 @@ extension MTMathListDisplay {
 
     for atom in subDisplays {
       let bounds = atom.displayBounds()
-      if bounds.origin.x - pixelDelta <= translatedPoint.x && translatedPoint.x <= bounds.maxX + pixelDelta {
+      if bounds.origin.x - pixelDelta <= translatedPoint.x
+        && translatedPoint.x <= bounds.maxX + pixelDelta
+      {
         xbounds.append(atom)
       }
 
@@ -312,7 +322,8 @@ extension MTMathListDisplay {
     } else if xbounds.count == 1 {
       atomWithPoint = xbounds[0]
       if translatedPoint.x >= width - pixelDelta,
-         translatedPoint.y <= atomWithPoint!.displayBounds().minY - pixelDelta {
+        translatedPoint.y <= atomWithPoint!.displayBounds().minY - pixelDelta
+      {
         // Near the end but too high for this atom; place caret at end of list.
         return MTMathListIndex.level0Index(UInt(NSMaxRange(range)))
       }
@@ -325,19 +336,22 @@ extension MTMathListDisplay {
     let index = atomWithPoint.closestIndex(to: translatedPoint)
 
     if let closestLine = atomWithPoint as? MTMathListDisplay {
-      assert(closestLine.type == .subscript || closestLine.type == .superscript,
-             "MTLine type regular inside an MTLine - shouldn't happen")
+      assert(
+        closestLine.type == .subscript || closestLine.type == .superscript,
+        "MTLine type regular inside an MTLine - shouldn't happen")
       // Subscript/superscript line: wrap the returned index as a nested sub-index.
-      let type: MTMathListSubIndexType = (closestLine.type == .subscript) ? .subIndexTypeSubscript : .subIndexTypeSuperscript
+      let type: MTMathListSubIndexType =
+        (closestLine.type == .subscript) ? .subIndexTypeSubscript : .subIndexTypeSuperscript
       let lineIndex = Int(closestLine.index)
       guard lineIndex != NSNotFound else { return nil }
       return MTMathListIndex(atLocation: UInt(lineIndex), withSubIndex: index, type: type)
     } else if atomWithPoint.hasScript, let index {
       // If we landed at atom end, caret should be before scripts, not after them.
       if Int(index.atomIndex) == NSMaxRange(atomWithPoint.range) {
-        return MTMathListIndex(atLocation: index.atomIndex - 1,
-                               withSubIndex: MTMathListIndex.level0Index(1),
-                               type: .subIndexTypeNucleus)
+        return MTMathListIndex(
+          atLocation: index.atomIndex - 1,
+          withSubIndex: MTMathListIndex.level0Index(1),
+          type: .subIndexTypeNucleus)
       }
     }
 
@@ -347,12 +361,16 @@ extension MTMathListDisplay {
   @objc(subAtomForIndex:)
   public func subAtom(for index: MTMathListIndex) -> MTDisplay? {
     // Sub/superscripts are represented as MTMathListDisplay entries in subDisplays.
-    if index.subIndexType == .subIndexTypeSuperscript || index.subIndexType == .subIndexTypeSubscript {
+    if index.subIndexType == .subIndexTypeSuperscript
+      || index.subIndexType == .subIndexTypeSubscript
+    {
       for atom in subDisplays {
         if let lineAtom = atom as? MTMathListDisplay,
-           Int(index.atomIndex) == Int(lineAtom.index) {
+          Int(index.atomIndex) == Int(lineAtom.index)
+        {
           if (lineAtom.type == .subscript && index.subIndexType == .subIndexTypeSubscript)
-              || (lineAtom.type == .superscript && index.subIndexType == .subIndexTypeSuperscript) {
+            || (lineAtom.type == .superscript && index.subIndexType == .subIndexTypeSuperscript)
+          {
             return lineAtom
           }
         }

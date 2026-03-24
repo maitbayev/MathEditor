@@ -1,6 +1,7 @@
 // Copyright © 2025 Snap, Inc. All rights reserved.
 
 import MathEditor
+import MathEditorSwift
 import SwiftUI
 
 struct ContentView: View {
@@ -41,7 +42,7 @@ struct ContentView: View {
     typealias UIViewType = NSView
 
     func makeNSView(context: Context) -> NSView {
-      let mathLabel = MTEditableMathLabel()
+      let mathLabel = MTEditableMathLabelSwift()
       mathLabel.backgroundColor = .clear
       mathLabel.caretColor = NSColor.labelColor
       mathLabel.textColor = NSColor.labelColor
