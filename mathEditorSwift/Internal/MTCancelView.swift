@@ -1,16 +1,10 @@
 import Foundation
 
-#if canImport(UIKit)
-import UIKit
-#elseif canImport(AppKit)
-import AppKit
-#endif
-
-@objc(MTCancelView)
+@objc
 public final class MTCancelView: MTView {
   private let imageView: MTImageView
 
-  @objc(initWithTarget:action:)
+  @objc
   public init(target: AnyObject, action: Selector) {
     #if canImport(UIKit)
     let image = MTImage(systemName: "xmark.circle")?.withRenderingMode(.alwaysTemplate)
@@ -29,13 +23,7 @@ public final class MTCancelView: MTView {
     addSubview(imageView)
     imageView.pinToSuperview()
 
-    #if canImport(UIKit)
-    let tap = UITapGestureRecognizer(target: target, action: action)
-    addGestureRecognizer(tap)
-    #else
-    let tap = NSClickGestureRecognizer(target: target, action: action)
-    addGestureRecognizer(tap)
-    #endif
+    addGestureRecognizer(MTTapGestureRecognizer(target: target, action: action))
 
     isHidden = true
   }
