@@ -14,7 +14,6 @@
 #import "MTMathList.h"
 #import "MTMathUILabel.h"
 #import "MTMathAtomFactory.h"
-#import "MTCancelView.h"
 #import "MTCaretView.h"
 #import "MTTapGestureRecognizer.h"
 #import "MTMathList+Editing.h"
