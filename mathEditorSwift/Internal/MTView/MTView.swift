@@ -5,10 +5,20 @@
 //  Created by Madiyar Aitbayev on 24/03/2026.
 //
 
-#if canImport(AppKit)
-  import AppKit
-  public typealias MTView = NSView
-#elseif canImport(UIKit)
-  import UIKit
-  public typealias MTView = UIView
+import Foundation
+
+#if canImport(UIKit)
+import UIKit
+public typealias MTView = UIView
+public typealias MTColor = UIColor
+public typealias MTBezierPath = UIBezierPath
+public typealias MTImage = UIImage
+public typealias MTImageView = UIImageView
+#elseif canImport(AppKit)
+import AppKit
+public typealias MTView = NSView
+public typealias MTColor = NSColor
+public typealias MTBezierPath = NSBezierPath
+public typealias MTImage = NSImage
+public typealias MTImageView = NSImageView
 #endif
