@@ -122,7 +122,7 @@ struct LettersKeyboardView: View {
         label: label,
         tone: .dark,
         action: { onAction(.insertText(label)) },
-        enabled: state.variablesAllowed,
+        enabled: true,
         pressedAsset: "Keyboard-azure-pressed"
       )
     )
@@ -134,7 +134,7 @@ struct LettersKeyboardView: View {
       tone: .dark,
       fontName: "CourierNewPS-ItalicMT",
       action: { onAction(.insertText(key.label)) },
-      enabled: state.variablesAllowed,
+      enabled: true,
       accessibilityLabel: key.accessibilityLabel,
       pressedAsset: "Keyboard-azure-pressed"
     )
