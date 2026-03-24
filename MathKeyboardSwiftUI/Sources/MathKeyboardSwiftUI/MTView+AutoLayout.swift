@@ -29,11 +29,9 @@ extension MTView {
 }
 
 extension MTViewEdgeInsets {
+#if os(macOS)
   static var zero: Self {
-    #if os(iOS)
-      .zero
-    #else
       NSEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    #endif
   }
+#endif
 }
