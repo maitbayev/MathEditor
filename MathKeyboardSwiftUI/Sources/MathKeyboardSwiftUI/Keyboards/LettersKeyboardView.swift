@@ -50,7 +50,8 @@ struct LettersKeyboardView: View {
 
         VStack(spacing: 0) {
           letterRow(topRow, horizontalInset: 0, unitWidth: unitWidth, rowHeight: rowHeight)
-          letterRow(middleRow, horizontalInset: unitWidth / 2, unitWidth: unitWidth, rowHeight: rowHeight)
+          letterRow(
+            middleRow, horizontalInset: unitWidth / 2, unitWidth: unitWidth, rowHeight: rowHeight)
           bottomLetterRow(unitWidth: unitWidth, rowHeight: rowHeight)
           greekRowView(unitWidth: unitWidth, rowHeight: rowHeight)
         }
