@@ -8,7 +8,6 @@
 #if TARGET_OS_IPHONE
 
 #import "MTEditableMathLabel.h"
-#import "MTCaretView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
