@@ -29,7 +29,7 @@ extension KeyboardTab {
   var nibName: String {
     switch self {
     case .numbers: return "MTKeyboard"
-    case .legacyNumbers: return "MTKeyboard"
+    case .legacyNumbers: return "MTKeyboardTab3"
     case .operations: return "MTKeyboardTab2"
     case .functions: return "MTKeyboardTab3"
     case .letters: return "MTKeyboardTab4"

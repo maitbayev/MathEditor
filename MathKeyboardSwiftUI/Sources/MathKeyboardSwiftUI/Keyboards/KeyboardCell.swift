@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct KeyboardCell: Identifiable {
   enum Content {
@@ -22,7 +23,6 @@ struct KeyboardCell: Identifiable {
 
   struct ImageContent {
     let name: String
-    let padding: Double
   }
 
   enum TextTone {
@@ -38,7 +38,8 @@ struct KeyboardCell: Identifiable {
   let accessibilityLabel: String
   let pressedAsset: String?
   let overlayAsset: String?
-
+  var padding: EdgeInsets
+  
   static func text(
     label: String,
     tone: TextTone,
@@ -48,7 +49,8 @@ struct KeyboardCell: Identifiable {
     enabled: Bool,
     accessibilityLabel: String? = nil,
     pressedAsset: String? = nil,
-    overlayAsset: String? = nil
+    overlayAsset: String? = nil,
+    padding: EdgeInsets = .zero,
   ) -> KeyboardCell {
     KeyboardCell(
       content: .text(
@@ -63,7 +65,8 @@ struct KeyboardCell: Identifiable {
       enabled: enabled,
       accessibilityLabel: accessibilityLabel ?? label,
       pressedAsset: pressedAsset,
-      overlayAsset: overlayAsset
+      overlayAsset: overlayAsset,
+      padding: padding
     )
   }
 
@@ -73,15 +76,31 @@ struct KeyboardCell: Identifiable {
     enabled: Bool,
     accessibilityLabel: String,
     pressedAsset: String? = nil,
-    overlayAsset: String? = nil
+    overlayAsset: String? = nil,
+    padding: EdgeInsets = .zero,
   ) -> KeyboardCell {
     KeyboardCell(
-      content: .image(ImageContent(name: imageName, padding: 8)),
+      content: .image(ImageContent(name: imageName)),
       action: action,
       enabled: enabled,
       accessibilityLabel: accessibilityLabel,
       pressedAsset: pressedAsset,
-      overlayAsset: overlayAsset
+      overlayAsset: overlayAsset,
+      padding: padding
     )
+  }
+}
+
+extension EdgeInsets {
+  static var zero: EdgeInsets {
+    EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+  }
+  
+  static func bottom(_ length: CGFloat) -> EdgeInsets {
+    EdgeInsets(top: 0, leading: 0, bottom: length, trailing: 0)
+  }
+  
+  static func top(_ length: CGFloat) -> EdgeInsets {
+    EdgeInsets(top: length, leading: 0, bottom: 0, trailing: 0)
   }
 }

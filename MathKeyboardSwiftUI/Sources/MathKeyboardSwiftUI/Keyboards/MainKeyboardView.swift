@@ -57,11 +57,11 @@ extension MainKeyboardView {
       .text(
         label: "x", tone: .light, fontName: KeyboardFontRegistry.variableFontName,
         action: { onAction(.insertText("x")) }, enabled: state.variablesAllowed,
-        pressedAsset: "Keyboard-marine-pressed"),
+        pressedAsset: "Keyboard-marine-pressed", padding: .bottom(10)),
       .text(
         label: "y", tone: .light, fontName: KeyboardFontRegistry.variableFontName,
         action: { onAction(.insertText("y")) }, enabled: state.variablesAllowed,
-        pressedAsset: "Keyboard-marine-pressed"),
+        pressedAsset: "Keyboard-marine-pressed", padding: .bottom(10)),
       .image(
         imageName: "Fraction",
         action: { onAction(.insertText(MTSymbolFractionSlash)) },
@@ -84,6 +84,7 @@ extension MainKeyboardView {
   private var enterCell: KeyboardCell {
     KeyboardCell.text(
       label: "Enter", tone: .light,
+      fontName: "Helvetica Neue Light",
       action: { onAction(.insertText("\n")) }, enabled: true,
       pressedAsset: "Keyboard-grey-pressed")
   }
@@ -91,7 +92,9 @@ extension MainKeyboardView {
     KeyboardCell.image(
       imageName: "Keyboard Down",
       action: { onAction(.dismiss) }, enabled: true, accessibilityLabel: "Dismiss keyboard",
-      pressedAsset: "Keyboard-grey-pressed")
+      pressedAsset: "Keyboard-grey-pressed",
+      padding: .bottom(5)
+    )
   }
 
 }

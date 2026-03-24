@@ -64,16 +64,24 @@ private func makeNumbersGrid(
   let operatorItems: [KeyboardCell] = [
     .text(
       label: "÷", tone: .dark, action: { onAction(.insertText("÷")) },
-      enabled: state.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed"),
+      enabled: state.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed",
+      padding: .bottom(5)
+    ),
     .text(
       label: "×", tone: .dark, action: { onAction(.insertText("×")) },
-      enabled: state.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed"),
+      enabled: state.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed",
+      padding: .bottom(7)
+    ),
     .text(
-      label: "-", tone: .dark, action: { onAction(.insertText("-")) },
-      enabled: state.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed"),
+      label: "-", tone: .dark, fontSize: 25, action: { onAction(.insertText("-")) },
+      enabled: state.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed",
+      padding: .bottom(9)
+    ),
     .text(
       label: "+", tone: .dark, action: { onAction(.insertText("+")) },
-      enabled: state.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed"),
+      enabled: state.operatorsAllowed, pressedAsset: "Keyboard-orange-pressed",
+      padding: .bottom(5)
+    ),
   ]
   return [numbersLeftItems, numbersMiddleItems, numbersRightItems, operatorItems]
 }

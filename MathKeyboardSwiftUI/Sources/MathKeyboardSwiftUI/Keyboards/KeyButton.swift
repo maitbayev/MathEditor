@@ -27,12 +27,12 @@ struct KeyButton: View {
           Text(text.value)
             .font(.custom(text.fontName, size: text.fontSize))
             .foregroundColor(textColor(for: text.tone))
+            .padding(cell.padding)
         case .image(let image):
           mtMathImage(image.name)
             .renderingMode(.original)
-            .resizable()
-            .scaledToFit()
-            .padding(image.padding)
+            .scaledToFill()
+            .padding(cell.padding)
         }
       }
     }

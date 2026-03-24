@@ -53,8 +53,10 @@ private func makeOperationsGrid(
       label: "≤", tone: .dark, action: { onAction(.insertText("≤")) }, enabled: true,
       pressedAsset: "Keyboard-orange-pressed"),
     .text(
-      label: "|□|", tone: .dark, action: { onAction(.insertText("||")) }, enabled: true,
-      accessibilityLabel: "Absolute value", pressedAsset: "Keyboard-orange-pressed"),
+      label: "|□|", tone: .dark, fontSize: 24, action: { onAction(.insertText("||")) },
+      enabled: true, accessibilityLabel: "Absolute value",
+      pressedAsset: "Keyboard-orange-pressed"
+    ),
     .text(
       label: ":", tone: .dark, action: { onAction(.insertText(":")) }, enabled: true,
       pressedAsset: "Keyboard-orange-pressed"),
