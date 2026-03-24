@@ -89,7 +89,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
     set { label.contentInsets = newValue }
   }
 
-  private let label = MTMathUILabel(frame: .zero)
+  let label = MTMathUILabel(frame: .zero)
   private var tapGestureRecognizer: MTTapGestureRecognizer?
   private var insertionIndex: MTMathListIndex?
   private var flipTransform = CGAffineTransform.identity
@@ -124,7 +124,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
   }
 
   @objc public func clearHighlights() {
-    setNeedsLayoutCompat()
+    setNeedsLayout()
   }
 
   @objc(moveCaretToPoint:)
@@ -134,7 +134,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
   }
 
   @objc public func startEditing() {
-    guard !isFirstResponderCompat else { return }
+    guard !isFirstResponder else { return }
     #if canImport(AppKit)
       window?.makeFirstResponder(self)
     #else
@@ -343,7 +343,7 @@ extension MTEditableMathLabelSwift {
   }
 
   fileprivate func handleTap(at point: CGPoint) {
-    if !isFirstResponderCompat {
+    if !isFirstResponder {
       insertionIndex = nil
       caretView.showHandle(false)
       startEditing()
@@ -380,7 +380,7 @@ extension MTEditableMathLabelSwift {
   }
 
   fileprivate func insertionPointChanged() {
-    guard isFirstResponderCompat else {
+    guard isFirstResponder else {
       caretView.removeFromSuperview()
       cancelImage?.isHidden = true
       return
@@ -752,102 +752,7 @@ extension MTEditableMathLabelSwift {
     #endif
   }
 
-  fileprivate func setNeedsLayoutCompat() {
-    #if canImport(UIKit)
-      setNeedsLayout()
-    #else
-      needsLayout = true
-    #endif
-  }
-
   fileprivate func setLabelNeedsLayoutCompat() {
-    #if canImport(UIKit)
-      label.setNeedsLayout()
-    #else
-      label.needsLayout = true
-    #endif
-  }
-
-  fileprivate var isFirstResponderCompat: Bool {
-    #if canImport(UIKit)
-      isFirstResponder
-    #else
-      window?.firstResponder === self
-    #endif
+    label.setNeedsLayout()
   }
 }
-
-#if canImport(UIKit)
-  extension MTEditableMathLabelSwift: UIKeyInput {
-    public override var canBecomeFirstResponder: Bool { true }
-
-    public override var inputView: UIView? {
-      keyboard as? UIView
-    }
-
-    public override func becomeFirstResponder() -> Bool {
-      let didBecome = super.becomeFirstResponder()
-      if didBecome {
-        doBecomeFirstResponder()
-      }
-      return didBecome
-    }
-
-    public override func resignFirstResponder() -> Bool {
-      guard isFirstResponder else { return true }
-      let didResign = super.resignFirstResponder()
-      doResignFirstResponder()
-      return didResign
-    }
-
-    public override func layoutSubviews() {
-      super.layoutSubviews()
-      doLayout()
-    }
-
-    public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-      if super.point(inside: point, with: event) {
-        return true
-      }
-      return caretView.point(inside: convert(point, to: caretView), with: event)
-    }
-  }
-#else
-  extension MTEditableMathLabelSwift {
-    public override var acceptsFirstResponder: Bool { true }
-
-    public override func becomeFirstResponder() -> Bool {
-      let didBecome = super.becomeFirstResponder()
-      if didBecome {
-        doBecomeFirstResponder()
-      }
-      return didBecome
-    }
-
-    public override func resignFirstResponder() -> Bool {
-      guard window?.firstResponder === self else { return true }
-      let didResign = super.resignFirstResponder()
-      doResignFirstResponder()
-      return didResign
-    }
-
-    public override func keyDown(with event: NSEvent) {
-      interpretKeyEvents([event])
-    }
-
-    public override func deleteBackward(_ sender: Any?) {
-      deleteBackward()
-    }
-
-    public override func layout() {
-      super.layout()
-      doLayout()
-    }
-
-    public override var isFlipped: Bool { true }
-
-    public override func hitTest(_ point: NSPoint) -> NSView? {
-      hitTestOutsideBounds(point, ignoringSubviews: [label])
-    }
-  }
-#endif
