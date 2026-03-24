@@ -7,6 +7,7 @@
 
 struct KeyboardState: Equatable {
   var currentTab: KeyboardTab = .numbers
+  var isLowercase = true
   var equalsAllowed = true
   var fractionsAllowed = true
   var variablesAllowed = true

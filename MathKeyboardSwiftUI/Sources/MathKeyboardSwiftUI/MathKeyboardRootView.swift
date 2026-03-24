@@ -12,8 +12,8 @@ import SwiftUI
 
   public struct MathKeyboardRootView: View {
     let state: KeyboardState
-    weak var textInput: (any UIView & UIKeyInput)?
     let onTabSelected: (KeyboardTab) -> Void
+    let onAction: (KeyboardAction) -> Void
 
     public var body: some View {
       GeometryReader { proxy in
@@ -27,20 +27,13 @@ import SwiftUI
               Button {
                 onTabSelected(tab)
               } label: {
-                if let image = tabImage(for: tab) {
-                  Image(uiImage: image)
-                    .renderingMode(.original)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 6)
-                } else {
-                  Text(tab.title ?? "")
-                    .font(.system(size: 14, weight: state.currentTab == tab ? .semibold : .regular))
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
+                Image(uiImage: tabImage(for: tab))
+                  .renderingMode(.original)
+                  .resizable()
+                  .scaledToFit()
+                  .frame(maxWidth: .infinity, maxHeight: .infinity)
+                  .padding(.horizontal, 8)
+                  .padding(.vertical, 6)
               }
               .buttonStyle(.plain)
               .background(Color(white: 0.768627451))
@@ -50,7 +43,7 @@ import SwiftUI
 
           KeyboardContainerView(
             state: state,
-            textInput: textInput
+            onAction: onAction
           )
           .frame(height: keyboardHeight)
         }
@@ -59,16 +52,14 @@ import SwiftUI
       }
     }
 
-    private func tabImage(for tab: KeyboardTab) -> UIImage? {
-      guard let names = tab.imageNames else {
-        return nil
-      }
+    private func tabImage(for tab: KeyboardTab) -> UIImage {
+      let names = tab.imageNames
       let name = state.currentTab == tab ? names.selected : names.normal
       return UIImage(
         named: name,
         in: MTMathKeyboardRootView.getMathKeyboardResourcesBundle(),
         compatibleWith: nil
-      )
+      ) ?? UIImage()
     }
   }
 

@@ -2,16 +2,18 @@ import Foundation
 import MathEditor
 import SwiftUI
 
-func functionsKeyboardView(
-  state: KeyboardState,
-  onAction: @escaping (KeyboardAction) -> Void
-) -> MainKeyboardView {
-  MainKeyboardView(
-    backgroundImageName: "Functions Keyboard",
-    middleColumns: makeFunctionsGrid(state: state, onAction: onAction),
-    state: state,
-    onAction: onAction
-  )
+struct FunctionsKeyboardView: View {
+  let state: KeyboardState
+  let onAction: (KeyboardAction) -> Void
+
+  var body: some View {
+    MainKeyboardView(
+      backgroundImageName: "Functions Keyboard",
+      middleColumns: makeFunctionsGrid(state: state, onAction: onAction),
+      state: state,
+      onAction: onAction
+    )
+  }
 }
 
 private func makeFunctionsGrid(

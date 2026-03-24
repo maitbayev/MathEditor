@@ -7,90 +7,33 @@
 
 #if os(iOS)
 
-  import MathEditor
-  import MathKeyboard
   import SwiftUI
-  import UIKit
 
-  struct KeyboardContainerView: UIViewRepresentable {
+  struct KeyboardContainerView: View {
     let state: KeyboardState
-    weak var textInput: (any UIView & UIKeyInput)?
+    let onAction: (KeyboardAction) -> Void
 
-    func makeUIView(context: Context) -> KeyboardContainerUIView {
-      let view = KeyboardContainerUIView()
-      view.sync(
-        state: state,
-        editingTarget: textInput
-      )
-      return view
+    var body: some View {
+      keyboardView(for: state.currentTab)
     }
 
-    func updateUIView(_ uiView: KeyboardContainerUIView, context: Context) {
-      uiView.sync(
-        state: state,
-        editingTarget: textInput
-      )
-    }
-  }
-
-  final class KeyboardContainerUIView: UIView {
-    private weak var currentKeyboard: UIView?
-    private lazy var keyboards: [KeyboardTab: (UIView & KeyboardConfigurable)] = [
-      .numbers: makeNumbersKeyboard(),
-      .legacyNumbers: makeKeyboard(named: KeyboardTab.legacyNumbers.nibName),
-      .operations: makeOperationsKeyboard(),
-      .functions: makeFunctionsKeyboard(),
-      .letters: makeLettersKeyboard(),
-    ]
-
-    fileprivate func sync(state: KeyboardState, editingTarget: (any UIView & UIKeyInput)?) {
-      for keyboard in keyboards.values {
-        keyboard.setTextInput(editingTarget)
-        keyboard.applyKeyboardState(state)
+    @ViewBuilder
+    private func keyboardView(for tab: KeyboardTab) -> some View {
+      switch tab {
+      case .numbers:
+        NumbersKeyboardView(state: state, onAction: onAction)
+      case .operations:
+        OperationsKeyboardView(state: state, onAction: onAction)
+      case .functions:
+        FunctionsKeyboardView(state: state, onAction: onAction)
+      case .letters:
+        LettersKeyboardView(
+          state: state,
+          isLowercase: state.isLowercase,
+          onShift: { onAction(.toggleShift) },
+          onAction: onAction
+        )
       }
-
-      display(keyboard: keyboards[state.currentTab]!)
-    }
-
-    fileprivate func display(keyboard: UIView) {
-      guard currentKeyboard !== keyboard else { return }
-
-      currentKeyboard?.removeFromSuperview()
-      currentKeyboard = keyboard
-      addSubview(keyboard)
-      keyboard.pinToSuperview()
-    }
-
-    private func makeNumbersKeyboard() -> UIView & KeyboardConfigurable {
-      MainKeyboardUIView { state, onAction in
-        numbersKeyboardView(state: state, onAction: onAction)
-      }
-    }
-
-    private func makeOperationsKeyboard() -> UIView & KeyboardConfigurable {
-      MainKeyboardUIView { state, onAction in
-        operationsKeyboardView(state: state, onAction: onAction)
-      }
-    }
-
-    private func makeFunctionsKeyboard() -> UIView & KeyboardConfigurable {
-      MainKeyboardUIView { state, onAction in
-        functionsKeyboardView(state: state, onAction: onAction)
-      }
-    }
-
-    private func makeLettersKeyboard() -> UIView & KeyboardConfigurable {
-      LettersKeyboardUIView()
-    }
-
-    private func makeKeyboard(named nibName: String) -> UIView & KeyboardConfigurable {
-      let bundle = MTMathKeyboardRootView.getMathKeyboardResourcesBundle()
-      let keyboard = UINib(nibName: nibName, bundle: bundle)
-        .instantiate(withOwner: nil, options: nil)
-        .compactMap { $0 as? MTKeyboard }
-        .first!
-      keyboard.translatesAutoresizingMaskIntoConstraints = false
-      return keyboard
     }
   }
 

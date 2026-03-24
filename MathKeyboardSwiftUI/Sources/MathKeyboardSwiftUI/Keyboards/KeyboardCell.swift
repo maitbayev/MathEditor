@@ -39,7 +39,7 @@ struct KeyboardCell: Identifiable {
   let pressedAsset: String?
   let overlayAsset: String?
   var padding: EdgeInsets
-  
+
   static func text(
     label: String,
     tone: TextTone,
@@ -95,11 +95,11 @@ extension EdgeInsets {
   static var zero: EdgeInsets {
     EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
   }
-  
+
   static func bottom(_ length: CGFloat) -> EdgeInsets {
     EdgeInsets(top: 0, leading: 0, bottom: length, trailing: 0)
   }
-  
+
   static func top(_ length: CGFloat) -> EdgeInsets {
     EdgeInsets(top: length, leading: 0, bottom: 0, trailing: 0)
   }
