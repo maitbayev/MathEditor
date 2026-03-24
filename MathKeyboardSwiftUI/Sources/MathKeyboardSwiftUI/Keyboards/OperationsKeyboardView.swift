@@ -1,16 +1,18 @@
 import Foundation
 import SwiftUI
 
-func operationsKeyboardView(
-  state: KeyboardState,
-  onAction: @escaping (KeyboardAction) -> Void
-) -> MainKeyboardView {
-  MainKeyboardView(
-    backgroundImageName: "Operations Keyboard",
-    middleColumns: makeOperationsGrid(state: state, onAction: onAction),
-    state: state,
-    onAction: onAction
-  )
+struct OperationsKeyboardView: View {
+  let state: KeyboardState
+  let onAction: (KeyboardAction) -> Void
+
+  var body: some View {
+    MainKeyboardView(
+      backgroundImageName: "Operations Keyboard",
+      middleColumns: makeOperationsGrid(state: state, onAction: onAction),
+      state: state,
+      onAction: onAction
+    )
+  }
 }
 
 private func makeOperationsGrid(

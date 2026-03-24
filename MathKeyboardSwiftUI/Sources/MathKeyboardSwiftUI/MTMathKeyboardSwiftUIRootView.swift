@@ -98,9 +98,11 @@
     private func makeRootView() -> MathKeyboardRootView {
       MathKeyboardRootView(
         state: state,
-        textInput: textInput,
         onTabSelected: { [weak self] tab in
           self?.updateState { $0.currentTab = tab }
+        },
+        onAction: { [weak self] action in
+          self?.handleKeyboardAction(action)
         }
       )
     }
@@ -122,6 +124,21 @@
 
     private func updateRootView() {
       hostingController.rootView = makeRootView()
+    }
+
+    private func handleKeyboardAction(_ action: KeyboardAction) {
+      UIDevice.current.playInputClick()
+
+      switch action {
+      case .insertText(let text):
+        textInput?.insertText(text)
+      case .backspace:
+        textInput?.deleteBackward()
+      case .dismiss:
+        textInput?.resignFirstResponder()
+      case .toggleShift:
+        updateState { $0.isLowercase.toggle() }
+      }
     }
   }
 

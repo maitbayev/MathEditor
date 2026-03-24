@@ -1,16 +1,18 @@
 import Foundation
 import SwiftUI
 
-func numbersKeyboardView(
-  state: KeyboardState,
-  onAction: @escaping (KeyboardAction) -> Void
-) -> MainKeyboardView {
-  MainKeyboardView(
-    backgroundImageName: "Numbers Keyboard",
-    middleColumns: makeNumbersGrid(state: state, onAction: onAction),
-    state: state,
-    onAction: onAction
-  )
+struct NumbersKeyboardView: View {
+  let state: KeyboardState
+  let onAction: (KeyboardAction) -> Void
+
+  var body: some View {
+    MainKeyboardView(
+      backgroundImageName: "Numbers Keyboard",
+      middleColumns: makeNumbersGrid(state: state, onAction: onAction),
+      state: state,
+      onAction: onAction
+    )
+  }
 }
 
 private func makeNumbersGrid(
