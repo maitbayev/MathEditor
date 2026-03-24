@@ -12,8 +12,44 @@ private let greekLowerEnd: UInt32 = 0x03C9
 private let greekCapitalStart: UInt32 = 0x0391
 private let greekCapitalEnd: UInt32 = 0x03A9
 
+public protocol MTEditableMathLabelSwiftDelegate: AnyObject {
+  func returnPressed(_ label: MTEditableMathLabelSwift)
+  func textModified(_ label: MTEditableMathLabelSwift)
+  func didBeginEditing(_ label: MTEditableMathLabelSwift)
+  func didEndEditing(_ label: MTEditableMathLabelSwift)
+}
+
+public extension MTEditableMathLabelSwiftDelegate {
+  func returnPressed(_ label: MTEditableMathLabelSwift) {}
+  func textModified(_ label: MTEditableMathLabelSwift) {}
+  func didBeginEditing(_ label: MTEditableMathLabelSwift) {}
+  func didEndEditing(_ label: MTEditableMathLabelSwift) {}
+}
+
+public protocol MTMathKeyboardTraitsSwift: AnyObject {
+  var equalsAllowed: Bool { get set }
+  var fractionsAllowed: Bool { get set }
+  var variablesAllowed: Bool { get set }
+  var numbersAllowed: Bool { get set }
+  var operatorsAllowed: Bool { get set }
+  var exponentHighlighted: Bool { get set }
+  var squareRootHighlighted: Bool { get set }
+  var radicalHighlighted: Bool { get set }
+}
+
+public protocol MTKeyInputSwift: AnyObject {
+  func insertText(_ text: String)
+  func deleteBackward()
+  var hasText: Bool { get }
+}
+
+public protocol MTMathKeyboardSwift: MTMathKeyboardTraitsSwift {
+  func startedEditing(_ label: MTView & MTKeyInputSwift)
+  func finishedEditing(_ label: MTView & MTKeyInputSwift)
+}
+
 @objc(MTEditableMathLabelSwift)
-public final class MTEditableMathLabelSwift: MTView {
+public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
   @objc public var mathList: MTMathList = MTMathList() {
     didSet {
       label.mathList = mathList
@@ -36,8 +72,8 @@ public final class MTEditableMathLabelSwift: MTView {
 
   @objc public private(set) var cancelImage: MTCancelView?
   @objc public private(set) var caretView: MTCaretViewSwift!
-  @objc public weak var delegate: NSObjectProtocol?
-  @objc public weak var keyboard: MTView?
+  public weak var delegate: MTEditableMathLabelSwiftDelegate?
+  public weak var keyboard: (MTView & MTMathKeyboardSwift)?
 
   @objc public var fontSize: CGFloat {
     get { label.fontSize }
@@ -141,21 +177,21 @@ public final class MTEditableMathLabelSwift: MTView {
     if insertionIndex == nil {
       insertionIndex = MTMathListIndex.level0Index(UInt(mathList.atoms.count))
     }
-    performSelector("startedEditing:", on: keyboard, with: self)
+    keyboard?.startedEditing(self)
     insertionPointChanged()
-    performSelector("didBeginEditing:", on: delegate, with: self)
+    delegate?.didBeginEditing(self)
   }
 
   @objc public func doResignFirstResponder() {
-    performSelector("finishedEditing:", on: keyboard, with: self)
+    keyboard?.finishedEditing(self)
     insertionPointChanged()
-    performSelector("didEndEditing:", on: delegate, with: self)
+    delegate?.didEndEditing(self)
   }
 
   @objc(insertText:)
   public func insertText(_ string: String) {
     if string == "\n" {
-      performSelector("returnPressed:", on: delegate, with: self)
+      delegate?.returnPressed(self)
       return
     }
 
@@ -211,7 +247,7 @@ public final class MTEditableMathLabelSwift: MTView {
       insertParens()
     }
 
-    performSelector("textModified:", on: delegate, with: self)
+    delegate?.textModified(self)
   }
 
   @objc public func deleteBackward() {
@@ -243,7 +279,7 @@ public final class MTEditableMathLabelSwift: MTView {
 
     label.mathList = mathList
     insertionPointChanged()
-    performSelector("textModified:", on: delegate, with: self)
+    delegate?.textModified(self)
   }
 
   @objc public var hasText: Bool {
@@ -677,16 +713,27 @@ extension MTEditableMathLabelSwift {
     return list
   }
 
-  fileprivate func performSelector(
-    _ selectorName: String, on object: AnyObject?, with argument: AnyObject
-  ) {
-    let selector = NSSelectorFromString(selectorName)
-    guard let object = object as? NSObject, object.responds(to: selector) else { return }
-    object.perform(selector, with: argument)
-  }
-
   fileprivate func setKeyboardValue(_ value: Bool, forKey key: String) {
-    (keyboard as? NSObject)?.setValue(value, forKey: key)
+    switch key {
+    case "equalsAllowed":
+      keyboard?.equalsAllowed = value
+    case "fractionsAllowed":
+      keyboard?.fractionsAllowed = value
+    case "variablesAllowed":
+      keyboard?.variablesAllowed = value
+    case "numbersAllowed":
+      keyboard?.numbersAllowed = value
+    case "operatorsAllowed":
+      keyboard?.operatorsAllowed = value
+    case "exponentHighlighted":
+      keyboard?.exponentHighlighted = value
+    case "squareRootHighlighted":
+      keyboard?.squareRootHighlighted = value
+    case "radicalHighlighted":
+      keyboard?.radicalHighlighted = value
+    default:
+      break
+    }
   }
 
   fileprivate func layoutLabelIfNeeded() {
