@@ -47,6 +47,8 @@ import Foundation
     }
 
     public override func keyDown(with event: NSEvent) {
+      // interpretKeyEvents feeds the event into the input system,
+      // which calls insertText: or deleteBackward: as appropriate.
       interpretKeyEvents([event])
     }
 

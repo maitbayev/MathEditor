@@ -12,6 +12,7 @@ private let greekLowerEnd: UInt32 = 0x03C9
 private let greekCapitalStart: UInt32 = 0x0391
 private let greekCapitalEnd: UInt32 = 0x03A9
 
+/// Delegate for the `MTEditableMathLabel`. All methods are optional.
 public protocol MTEditableMathLabelSwiftDelegate: AnyObject {
   func returnPressed(_ label: MTEditableMathLabelSwift)
   func textModified(_ label: MTEditableMathLabelSwift)
@@ -19,13 +20,16 @@ public protocol MTEditableMathLabelSwiftDelegate: AnyObject {
   func didEndEditing(_ label: MTEditableMathLabelSwift)
 }
 
-public extension MTEditableMathLabelSwiftDelegate {
-  func returnPressed(_ label: MTEditableMathLabelSwift) {}
-  func textModified(_ label: MTEditableMathLabelSwift) {}
-  func didBeginEditing(_ label: MTEditableMathLabelSwift) {}
-  func didEndEditing(_ label: MTEditableMathLabelSwift) {}
+extension MTEditableMathLabelSwiftDelegate {
+  public func returnPressed(_ label: MTEditableMathLabelSwift) {}
+  public func textModified(_ label: MTEditableMathLabelSwift) {}
+  public func didBeginEditing(_ label: MTEditableMathLabelSwift) {}
+  public func didEndEditing(_ label: MTEditableMathLabelSwift) {}
 }
 
+/// This protocol provides information on the context of the current insertion point.
+/// The keyboard may choose to enable/disable/highlight certain parts of the UI depending on the context.
+/// e.g. you cannot enter the = sign when you are in a fraction so the keyboard could disable that.
 public protocol MTMathKeyboardTraitsSwift: AnyObject {
   var equalsAllowed: Bool { get set }
   var fractionsAllowed: Bool { get set }
@@ -43,6 +47,13 @@ public protocol MTKeyInputSwift: AnyObject {
   var hasText: Bool { get }
 }
 
+/// Any keyboard that provides input to the `MTEditableMathUILabel` must implement
+/// this protocol.
+///
+/// This protocol informs the keyboard when a particular `MTEditableMathUILabel` is being edited.
+/// The keyboard should use this information to send `MTKeyInput` messages to the label.
+///
+/// This protocol inherits from `MTMathKeyboardTraits`.
 public protocol MTMathKeyboardSwift: MTMathKeyboardTraitsSwift {
   func startedEditing(_ label: MTView & MTKeyInputSwift)
   func finishedEditing(_ label: MTView & MTKeyInputSwift)
@@ -150,6 +161,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
   @objc(insertMathList:atPoint:)
   public func insertMathList(_ list: MTMathList, at point: CGPoint) {
     guard let detailedIndex = closestIndex(to: point) else { return }
+    // insert at the given index - but don't consider sublevels at this point
     var index = MTMathListIndex.level0Index(detailedIndex.atomIndex)
     for atom in list.atoms {
       mathList.insert(atom, atListIndex: index)
@@ -167,6 +179,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
   @objc public func doLayout() {
     cancelImage?.frame = CGRect(
       x: frame.size.width - 55, y: (frame.size.height - 45) / 2, width: 45, height: 45)
+    // update the flip transform
     let transform = CGAffineTransform(translationX: 0, y: bounds.size.height)
     flipTransform = CGAffineTransform(scaleX: 1, y: -1).concatenating(transform)
     layoutLabelIfNeeded()
@@ -200,6 +213,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
     var insertedAtom: MTMathAtom?
 
     if string.count > 1 {
+      // Check if this is a supported command
       insertedAtom = MTMathAtomFactory.atom(forLatexSymbolName: string)
     } else {
       insertedAtom = atom(forCharacter: scalar)
@@ -229,9 +243,11 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
     default:
       if let insertedAtom, let insertionIndex {
         if !updatePlaceholderIfPresent(insertedAtom) {
+          // If a placeholder wasn't updated then insert the new element.
           mathList.insert(insertedAtom, atListIndex: insertionIndex)
         }
         if insertedAtom.type == .fraction {
+          // go to the numerator
           self.insertionIndex = insertionIndex.levelUp(
             withSubIndex: MTMathListIndex.level0Index(0), type: .subIndexTypeNumerator)
         } else {
@@ -243,6 +259,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
     label.mathList = mathList
     insertionPointChanged()
 
+    // If trig function, insert parens after
     if isTrigFunction(string) {
       insertParens()
     }
@@ -253,6 +270,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
   @objc public func deleteBackward() {
     guard hasText, var previousIndex = insertionIndex?.previous() else { return }
 
+    // delete the last atom from the list
     mathList.removeAtom(atListIndex: previousIndex)
     if previousIndex.finalSubIndexType() == MTMathListSubIndexType.subIndexTypeNucleus,
       let downIndex = previousIndex.levelDown()
@@ -270,8 +288,11 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
     if insertionIndex?.isAtBeginningOfLine() == true,
       insertionIndex?.subIndexType != .subIndexTypeNone
     {
+      // We have deleted to the beginning of the line and it is not the outermost line
       if mathList.atom(atListIndex: insertionIndex) == nil, let insertionIndex {
+        // add a placeholder if we deleted everything in the list
         let atom = MTMathAtomFactory.placeholder()
+        // mark the placeholder as selected since that is the current insertion point.
         atom.nucleus = MTSymbolBlackSquare
         mathList.insert(atom, atListIndex: insertionIndex)
       }
@@ -289,6 +310,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
   @objc(closestIndexToPoint:)
   public func closestIndex(to point: CGPoint) -> MTMathListIndex? {
     layoutLabelIfNeeded()
+    // no mathlist, so can't figure it out.
     guard let displayList = label.displayList else { return nil }
     return displayList.closestIndex(to: convert(point, to: label))
   }
@@ -296,6 +318,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
   @objc(caretRectForIndex:)
   public func caretRect(for index: MTMathListIndex) -> CGPoint {
     layoutLabelIfNeeded()
+    // no mathlist so we can't figure it out.
     guard let displayList = label.displayList else { return .zero }
     return displayList.caretPosition(for: index)
   }
@@ -303,10 +326,12 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
 
 extension MTEditableMathLabelSwift {
   fileprivate func initialize() {
+    // Add tap gesture recognizer to let the user enter editing mode.
     let tap = MTTapGestureRecognizer(target: self, action: #selector(tap(_:)))
     addGestureRecognizer(tap)
     tapGestureRecognizer = tap
 
+    // Create and set up the APLSimpleCoreTextView that will do the drawing.
     addSubview(label)
     label.pinToSuperview()
     label.fontSize = 30
@@ -326,6 +351,7 @@ extension MTEditableMathLabelSwift {
 
     highlightColor = MTColor.systemRed
     bringSubviewToFront(cancelImage!)
+    // start with an empty math list
     mathList = MTMathList()
   }
 
@@ -350,6 +376,7 @@ extension MTEditableMathLabelSwift {
       return
     }
 
+    // If already editing move the cursor and show handle
     insertionIndex =
       closestIndex(to: point) ?? MTMathListIndex.level0Index(UInt(mathList.atoms.count))
     caretView.showHandle(true)
@@ -379,7 +406,9 @@ extension MTEditableMathLabelSwift {
     }
   }
 
+  // Helper method to update caretView when insertion point/selection changes.
   fileprivate func insertionPointChanged() {
+    // If not in editing mode, we don't show the caret.
     guard isFirstResponder else {
       caretView.removeFromSuperview()
       cancelImage?.isHidden = true
@@ -393,6 +422,7 @@ extension MTEditableMathLabelSwift {
     {
       atom.nucleus = MTSymbolBlackSquare
       if index.finalSubIndexType() == .subIndexTypeNucleus {
+        // If the insertion index is inside a placeholder, move it out.
         insertionIndex = index.levelDown()
       }
     } else if let previousIndex = insertionIndex?.previous(),
@@ -407,17 +437,22 @@ extension MTEditableMathLabelSwift {
 
     setKeyboardMode()
 
+    // Find the insert point rect and create a caretView to draw the caret at this position.
     guard let insertionIndex else { return }
     let caretPosition = caretRect(for: insertionIndex)
+    // Check tht we were returned a valid position before displaying a caret there.
     guard caretPosition != CGPoint(x: -1, y: -1) else { return }
 
+    // caretFrame is in the flipped coordinate system, flip it back
     caretView.setPosition(caretPosition.applying(flipTransform))
     if caretView.superview == nil {
       addSubview(caretView)
       setNeedsDisplayCompat()
     }
 
+    // when a caret is displayed, the X symbol should be as well
     cancelImage?.isHidden = false
+    // Set up a timer to "blink" the caret.
     caretView.delayBlink()
     setLabelNeedsLayoutCompat()
   }
@@ -443,6 +478,8 @@ extension MTEditableMathLabelSwift {
 
   fileprivate func atom(forCharacter scalar: UnicodeScalar) -> MTMathAtom? {
     let string = String(scalar)
+    // Get the basic conversion from MTMathAtomFactory, and then special case
+    // unicode characters and latex special characters.
     if let atom = MTMathAtomFactory.atom(forCharacter: UInt16(scalar.value)) {
       return atom
     }
@@ -475,11 +512,14 @@ extension MTEditableMathLabelSwift {
     if (greekLowerStart...greekLowerEnd).contains(value)
       || (greekCapitalStart...greekCapitalEnd).contains(value)
     {
+      // All greek chars are rendered as variables.
       return MTMathAtom(type: .variable, value: string)
     }
     if value < 0x21 || value > 0x7E || string == "'" || string == "~" {
+      // not ascii
       return nil
     }
+    // just an ordinary character
     return MTMathAtom(type: .ordinary, value: string)
   }
 
@@ -494,6 +534,7 @@ extension MTEditableMathLabelSwift {
   fileprivate func handleScriptButton(_ type: MTMathListSubIndexType) {
     guard let insertionIndex else { return }
     if insertionIndex.hasSubIndex(of: type) {
+      // The index is currently inside a script. The button gets it out of the script and move forward.
       self.insertionIndex = getIndexAfterSpecialStructure(insertionIndex, type: type)
       return
     }
@@ -507,6 +548,7 @@ extension MTEditableMathLabelSwift {
         self.insertionIndex = insertionIndex.previous()?.levelUp(
           withSubIndex: MTMathListIndex.level0Index(0), type: type)
       } else if insertionIndex.finalSubIndexType() == .subIndexTypeNucleus {
+        // If we are already inside the nucleus, then we come out and go up to the script
         self.insertionIndex = insertionIndex.levelDown()?.levelUp(
           withSubIndex: MTMathListIndex.level0Index(UInt(count)), type: type)
       } else {
@@ -519,6 +561,7 @@ extension MTEditableMathLabelSwift {
     let emptyAtom = MTMathAtomFactory.placeholder()
     setScriptList(makePlaceholderMathList(), on: emptyAtom, type: type)
     if !updatePlaceholderIfPresent(emptyAtom) {
+      // If the placeholder hasn't been updated then insert it.
       mathList.insert(emptyAtom, atListIndex: insertionIndex)
     }
     self.insertionIndex = insertionIndex.levelUp(
@@ -532,23 +575,28 @@ extension MTEditableMathLabelSwift {
     while nextIndex.hasSubIndex(of: type) {
       nextIndex = nextIndex.levelDown() ?? nextIndex
     }
+    //Point to just after this node.
     return nextIndex.next()
   }
 
   fileprivate func handleSlashButton() {
     guard let insertionIndex else { return }
+    // special / handling - makes the thing a fraction
     let numerator = MTMathList()
     var current = insertionIndex
     while !current.isAtBeginningOfLine() {
       guard let atom = mathList.atom(atListIndex: current.previous()) else { break }
       if atom.type != .number && atom.type != .variable {
+        // we don't put this atom on the fraction
         break
       }
+      // add the number to the beginning of the list
       numerator.insert(atom, atListIndex: MTMathListIndex.level0Index(0))
       current = current.previous()!
     }
 
     if current.atomIndex == insertionIndex.atomIndex {
+      // so we didn't really find any numbers before this, so make the numerator 1
       if let atom = atom(forCharacter: "1".unicodeScalars.first!) {
         numerator.addAtom(atom)
       }
@@ -557,10 +605,12 @@ extension MTEditableMathLabelSwift {
         previousAtom.type == .fraction
       {
         let times = MTMathAtomFactory.times()
+        // add a times symbol
         mathList.insert(times, atListIndex: current)
         current = current.next()
       }
     } else {
+      // delete stuff in the mathlist from current to _insertionIndex
       mathList.removeAtoms(
         inListIndexRange: MTMathListRange.make(
           current, length: insertionIndex.atomIndex - current.atomIndex))
@@ -570,7 +620,9 @@ extension MTEditableMathLabelSwift {
     fraction.denominator = MTMathList()
     fraction.denominator.addAtom(MTMathAtomFactory.placeholder())
     fraction.numerator = numerator
+    // insert it
     mathList.insert(fraction, atListIndex: current)
+    // update the insertion index to go the denominator
     self.insertionIndex = current.levelUp(
       withSubIndex: MTMathListIndex.level0Index(0), type: .subIndexTypeDenominator)
   }
@@ -600,15 +652,19 @@ extension MTEditableMathLabelSwift {
           insertionIndex = current.levelDown()?.levelUp(
             withSubIndex: MTMathListIndex.level0Index(0), type: .subIndexTypeDegree)
         } else if current.hasSubIndex(of: .subIndexTypeRadicand) {
+          // If the cursor is at the radicand, switch it to the degree
           insertionIndex = current.levelDown()?.levelUp(
             withSubIndex: MTMathListIndex.level0Index(0), type: .subIndexTypeDegree)
         } else {
+          // If the cursor is at the degree, get out of the radical
           insertionIndex = getOutOfRadical(current)
         }
       } else if current.hasSubIndex(of: .subIndexTypeDegree) {
+        // If the radical the cursor at has a degree, and the cursor is at the degree, move the cursor to the radicand.
         insertionIndex = current.levelDown()?.levelUp(
           withSubIndex: MTMathListIndex.level0Index(0), type: .subIndexTypeRadicand)
       } else {
+        // If the cursor is at the radicand, get out of the radical.
         insertionIndex = getOutOfRadical(current)
       }
       return
@@ -628,9 +684,11 @@ extension MTEditableMathLabelSwift {
     guard let insertionIndex, let current = mathList.atom(atListIndex: insertionIndex),
       current.type == .placeholder
     else { return }
+    // remove this element - the inserted text replaces the placeholder
     mathList.removeAtom(atListIndex: insertionIndex)
   }
 
+  // Returns true if updated
   fileprivate func updatePlaceholderIfPresent(_ atom: MTMathAtom) -> Bool {
     guard let insertionIndex,
       let current = mathList.atom(atListIndex: insertionIndex),
@@ -642,11 +700,13 @@ extension MTEditableMathLabelSwift {
     if let subScript = current.subScript {
       atom.subScript = subScript
     }
+    // remove the placeholder and replace with atom.
     mathList.removeAtom(atListIndex: insertionIndex)
     mathList.insert(atom, atListIndex: insertionIndex)
     return true
   }
 
+  // Return YES if string is a trig function, otherwise return NO
   fileprivate func isTrigFunction(_ string: String) -> Bool {
     ["sin", "cos", "tan", "sec", "csc", "cot"].contains(string)
   }
@@ -669,6 +729,7 @@ extension MTEditableMathLabelSwift {
     if let insertionIndex = self.insertionIndex {
       mathList.insert(closeAtom, atListIndex: insertionIndex)
     }
+    // Don't go to the next insertion index, to start inserting before the close parens.
   }
 
   fileprivate func makePlaceholderMathList() -> MTMathList {

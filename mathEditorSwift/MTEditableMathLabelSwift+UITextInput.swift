@@ -4,6 +4,8 @@ import Foundation
   import ObjectiveC
   import UIKit
 
+  // These are blank just to get a UITextInput implementation, to fix the dictation button bug.
+  // Proposed fix from: http://stackoverflow.com/questions/20980898/work-around-for-dictation-custom-text-view-bug
   private final class MTTextInputPosition: UITextPosition {}
 
   private final class MTTextInputRange: UITextRange {
@@ -50,10 +52,8 @@ import Foundation
 
     public var inputDelegate: UITextInputDelegate? {
       get {
-        (
-          objc_getAssociatedObject(self, &MTTextInputAssociatedKeys.inputDelegate)
-            as? WeakTextInputDelegateBox
-        )?.value
+        (objc_getAssociatedObject(self, &MTTextInputAssociatedKeys.inputDelegate)
+          as? WeakTextInputDelegateBox)?.value
       }
       set {
         objc_setAssociatedObject(

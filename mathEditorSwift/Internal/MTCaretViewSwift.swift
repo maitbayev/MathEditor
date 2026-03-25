@@ -17,6 +17,7 @@ private let caretHandleDescent: CGFloat = 8
 private let caretHandleHeight: CGFloat = 20
 private let caretHandleHitAreaSize: CGFloat = 44
 
+// The settings below make sense for the given font size. They are scaled appropriately when the fontsize changes.
 private func caretHeight() -> CGFloat {
   caretAscent + caretDescent
 }
@@ -70,10 +71,12 @@ private final class MTCaretHandleSwift: MTView {
     let caretPoint = CGPoint(x: localPoint.x, y: localPoint.y - frame.origin.y)
     guard let label else { return }
     let labelPoint = convert(caretPoint, to: label)
+    // puts the point at the top to the top of the current caret
     label.moveCaret(to: labelPoint)
   }
 
   private func hitArea() -> CGRect {
+    // Create a hit area around the center.
     let size = bounds.size
     return CGRect(
       x: (size.width - caretHandleHitAreaSize) / 2,
@@ -103,6 +106,7 @@ private final class MTCaretHandleSwift: MTView {
     }
 
     public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+      // From apple documentation
       guard let touch = touches.first else { return }
       handleDrag(localPoint: touch.location(in: self))
     }
@@ -198,6 +202,7 @@ public final class MTCaretViewSwift: MTView {
   }
 
   func setPosition(_ position: CGPoint) {
+    // position is in the parent's coordinate system and it is the bottom left corner of the view.
     frame = CGRect(x: position.x, y: position.y - caretAscent * scale, width: 0, height: 0)
   }
 
@@ -210,12 +215,14 @@ public final class MTCaretViewSwift: MTView {
     handle.isHidden = !show
   }
 
+  // Helper method to set an initial blink delay
   func delayBlink() {
     isHidden = false
     blinker.isHidden = false
     blinkTimer?.fireDate = Date(timeIntervalSinceNow: initialBlinkDelay)
   }
 
+  // Helper method to toggle hidden state of caret view.
   private func blink() {
     blinker.isHidden.toggle()
   }
@@ -252,6 +259,7 @@ public final class MTCaretViewSwift: MTView {
   #if canImport(UIKit)
     public override func didMoveToSuperview() {
       super.didMoveToSuperview()
+      // UIView didMoveToSuperview override to set up blink timers after caret view created in superview.
       isHidden = false
       startBlinkingIfNeeded()
     }
