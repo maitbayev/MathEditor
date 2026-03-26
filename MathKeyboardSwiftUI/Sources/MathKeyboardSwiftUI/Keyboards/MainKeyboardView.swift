@@ -1,6 +1,7 @@
 import Foundation
-import MathEditor
+import MathEditorSwift
 import SwiftUI
+import iosMath
 
 struct MainKeyboardView: View {
   let backgroundImageName: String

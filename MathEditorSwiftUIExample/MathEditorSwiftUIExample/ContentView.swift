@@ -1,6 +1,6 @@
 // Copyright © 2025 Snap, Inc. All rights reserved.
 
-import MathEditor
+import MathEditorSwift
 import SwiftUI
 
 struct ContentView: View {
@@ -16,20 +16,19 @@ struct ContentView: View {
 }
 
 #if os(iOS)
-  import MathKeyboard
   import MathKeyboardSwiftUI
 
   struct MathEditorView: UIViewRepresentable {
-    typealias UIViewType = MTEditableMathLabel
+    typealias UIViewType = MTEditableMathLabelSwift
 
-    func makeUIView(context: Context) -> MTEditableMathLabel {
-      let mathLabel = MTEditableMathLabel()
+    func makeUIView(context: Context) -> MTEditableMathLabelSwift {
+      let mathLabel = MTEditableMathLabelSwift()
       mathLabel.backgroundColor = .clear
       mathLabel.keyboard = MTMathKeyboardSwiftUIRootView.sharedInstance()
       return mathLabel
     }
 
-    func updateUIView(_ uiView: MTEditableMathLabel, context: Context) {
+    func updateUIView(_ uiView: MTEditableMathLabelSwift, context: Context) {
 
     }
   }
@@ -41,7 +40,7 @@ struct ContentView: View {
     typealias UIViewType = NSView
 
     func makeNSView(context: Context) -> NSView {
-      let mathLabel = MTEditableMathLabel()
+      let mathLabel = MTEditableMathLabelSwift()
       mathLabel.backgroundColor = .clear
       mathLabel.caretColor = NSColor.labelColor
       mathLabel.textColor = NSColor.labelColor

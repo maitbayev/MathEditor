@@ -1,10 +1,11 @@
 #if os(iOS)
 
-  import MathEditor
+  import MathEditorSwift
   import SwiftUI
   import UIKit
 
-  public final class MTMathKeyboardSwiftUIRootView: UIView, MTMathKeyboard, UIInputViewAudioFeedback
+  public final class MTMathKeyboardSwiftUIRootView: UIView, MTMathKeyboard,
+    UIInputViewAudioFeedback
   {
     private static let defaultTab: KeyboardTab = .numbers
     private static let shared = MTMathKeyboardSwiftUIRootView()
@@ -77,12 +78,12 @@
       set { updateState { $0.radicalHighlighted = newValue } }
     }
 
-    public func startedEditing(_ label: (any UIView & UIKeyInput)!) {
+    public func startedEditing(_ label: any UIView & UIKeyInput) {
       textInput = label
       updateRootView()
     }
 
-    public func finishedEditing(_ label: (any UIView & UIKeyInput)!) {
+    public func finishedEditing(_ label: any UIView & UIKeyInput) {
       if textInput === label {
         textInput = nil
         updateRootView()
