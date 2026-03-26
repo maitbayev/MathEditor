@@ -41,12 +41,6 @@ public protocol MTMathKeyboardTraitsSwift: AnyObject {
   var radicalHighlighted: Bool { get set }
 }
 
-public protocol MTKeyInputSwift: AnyObject {
-  func insertText(_ text: String)
-  func deleteBackward()
-  var hasText: Bool { get }
-}
-
 /// Any keyboard that provides input to the `MTEditableMathUILabel` must implement
 /// this protocol.
 ///
@@ -55,12 +49,12 @@ public protocol MTKeyInputSwift: AnyObject {
 ///
 /// This protocol inherits from `MTMathKeyboardTraits`.
 public protocol MTMathKeyboardSwift: MTMathKeyboardTraitsSwift {
-  func startedEditing(_ label: MTView & MTKeyInputSwift)
-  func finishedEditing(_ label: MTView & MTKeyInputSwift)
+  func startedEditing(_ label: MTView & MTKeyInput)
+  func finishedEditing(_ label: MTView & MTKeyInput)
 }
 
 @objc(MTEditableMathLabelSwift)
-public final class MTEditableMathLabelSwift: MTView, MTKeyInputSwift {
+public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
   @objc public var mathList: MTMathList = MTMathList() {
     didSet {
       label.mathList = mathList

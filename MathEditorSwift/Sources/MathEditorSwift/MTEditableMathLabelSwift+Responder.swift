@@ -3,7 +3,7 @@ import Foundation
 #if canImport(UIKit)
   import UIKit
 
-  extension MTEditableMathLabelSwift: UIKeyInput {
+  extension MTEditableMathLabelSwift {
     public override var inputView: UIView? {
       keyboard as? UIView
     }

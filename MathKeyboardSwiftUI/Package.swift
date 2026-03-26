@@ -13,13 +13,13 @@ let package = Package(
     )
   ],
   dependencies: [
-    .package(path: "..")
+    .package(path: "../MathEditorSwift")
   ],
   targets: [
     .target(
       name: "MathKeyboardSwiftUI",
       dependencies: [
-        .product(name: "MathEditor", package: "MathEditor")
+        "MathEditorSwift"
       ],
       path: "Sources/MathKeyboardSwiftUI",
       resources: [.process("Resources")],
