@@ -15,12 +15,12 @@ let package = Package(
       targets: ["MathKeyboard"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/maitbayev/iosMath.git", branch: "master"),
+    .package(url: "https://github.com/maitbayev/iosMath.git", branch: "master")
   ],
   targets: [
     .target(
       name: "MathEditor",
-      dependencies: ["iosMath"],
+      dependencies: [.product(name: "iosMath", package: "iosMath")],
       path: "./mathEditor",
       cSettings: [
         .headerSearchPath("./editor"),
@@ -29,7 +29,7 @@ let package = Package(
     ),
     .target(
       name: "MathKeyboard",
-      dependencies: ["iosMath", "MathEditor"],
+      dependencies: [.product(name: "iosMath", package: "iosMath"), "MathEditor"],
       path: "./mathKeyboard",
       resources: [.process("MathKeyboardResources")],
       cSettings: [
