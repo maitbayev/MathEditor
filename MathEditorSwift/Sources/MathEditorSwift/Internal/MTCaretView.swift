@@ -1,4 +1,5 @@
 import Foundation
+import iosMath
 
 #if canImport(UIKit)
   import UIKit
@@ -25,19 +26,28 @@ private func caretHeight() -> CGFloat {
 private final class CaretHandle: MTView {
   weak var label: MTEditableMathLabelSwift?
 
-  var color: MTColor? {
-    didSet {
-      baseColor = color?.withAlphaComponent(0.7)
-      setNeedsDisplay()
-    }
+  var color: MTColor = MTColor.label {
+    didSet { setNeedsDisplay() }
   }
 
   private var path = MTBezierPath()
-  private var baseColor: MTColor?
+  private var isInteracting = false
+
+  private var hitArea: CGRect {
+    // Create a hit area around the center.
+    let size = bounds.size
+    return CGRect(
+      x: (size.width - caretHandleHitAreaSize) / 2,
+      y: (size.height - caretHandleHitAreaSize) / 2,
+      width: caretHandleHitAreaSize,
+      height: caretHandleHitAreaSize
+    )
+  }
 
   override init(frame: CGRect) {
     super.init(frame: frame)
     path = createHandlePath()
+    backgroundColor = .clear
   }
 
   @available(*, unavailable)
@@ -58,40 +68,32 @@ private final class CaretHandle: MTView {
   }
 
   private func interactionBegan() {
-    baseColor = baseColor?.withAlphaComponent(1.0)
+    isInteracting = true
     setNeedsDisplay()
   }
 
   private func interactionEnded() {
-    baseColor = baseColor?.withAlphaComponent(0.6)
+    isInteracting = false
     setNeedsDisplay()
   }
 
   private func handleDrag(localPoint: CGPoint) {
-    let caretPoint = CGPoint(x: localPoint.x, y: localPoint.y - frame.origin.y)
     guard let label else { return }
-    let labelPoint = convert(caretPoint, to: label)
+    let caretPoint = CGPoint(x: localPoint.x, y: localPoint.y - frame.origin.y)
+    let labelPoint = label.convert(caretPoint, from: self)
     // puts the point at the top to the top of the current caret
     label.moveCaret(to: labelPoint)
   }
 
-  private func hitArea() -> CGRect {
-    // Create a hit area around the center.
-    let size = bounds.size
-    return CGRect(
-      x: (size.width - caretHandleHitAreaSize) / 2,
-      y: (size.height - caretHandleHitAreaSize) / 2,
-      width: caretHandleHitAreaSize,
-      height: caretHandleHitAreaSize
-    )
+  public override func draw(_ rect: CGRect) {
+    let drawColor = color.withAlphaComponent(isInteracting ? 1.0 : 0.6)
+    drawColor.setFill()
+    path.fill()
   }
+}
 
-  #if canImport(UIKit)
-    public override func draw(_ rect: CGRect) {
-      baseColor?.setFill()
-      path.fill()
-    }
-
+#if canImport(UIKit)
+  extension CaretHandle {
     public override func layoutSubviews() {
       super.layoutSubviews()
       path = createHandlePath()
@@ -106,7 +108,6 @@ private final class CaretHandle: MTView {
     }
 
     public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-      // From apple documentation
       guard let touch = touches.first else { return }
       handleDrag(localPoint: touch.location(in: self))
     }
@@ -116,15 +117,14 @@ private final class CaretHandle: MTView {
     }
 
     public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-      hitArea().contains(point)
+      self.hitArea.contains(point)
     }
-  #else
-    public override var isFlipped: Bool { true }
+  }
+#endif  // canImport(UIKit)
 
-    public override func draw(_ dirtyRect: NSRect) {
-      baseColor?.setFill()
-      path.fill()
-    }
+#if canImport(AppKit)
+  extension CaretHandle {
+    public override var isFlipped: Bool { true }
 
     public override func layout() {
       super.layout()
@@ -147,16 +147,20 @@ private final class CaretHandle: MTView {
       interactionEnded()
     }
 
+    public override func mouseCancelled(with event: NSEvent) {
+      interactionEnded()
+    }
+
     public override func hitTest(_ point: NSPoint) -> NSView? {
       guard !isHidden else { return nil }
       let localPoint = convert(point, from: superview)
-      return hitArea().contains(localPoint) ? self : nil
+      return hitArea.contains(localPoint) ? self : nil
     }
-  #endif
-}
+  }
+#endif  // canImport(AppKit)
 
 final class MTCaretView: MTView {
-  public var caretColor: MTColor? {
+  public var caretColor: MTColor = MTColor.label {
     didSet {
       handle.color = caretColor
       blinker.backgroundColor = caretColor
@@ -166,7 +170,7 @@ final class MTCaretView: MTView {
   private var blinkTimer: Timer?
   private let blinker = MTView(frame: .zero)
   private let handle: CaretHandle
-  private var scale: CGFloat
+  private var scale: Double
 
   init(editor: MTEditableMathLabelSwift) {
     scale = editor.fontSize / caretFontSize
@@ -182,7 +186,7 @@ final class MTCaretView: MTView {
     blinker.backgroundColor = caretColor
     addSubview(blinker)
 
-    handle.backgroundColor = .clear
+    handle.color = caretColor
     handle.isHidden = true
     handle.label = editor
     addSubview(handle)
@@ -246,9 +250,12 @@ final class MTCaretView: MTView {
 
   deinit {
     blinkTimer?.invalidate()
+    blinkTimer = nil
   }
+}
 
-  #if canImport(UIKit)
+#if canImport(UIKit)
+  extension MTCaretView {
     public override func didMoveToSuperview() {
       super.didMoveToSuperview()
       // UIView didMoveToSuperview override to set up blink timers after caret view created in superview.
@@ -267,7 +274,11 @@ final class MTCaretView: MTView {
       super.layoutSubviews()
       doLayout()
     }
-  #else
+  }
+#endif  // canImport(UIKit)
+
+#if canImport(AppKit)
+  extension MTCaretView {
     public override var isFlipped: Bool { true }
 
     public override func viewDidMoveToSuperview() {
@@ -284,5 +295,5 @@ final class MTCaretView: MTView {
     public override func hitTest(_ point: NSPoint) -> NSView? {
       hitTestOutsideBounds(point)
     }
-  #endif
-}
+  }
+#endif  // canImport(AppKit)

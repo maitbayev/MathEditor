@@ -70,7 +70,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
     set { label.textColor = newValue ?? label.textColor }
   }
 
-  @objc public var caretColor: MTColor? {
+  @objc public var caretColor: MTColor {
     get { caretView.caretColor }
     set { caretView.caretColor = newValue }
   }
