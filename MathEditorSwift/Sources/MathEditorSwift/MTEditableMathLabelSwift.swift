@@ -124,7 +124,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
 
   @objc(highlightCharacterAtIndex:)
   public func highlightCharacter(at index: MTMathListIndex) {
-    layoutLabelIfNeeded()
+    label.layoutIfNeeded()
     guard let displayList = label.displayList else { return }
     displayList.highlightCharacter(at: index, color: highlightColor)
     setNeedsDisplay()
@@ -178,7 +178,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
     // update the flip transform
     let transform = CGAffineTransform(translationX: 0, y: bounds.size.height)
     flipTransform = CGAffineTransform(scaleX: 1, y: -1).concatenating(transform)
-    layoutLabelIfNeeded()
+    label.layoutIfNeeded()
     insertionPointChanged()
   }
 
@@ -305,7 +305,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
 
   @objc(closestIndexToPoint:)
   public func closestIndex(to point: CGPoint) -> MTMathListIndex? {
-    layoutLabelIfNeeded()
+    label.layoutIfNeeded()
     // no mathlist, so can't figure it out.
     guard let displayList = label.displayList else { return nil }
     return displayList.closestIndex(to: convert(point, to: label))
@@ -313,7 +313,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
 
   @objc(caretRectForIndex:)
   public func caretRect(for index: MTMathListIndex) -> CGPoint {
-    layoutLabelIfNeeded()
+    label.layoutIfNeeded()
     // no mathlist so we can't figure it out.
     guard let displayList = label.displayList else { return .zero }
     return displayList.caretPosition(for: index)
@@ -791,13 +791,5 @@ extension MTEditableMathLabelSwift {
     default:
       break
     }
-  }
-
-  fileprivate func layoutLabelIfNeeded() {
-    #if canImport(UIKit)
-      label.layoutIfNeeded()
-    #else
-      label.layoutSubtreeIfNeeded()
-    #endif
   }
 }
