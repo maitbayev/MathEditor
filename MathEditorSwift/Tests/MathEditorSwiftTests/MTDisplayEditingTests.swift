@@ -8,6 +8,7 @@ fileprivate struct ClosestIndexCase {
   let expected: MTMathListIndex
 }
 
+@Suite(.serialized)
 struct MTDisplayEditingTests {
   private let font: MTFont = MTFontManager().latinModernFont(withSize: 20)
 
@@ -15,11 +16,11 @@ struct MTDisplayEditingTests {
     expression: String,
     cases: [ClosestIndexCase]
   ) {
-    let mathList = MTMathListBuilder.build(from: expression)
+    let mathList = MTMathListBuilder.build(from: expression)!
     let displayList = MTTypesetter.createLine(for: mathList, font: font, style: .display)
 
     for testCase in cases {
-      let actual = displayList?.closestIndex(to: testCase.point)
+      let actual = displayList.closestIndex(to: testCase.point)
       #expect(actual?.isEqual(testCase.expected) == true,
               "Index \(String(describing: actual)) does not match \(testCase.expected) for point \(testCase.point)")
     }
