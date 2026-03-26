@@ -18,6 +18,10 @@ let package = Package(
     .target(
       name: "MathEditorSwift",
       dependencies: ["iosMath"]
+    ),
+    .testTarget(
+      name: "MathEditorSwiftTests",
+      dependencies: ["MathEditorSwift"]
     )
   ]
 )
