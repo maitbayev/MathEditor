@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		86B4C29D2F75BCDD00A5EB77 /* MathKeyboardSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 86B4C29C2F75BCDD00A5EB77 /* MathKeyboardSwiftUI */; };
 		86E17B822F7569EF0079CEC2 /* MathEditorSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 86E17B812F7569EF0079CEC2 /* MathEditorSwift */; };
-		C1DAAE012F70231100E4E983 /* MathKeyboardSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = C1DAAE002F70231100E4E983 /* MathKeyboardSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,8 +28,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1DAAE012F70231100E4E983 /* MathKeyboardSwiftUI in Frameworks */,
 				86E17B822F7569EF0079CEC2 /* MathEditorSwift in Frameworks */,
+				86B4C29D2F75BCDD00A5EB77 /* MathKeyboardSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,8 +80,8 @@
 			);
 			name = MathEditorSwiftUIExample;
 			packageProductDependencies = (
-				C1DAAE002F70231100E4E983 /* MathKeyboardSwiftUI */,
 				86E17B812F7569EF0079CEC2 /* MathEditorSwift */,
+				86B4C29C2F75BCDD00A5EB77 /* MathKeyboardSwiftUI */,
 			);
 			productName = MathEditorSwiftUIExample;
 			productReference = 862D28E72E2D51E100F9B6FE /* MathEditorSwiftUIExample.app */;
@@ -112,8 +112,8 @@
 			mainGroup = 862D28DE2E2D51E100F9B6FE;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				C1C5F2D42FF0000000000001 /* XCLocalSwiftPackageReference "../../MathEditor/MathKeyboardSwiftUI" */,
 				86E17B802F7569EF0079CEC2 /* XCLocalSwiftPackageReference "../MathEditorSwift" */,
+				86B4C29B2F75BCDD00A5EB77 /* XCLocalSwiftPackageReference "../MathKeyboardSwiftUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 862D28E82E2D51E100F9B6FE /* Products */;
@@ -374,25 +374,24 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		86B4C29B2F75BCDD00A5EB77 /* XCLocalSwiftPackageReference "../MathKeyboardSwiftUI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../MathKeyboardSwiftUI;
+		};
 		86E17B802F7569EF0079CEC2 /* XCLocalSwiftPackageReference "../MathEditorSwift" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../MathEditorSwift;
 		};
-		C1C5F2D42FF0000000000001 /* XCLocalSwiftPackageReference "../../MathEditor/MathKeyboardSwiftUI" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../MathEditor/MathKeyboardSwiftUI;
-		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		86B4C29C2F75BCDD00A5EB77 /* MathKeyboardSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MathKeyboardSwiftUI;
+		};
 		86E17B812F7569EF0079CEC2 /* MathEditorSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MathEditorSwift;
-		};
-		C1DAAE002F70231100E4E983 /* MathKeyboardSwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C1C5F2D42FF0000000000001 /* XCLocalSwiftPackageReference "../../MathEditor/MathKeyboardSwiftUI" */;
-			productName = MathKeyboardSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
