@@ -22,7 +22,7 @@ private func caretHeight() -> CGFloat {
   caretAscent + caretDescent
 }
 
-private final class MTCaretHandleSwift: MTView {
+private final class CaretHandle: MTView {
   weak var label: MTEditableMathLabelSwift?
 
   var color: MTColor? {
@@ -165,12 +165,12 @@ public final class MTCaretViewSwift: MTView {
 
   private var blinkTimer: Timer?
   private let blinker = MTView(frame: .zero)
-  private let handle: MTCaretHandleSwift
+  private let handle: CaretHandle
   private var scale: CGFloat
 
   init(editor: MTEditableMathLabelSwift) {
     scale = editor.fontSize / caretFontSize
-    handle = MTCaretHandleSwift(
+    handle = CaretHandle(
       frame: CGRect(
         x: 0,
         y: 0,

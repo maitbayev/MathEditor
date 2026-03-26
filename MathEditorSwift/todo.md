@@ -2,7 +2,7 @@
 ## MTCaretView 
 
 1. - [ ] No need for baseColor vs color
-2. - [ ] setNeedsDisplayCompatk
+2. - [x] setNeedsDisplayCompat
 3. - [ ] handleDrag convert is different implementation
 4. - [ ] no mouse cancelled
 5. - [ ] can caretColor be non-optional
