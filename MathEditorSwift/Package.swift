@@ -17,7 +17,7 @@ let package = Package(
   targets: [
     .target(
       name: "MathEditorSwift",
-      dependencies: [.product(name: "iosMath", package: "iosMath")]
+      dependencies: ["iosMath"]
     )
   ]
 )
