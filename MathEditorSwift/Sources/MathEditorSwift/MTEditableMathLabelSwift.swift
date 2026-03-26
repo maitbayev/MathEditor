@@ -1,12 +1,6 @@
 import Foundation
 import iosMath
 
-#if canImport(UIKit)
-  import UIKit
-#elseif canImport(AppKit)
-  import AppKit
-#endif
-
 private let greekLowerStart: UInt32 = 0x03B1
 private let greekLowerEnd: UInt32 = 0x03C9
 private let greekCapitalStart: UInt32 = 0x0391
