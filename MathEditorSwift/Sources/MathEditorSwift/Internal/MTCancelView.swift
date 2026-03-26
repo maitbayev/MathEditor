@@ -7,15 +7,15 @@ public final class MTCancelView: MTView {
   @objc
   public init(target: AnyObject, action: Selector) {
     #if canImport(UIKit)
-    let image = MTImage(systemName: "xmark.circle")?.withRenderingMode(.alwaysTemplate)
-    imageView = MTImageView(image: image)
-    imageView.contentMode = .scaleAspectFit
-    imageView.tintColor = .secondaryLabel
+      let image = MTImage(systemName: "xmark.circle")?.withRenderingMode(.alwaysTemplate)
+      imageView = MTImageView(image: image)
+      imageView.contentMode = .scaleAspectFit
+      imageView.tintColor = .secondaryLabel
     #else
-    imageView = MTImageView(frame: .zero)
-    imageView.image = MTImage(systemSymbolName: "xmark.circle", accessibilityDescription: nil)
-    imageView.imageScaling = .scaleProportionallyUpOrDown
-    imageView.contentTintColor = .secondaryLabelColor
+      imageView = MTImageView(frame: .zero)
+      imageView.image = MTImage(systemSymbolName: "xmark.circle", accessibilityDescription: nil)
+      imageView.imageScaling = .scaleProportionallyUpOrDown
+      imageView.contentTintColor = .secondaryLabelColor
     #endif
 
     super.init(frame: .zero)

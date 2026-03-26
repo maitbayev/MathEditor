@@ -28,10 +28,12 @@ extension MTMathList {
     case .subIndexTypeNucleus:
       let atomIndex = Int(index.atomIndex)
       guard let currentAtom = atoms[atomIndex] as? MTMathAtom else { return }
-      assert(currentAtom.subScript != nil || currentAtom.superScript != nil,
-             "Nuclear fusion is not supported if there are no subscripts or superscripts.")
-      assert(atom.subScript == nil && atom.superScript == nil,
-             "Cannot fuse with an atom that already has a subscript or a superscript")
+      assert(
+        currentAtom.subScript != nil || currentAtom.superScript != nil,
+        "Nuclear fusion is not supported if there are no subscripts or superscripts.")
+      assert(
+        atom.subScript == nil && atom.superScript == nil,
+        "Cannot fuse with an atom that already has a subscript or a superscript")
       guard let subIndex = index.sub else { return }
 
       atom.subScript = currentAtom.subScript
@@ -109,15 +111,17 @@ extension MTMathList {
     case .subIndexTypeNucleus:
       let atomIndex = Int(index.atomIndex)
       guard let currentAtom = atoms[atomIndex] as? MTMathAtom else { return }
-      assert(currentAtom.subScript != nil || currentAtom.superScript != nil,
-             "Nuclear fission is not supported if there are no subscripts or superscripts.")
+      assert(
+        currentAtom.subScript != nil || currentAtom.superScript != nil,
+        "Nuclear fission is not supported if there are no subscripts or superscripts.")
       var previous: MTMathAtom?
       if index.atomIndex > 0 {
         previous = atoms[Int(index.atomIndex - 1)] as? MTMathAtom
       }
       if let previous,
-         previous.subScript == nil,
-         previous.superScript == nil {
+        previous.subScript == nil,
+        previous.superScript == nil
+      {
         previous.superScript = currentAtom.superScript
         previous.subScript = currentAtom.subScript
         removeAtom(at: index.atomIndex)
