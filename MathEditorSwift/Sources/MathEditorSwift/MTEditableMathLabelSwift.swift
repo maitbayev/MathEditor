@@ -451,6 +451,7 @@ extension MTEditableMathLabelSwift {
     keyboard?.exponentHighlighted = false
     keyboard?.radicalHighlighted = false
     keyboard?.squareRootHighlighted = false
+    keyboard?.equalsAllowed = true
 
     if insertionIndex?.hasSubIndex(of: .subIndexTypeSuperscript) == true {
       keyboard?.exponentHighlighted = true
@@ -458,7 +459,10 @@ extension MTEditableMathLabelSwift {
     }
     if insertionIndex?.subIndexType == .subIndexTypeNumerator {
       keyboard?.equalsAllowed = false
+    } else if insertionIndex?.subIndexType == .subIndexTypeDenominator {
+      keyboard?.equalsAllowed = false
     }
+
     if insertionIndex?.subIndexType == .subIndexTypeDegree {
       keyboard?.radicalHighlighted = true
     } else if insertionIndex?.subIndexType == .subIndexTypeRadicand {
@@ -763,6 +767,5 @@ extension MTEditableMathLabelSwift {
     setScriptList(list, on: atom, type: type)
     return list
   }
-
 
 }

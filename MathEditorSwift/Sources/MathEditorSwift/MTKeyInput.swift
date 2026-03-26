@@ -5,7 +5,7 @@
 //  Created by Madiyar Aitbayev on 26/03/2026.
 //
 
-#if canImport(UIKit)
+#if os(iOS)
   import UIKit
   public typealias MTKeyInput = UIKeyInput
 #else
