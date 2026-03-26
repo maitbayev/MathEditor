@@ -27,6 +27,7 @@
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		862D28DD2E2D4C4400F9B6FE /* MathEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 862D28DC2E2D4C4400F9B6FE /* MathEditor */; };
+		86B937A02F75C33F00FFC54B /* MathKeyboard in Frameworks */ = {isa = PBXBuildFile; productRef = 86B9379F2F75C33F00FFC54B /* MathKeyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -105,6 +106,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
+				86B937A02F75C33F00FFC54B /* MathKeyboard in Frameworks */,
 				862D28DD2E2D4C4400F9B6FE /* MathEditor in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -332,7 +334,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = MT;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2630;
 				ORGANIZATIONNAME = "Kostub Deshmukh";
 				TargetAttributes = {
 					490BE5551CE695CC00AE31A0 = {
@@ -342,10 +344,9 @@
 			};
 			buildConfigurationList = 6003F585195388D10070C39A /* Build configuration list for PBXProject "MathEditor" */;
 			compatibilityVersion = "Xcode 6.3";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -528,6 +529,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -576,6 +578,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -701,6 +704,11 @@
 		862D28DC2E2D4C4400F9B6FE /* MathEditor */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MathEditor;
+		};
+		86B9379F2F75C33F00FFC54B /* MathKeyboard */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 862D28DB2E2D4C4400F9B6FE /* XCLocalSwiftPackageReference "../MathEditor" */;
+			productName = MathKeyboard;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

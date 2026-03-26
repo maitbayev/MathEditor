@@ -10,7 +10,8 @@
 //
 
 #import "MTViewController.h"
-#import "MTMathKeyboardRootView.h"
+
+@import MathKeyboard;
 
 @interface MTViewController () <MTEditableMathLabelDelegate>
 
