@@ -4,14 +4,14 @@
   import SwiftUI
   import UIKit
 
-  public final class MTMathKeyboardSwiftUIRootView: UIView, MTMathKeyboard,
+  public final class MTMathKeyboardSwiftUIRootView: MTView, MTMathKeyboard,
     UIInputViewAudioFeedback
   {
     private static let defaultTab: KeyboardTab = .numbers
     private static let shared = MTMathKeyboardSwiftUIRootView()
 
     private var state = KeyboardState()
-    private weak var textInput: (any UIView & UIKeyInput)?
+    private weak var textInput: (any MTView & MTKeyInput)?
     private lazy var hostingController = UIHostingController(
       rootView: makeRootView()
     )
@@ -78,12 +78,12 @@
       set { updateState { $0.radicalHighlighted = newValue } }
     }
 
-    public func startedEditing(_ label: any UIView & UIKeyInput) {
+    public func startedEditing(_ label: any MTView & MTKeyInput) {
       textInput = label
       updateRootView()
     }
 
-    public func finishedEditing(_ label: any UIView & UIKeyInput) {
+    public func finishedEditing(_ label: any MTView & MTKeyInput) {
       if textInput === label {
         textInput = nil
         updateRootView()

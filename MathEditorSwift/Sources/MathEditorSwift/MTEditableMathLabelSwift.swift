@@ -42,7 +42,7 @@ public protocol MTMathKeyboardTraits {
 /// The keyboard should use this information to send `MTKeyInput` messages to the label.
 ///
 /// This protocol inherits from `MTMathKeyboardTraits`.
-public protocol MTMathKeyboard: MTMathKeyboardTraits {
+public protocol MTMathKeyboard: AnyObject, MTMathKeyboardTraits {
   func startedEditing(_ label: MTView & MTKeyInput)
   func finishedEditing(_ label: MTView & MTKeyInput)
 }
@@ -72,7 +72,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
   @objc public private(set) var cancelImage: MTCancelView?
   @objc private(set) var caretView: MTCaretView!
   public weak var delegate: MTEditableMathLabelDelegate?
-  public weak var keyboard: (MTView & MTMathKeyboard)?
+  public weak var keyboard: MTMathKeyboard?
 
   @objc public var fontSize: CGFloat {
     get { label.fontSize }

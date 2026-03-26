@@ -25,6 +25,9 @@ struct ContentView: View {
       let mathLabel = MTEditableMathLabelSwift()
       mathLabel.backgroundColor = .clear
       mathLabel.keyboard = MTMathKeyboardSwiftUIRootView.sharedInstance()
+      mathLabel.textColor = .label
+      mathLabel.caretColor = .label
+      mathLabel.startEditing()
       return mathLabel
     }
 
