@@ -99,6 +99,8 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
   private var insertionIndex: MTMathListIndex?
   private var flipTransform = CGAffineTransform.identity
 
+  var textInputHandler = DummyTextInputHandler()
+
   public override init(frame: CGRect) {
     super.init(frame: frame)
     initialize()

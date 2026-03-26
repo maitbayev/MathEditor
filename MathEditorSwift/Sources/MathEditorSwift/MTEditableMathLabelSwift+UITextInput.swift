@@ -6,132 +6,49 @@ import Foundation
 
   // These are blank just to get a UITextInput implementation, to fix the dictation button bug.
   // Proposed fix from: http://stackoverflow.com/questions/20980898/work-around-for-dictation-custom-text-view-bug
-  private final class MTTextInputPosition: UITextPosition {}
-
-  private final class MTTextInputRange: UITextRange {
-    private let internalStart = MTTextInputPosition()
-    private let internalEnd = MTTextInputPosition()
-
-    override var start: UITextPosition { internalStart }
-    override var end: UITextPosition { internalEnd }
-    override var isEmpty: Bool { true }
-  }
-
-  private final class WeakTextInputDelegateBox {
-    weak var value: UITextInputDelegate?
-
-    init(_ value: UITextInputDelegate?) {
-      self.value = value
-    }
-  }
-
-  private enum MTTextInputAssociatedKeys {
-    static var selectedTextRange = "mt_selectedTextRange"
-    static var inputDelegate = "mt_inputDelegate"
-    static var markedTextRange = "mt_markedTextRange"
-    static var markedTextStyle = "mt_markedTextStyle"
-    static var tokenizer = "mt_tokenizer"
-    static var beginningOfDocument = "mt_beginningOfDocument"
-    static var endOfDocument = "mt_endOfDocument"
-  }
 
   extension MTEditableMathLabelSwift: UITextInput {
     public var selectedTextRange: UITextRange? {
       get {
-        objc_getAssociatedObject(self, &MTTextInputAssociatedKeys.selectedTextRange) as? UITextRange
+        textInputHandler.selectedTextRange
       }
       set {
-        objc_setAssociatedObject(
-          self,
-          &MTTextInputAssociatedKeys.selectedTextRange,
-          newValue,
-          .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-        )
+        textInputHandler.selectedTextRange = newValue
       }
     }
 
     public var inputDelegate: UITextInputDelegate? {
       get {
-        (objc_getAssociatedObject(self, &MTTextInputAssociatedKeys.inputDelegate)
-          as? WeakTextInputDelegateBox)?.value
+        textInputHandler.inputDelegate
       }
       set {
-        objc_setAssociatedObject(
-          self,
-          &MTTextInputAssociatedKeys.inputDelegate,
-          WeakTextInputDelegateBox(newValue),
-          .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-        )
+        textInputHandler.inputDelegate = newValue
       }
     }
 
     public var markedTextRange: UITextRange? {
-      objc_getAssociatedObject(self, &MTTextInputAssociatedKeys.markedTextRange) as? UITextRange
+      textInputHandler.markedTextRange
     }
 
     public var markedTextStyle: [NSAttributedString.Key: Any]? {
       get {
-        objc_getAssociatedObject(self, &MTTextInputAssociatedKeys.markedTextStyle)
-          as? [NSAttributedString.Key: Any]
+        textInputHandler.markedTextStyle
       }
       set {
-        objc_setAssociatedObject(
-          self,
-          &MTTextInputAssociatedKeys.markedTextStyle,
-          newValue,
-          .OBJC_ASSOCIATION_COPY_NONATOMIC
-        )
+        textInputHandler.markedTextStyle = newValue
       }
     }
 
     public var beginningOfDocument: UITextPosition {
-      if let position = objc_getAssociatedObject(
-        self,
-        &MTTextInputAssociatedKeys.beginningOfDocument
-      ) as? UITextPosition {
-        return position
-      }
-      let position = MTTextInputPosition()
-      objc_setAssociatedObject(
-        self,
-        &MTTextInputAssociatedKeys.beginningOfDocument,
-        position,
-        .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-      )
-      return position
+      textInputHandler.beginningOfDocument
     }
 
     public var endOfDocument: UITextPosition {
-      if let position = objc_getAssociatedObject(
-        self,
-        &MTTextInputAssociatedKeys.endOfDocument
-      ) as? UITextPosition {
-        return position
-      }
-      let position = MTTextInputPosition()
-      objc_setAssociatedObject(
-        self,
-        &MTTextInputAssociatedKeys.endOfDocument,
-        position,
-        .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-      )
-      return position
+      textInputHandler.endOfDocument
     }
 
     public var tokenizer: UITextInputTokenizer {
-      if let tokenizer = objc_getAssociatedObject(self, &MTTextInputAssociatedKeys.tokenizer)
-        as? UITextInputTokenizer
-      {
-        return tokenizer
-      }
-      let tokenizer = UITextInputStringTokenizer(textInput: self)
-      objc_setAssociatedObject(
-        self,
-        &MTTextInputAssociatedKeys.tokenizer,
-        tokenizer,
-        .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-      )
-      return tokenizer
+      textInputHandler.tokenizer
     }
 
     public func baseWritingDirection(
@@ -186,9 +103,7 @@ import Foundation
 
     public func insertDictationResult(_ dictationResult: [UIDictationPhrase]) {}
 
-    public func insertDictationResultPlaceholder() -> Any {
-      MTTextInputRange()
-    }
+    public var insertDictationResultPlaceholder: Any { 0 }
 
     public func offset(from: UITextPosition, to toPosition: UITextPosition) -> Int {
       0

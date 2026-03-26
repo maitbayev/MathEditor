@@ -17,7 +17,7 @@ public final class MTCancelView: MTView {
       imageView.contentTintColor = .secondaryLabelColor
     #endif
 
-    super.init()
+    super.init(frame: .zero)
 
     addSubview(imageView)
     imageView.pinToSuperview()
