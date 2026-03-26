@@ -23,6 +23,6 @@
 ### Responder
 
 1. - [x] Should not extend UIKeyInput
-2. - [ ] reuse becomeFirstResponder on both 
-3. - [ ] Reuse resignFirstResponder on both
+2. - [x] reuse becomeFirstResponder on both 
+3. - [x] Reuse resignFirstResponder on both
 4. - [ ]
