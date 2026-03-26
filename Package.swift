@@ -11,29 +11,22 @@ let package = Package(
       name: "MathEditor",
       targets: ["MathEditor"]),
     .library(
-      name: "MathEditorSwift",
-      targets: ["MathEditorSwift"]),
-    .library(
       name: "MathKeyboard",
       targets: ["MathKeyboard"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/maitbayev/iosMath.git", branch: "master")
+    .package(url: "https://github.com/maitbayev/iosMath.git", branch: "master"),
+    .package(path: "./mathEditorSwift")
   ],
   targets: [
     .target(
       name: "MathEditor",
-      dependencies: [.product(name: "iosMath", package: "iosMath"), "MathEditorSwift"],
+      dependencies: [.product(name: "iosMath", package: "iosMath"), .product(name: "MathEditorSwift", package: "MathEditorSwift")],
       path: "./mathEditor",
       cSettings: [
         .headerSearchPath("./editor"),
         .headerSearchPath("./internal"),
       ]
-    ),
-    .target(
-      name: "MathEditorSwift",
-      dependencies: [.product(name: "iosMath", package: "iosMath")],
-      path: "./mathEditorSwift",
     ),
     .target(
       name: "MathKeyboard",
