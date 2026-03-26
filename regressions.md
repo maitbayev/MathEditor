@@ -1,59 +1,106 @@
-# MTEditableMathLabelSwift regressions vs legacy ObjC
+# Swift vs Objective-C regression review
 
-## Confirmed from prior review
+## Scope
+Compared `mathEditorSwift` against legacy `mathEditor`, with emphasis on Swift-only `guard` and early-return behavior.
 
-### P2: Redraw the math label after applying a highlight
+## Regressions
 
-- Swift: [mathEditorSwift/MTEditableMathLabelSwift.swift](/Users/madiyar/Dev/iOS/MathEditor/mathEditorSwift/MTEditableMathLabelSwift.swift#L129)
-- ObjC reference: [mathEditor/editor/MTEditableMathLabel.m](/Users/madiyar/Dev/iOS/MathEditor/mathEditor/editor/MTEditableMathLabel.m#L835)
+### 1) `insertMathList(_:at:)` silently drops inserts when no closest index is available
+- **Swift behavior**: Returns early when `closestIndex(to:)` is `nil`.
+  - `guard let detailedIndex = closestIndex(to: point) else { return }`
+- **Legacy Objective-C behavior**: No early return; code proceeds using `detailedIndex.atomIndex` even when `detailedIndex` is `nil` (Objective-C nil messaging effectively falls back to index `0`), so list content still gets inserted.
+- **Impact**: Programmatic inserts can be lost in Swift in edge cases where the display list is not yet ready.
+- **Relevant files**:
+  - `mathEditorSwift/MTEditableMathLabelSwift.swift`
+  - `mathEditor/editor/MTEditableMathLabel.m`
 
-`highlightCharacter(at:)` mutates `label.displayList`, but the Swift port invalidates the wrapper view instead of the embedded `MTMathUILabel` that actually renders the expression. In the ObjC implementation, `highlightCharacterAtIndex:` calls `[self.label setNeedsDisplay]`. In Swift, the redraw can be missed until some unrelated update forces the label to repaint.
+### 2) Swift drops normal typed input when `insertionIndex` is `nil`
+- **Swift behavior**: In `insertText(_:)`, normal atom insertion is gated by `if let insertedAtom, let insertionIndex { ... }`; when `insertionIndex` is `nil`, nothing is inserted and no fallback index is chosen.
+- **Legacy Objective-C behavior**: Uses `_insertionIndex` directly; with Objective-C nil messaging, insertion APIs are still invoked rather than skipped.
+- **Impact**: Input can be ignored in transient states (e.g., before insertion point is initialized) instead of being inserted at a default position.
+- **Relevant files**:
+  - `mathEditorSwift/MTEditableMathLabelSwift.swift`
+  - `mathEditor/editor/MTEditableMathLabel.m`
 
-### P2: Clear highlights by relayouting the inner label, not the wrapper
+### 3) Swift special insert operations no-op when `insertionIndex` is `nil`
+- **Swift behavior**: Multiple operations immediately return on missing `insertionIndex`:
+  - `handleScriptButton(_:)`
+  - `handleSlashButton()`
+  - `handleRadical(withDegreeButtonPressed:)`
+  - `insertPairedAtoms(open:close:)`
+- **Legacy Objective-C behavior**: Same operations execute without explicit index guards; nil messaging allows the methods to proceed instead of immediate no-op.
+- **Impact**: `^`, `_`, `/`, radicals, and paired insertions (`()`, `||`) can be dropped in Swift under the same transient nil-index state.
+- **Relevant files**:
+  - `mathEditorSwift/MTEditableMathLabelSwift.swift`
+  - `mathEditor/editor/MTEditableMathLabel.m`
 
-- Swift: [mathEditorSwift/MTEditableMathLabelSwift.swift](/Users/madiyar/Dev/iOS/MathEditor/mathEditorSwift/MTEditableMathLabelSwift.swift#L137)
-- ObjC reference: [mathEditor/editor/MTEditableMathLabel.m](/Users/madiyar/Dev/iOS/MathEditor/mathEditor/editor/MTEditableMathLabel.m#L849)
+## Guard-specific note requested
+The Swift pattern `guard let insertionIndex else { return }` (and similar early returns) is the main source of these regressions. In Objective-C, equivalent paths commonly continued because messaging `nil` did not short-circuit the entire operation.
 
-The highlight state lives in the label display list. The ObjC implementation clears it by calling `[self.label setNeedsLayout]`, forcing the embedded math label to rebuild its layout/display list. The Swift port calls `setNeedsLayout()` on the wrapper instead, which can leave stale highlights visible.
+## Additional regressions (added)
 
-## Additional regressions found by comparing ObjC and Swift
+### 4) Paired insert shortcuts (`"()"`, `"||"`) can be dropped entirely by Swift early return
+- **Swift behavior**: `insertText(_:)` routes to `insertParens()` / `insertAbsValue()`, which both call `insertPairedAtoms(open:close:)`. That helper has `guard let insertionIndex ... else { return }`, so the whole shortcut no-ops when the insertion index is temporarily nil.
+- **Legacy Objective-C behavior**: `insertParens`/`insertAbsValue` directly execute insertions with `_insertionIndex` and do not short-circuit on a nil guard.
+- **Impact**: User-visible shortcuts can be ignored in transient index-init windows where legacy behavior still inserted delimiters.
+- **Relevant files**:
+  - `mathEditorSwift/MTEditableMathLabelSwift.swift`
+  - `mathEditor/editor/MTEditableMathLabel.m`
 
-### P1: `insertMathList(_:at:)` becomes a no-op when there is no display list
+### 5) First-key race after tap-to-edit: Swift can drop operators due guard-based nil-index exits
+- **Swift behavior**: `handleTap(at:)` sets `insertionIndex = nil` before `startEditing()`. If a key arrives before `doBecomeFirstResponder()` reinitializes the index, operations like `^`, `_`, `/`, radicals, and paired insertions can return early through Swift guards.
+- **Legacy Objective-C behavior**: The same tap path nils `_insertionIndex`, but operation handlers do not use `guard` exits and continue through nil-messaging paths.
+- **Impact**: The first key after entering edit mode can be intermittently dropped in Swift under timing-sensitive input sequences.
+- **Relevant files**:
+  - `mathEditorSwift/MTEditableMathLabelSwift.swift`
+  - `mathEditor/editor/MTEditableMathLabel.m`
 
-- Swift: [mathEditorSwift/MTEditableMathLabelSwift.swift](/Users/madiyar/Dev/iOS/MathEditor/mathEditorSwift/MTEditableMathLabelSwift.swift#L161)
-- ObjC reference: [mathEditor/editor/MTEditableMathLabel.m](/Users/madiyar/Dev/iOS/MathEditor/mathEditor/editor/MTEditableMathLabel.m#L369)
+## Additional regressions (highlighting / API parity)
 
-The Swift implementation does `guard let detailedIndex = closestIndex(to: point) else { return }`. That means inserting into an empty label, or a label whose display list has not been built yet, silently does nothing. The ObjC version still inserts at top-level index `0`, because `detailedIndex.atomIndex` on `nil` collapses to `0` under Objective-C nil messaging. This is a functional regression for insertion into empty/not-yet-laid-out editors.
+### 6) Highlight redraw targets wrapper view instead of `MTMathUILabel`
+- **Swift behavior**: `highlightCharacter(at:)` updates `displayList` and calls `setNeedsDisplayCompat()` on the wrapper view.
+- **Legacy Objective-C behavior**: `highlightCharacterAtIndex:` calls `[self.label setNeedsDisplay]` on the embedded math label.
+- **Impact**: Highlight changes can be visually delayed/missed until some other update repaints `MTMathUILabel`.
+- **Relevant files**:
+  - `mathEditorSwift/MTEditableMathLabelSwift.swift`
+  - `mathEditor/editor/MTEditableMathLabel.m`
 
-### P1: Swift dropped nib/storyboard initialization support
+### 7) Clearing highlights relayouts wrapper instead of the inner math label
+- **Swift behavior**: `clearHighlights()` calls `setNeedsLayout()` on the wrapper view.
+- **Legacy Objective-C behavior**: `clearHighlights` calls `[self.label setNeedsLayout]`, directly invalidating the display-list owner.
+- **Impact**: Stale highlight state may persist because the label display list is not explicitly rebuilt.
+- **Relevant files**:
+  - `mathEditorSwift/MTEditableMathLabelSwift.swift`
+  - `mathEditor/editor/MTEditableMathLabel.m`
 
-- Swift: [mathEditorSwift/MTEditableMathLabelSwift.swift](/Users/madiyar/Dev/iOS/MathEditor/mathEditorSwift/MTEditableMathLabelSwift.swift#L113)
-- ObjC reference: [mathEditor/editor/MTEditableMathLabel.m](/Users/madiyar/Dev/iOS/MathEditor/mathEditor/editor/MTEditableMathLabel.m#L36)
+### 8) Swift class cannot be initialized from nib/storyboard (`init(coder:)` unavailable)
+- **Swift behavior**: `init(coder:)` is marked unavailable and traps.
+- **Legacy Objective-C behavior**: Supports archive-based initialization via `awakeFromNib`.
+- **Impact**: Existing nib/storyboard integrations that worked with `MTEditableMathLabel` are not drop-in compatible with `MTEditableMathLabelSwift`.
+- **Relevant files**:
+  - `mathEditorSwift/MTEditableMathLabelSwift.swift`
+  - `mathEditor/editor/MTEditableMathLabel.m`
 
-The legacy ObjC control supports both programmatic initialization and archive-based initialization via `awakeFromNib`. The Swift port marks `init(coder:)` unavailable and unconditionally traps. Any existing XIB, storyboard, or archived view usage that worked with the ObjC implementation cannot be migrated to the Swift class without breaking at runtime.
+### 9) Tap-while-editing now shows the caret handle (legacy hid it)
+- **Swift behavior**: In `handleTap(at:)`, already-editing taps call `caretView.showHandle(true)`.
+- **Legacy Objective-C behavior**: `handleTapAtPoint:` uses `[_caretView showHandle:NO]` in the same branch.
+- **Impact**: Visible interaction behavior changes and touch-hit area around caret becomes active after each editing tap.
+- **Relevant files**:
+  - `mathEditorSwift/MTEditableMathLabelSwift.swift`
+  - `mathEditor/editor/MTEditableMathLabel.m`
 
-### P2: Editing taps now show the caret handle instead of hiding it
+### 10) `textColor = nil` no longer clears custom text color
+- **Swift behavior**: Setter coalesces nil with `newValue ?? label.textColor`, turning nil assignment into a no-op.
+- **Legacy Objective-C behavior**: Setter forwards `textColor` directly to `self.label.textColor`, allowing nil reset semantics.
+- **Impact**: Hosts that clear a previously set color by assigning nil no longer get legacy behavior.
+- **Relevant files**:
+  - `mathEditorSwift/MTEditableMathLabelSwift.swift`
+  - `mathEditor/editor/MTEditableMathLabel.m`
 
-- Swift: [mathEditorSwift/MTEditableMathLabelSwift.swift](/Users/madiyar/Dev/iOS/MathEditor/mathEditorSwift/MTEditableMathLabelSwift.swift#L379)
-- ObjC reference: [mathEditor/editor/MTEditableMathLabel.m](/Users/madiyar/Dev/iOS/MathEditor/mathEditor/editor/MTEditableMathLabel.m#L216)
-
-When the user taps while already editing, the ObjC implementation moves the insertion point and hides the caret handle with `showHandle:NO`. The Swift port changed this to `showHandle(true)`. That changes visible behavior and also expands the active touch target after every tap because hit testing includes the caret view.
-
-### P1: Swift dropped Objective-C-visible `delegate` and `keyboard` integration points
-
-- Swift: [mathEditorSwift/MTEditableMathLabelSwift.swift](/Users/madiyar/Dev/iOS/MathEditor/mathEditorSwift/MTEditableMathLabelSwift.swift#L86)
-- ObjC reference: [mathEditor/editor/MTEditableMathLabel.h](/Users/madiyar/Dev/iOS/MathEditor/mathEditor/editor/MTEditableMathLabel.h#L77)
-
-The legacy control exposes `delegate` and `keyboard` as public Objective-C properties backed by Objective-C protocols, so existing ObjC hosts can assign delegates, provide custom keyboards, and receive editing callbacks. In the Swift rewrite, both properties are Swift-only: the properties themselves are not marked `@objc`, and their protocol types are not Objective-C protocols. That means mixed ObjC code cannot wire up these integration points to the Swift class, which is a migration blocker for existing legacy consumers.
-
-### P2: `textColor = nil` no longer clears the embedded label color
-
-- Swift: [mathEditorSwift/MTEditableMathLabelSwift.swift](/Users/madiyar/Dev/iOS/MathEditor/mathEditorSwift/MTEditableMathLabelSwift.swift#L74)
-- ObjC reference: [mathEditor/editor/MTEditableMathLabel.m](/Users/madiyar/Dev/iOS/MathEditor/mathEditor/editor/MTEditableMathLabel.m#L112)
-
-The ObjC setter forwards the assigned value directly to `self.label.textColor`, so callers can reset the math label to its default rendering by assigning `nil`. The Swift setter coalesces `nil` back to the current value with `newValue ?? label.textColor`, so clearing the color becomes a no-op. Any code that relied on clearing a previously customized text color now behaves differently.
-
-## Notes
-
-- The legacy ObjC implementation does not have the two highlight invalidation regressions. It correctly targets `self.label` in both `highlightCharacterAtIndex:` and `clearHighlights`.
-- Keyboard-state logic in `setKeyboardMode()` appears materially equivalent between ObjC and Swift.
+### 11) Objective-C integration points for `delegate`/`keyboard` are not API-compatible
+- **Swift behavior**: `delegate` and `keyboard` are Swift-only protocol-typed properties (not exposed with Objective-C protocol-compatible types).
+- **Legacy Objective-C behavior**: Public ObjC properties use ObjC protocols (`id<MTEditableMathLabelDelegate>`, `MTView<MTMathKeyboard>*`).
+- **Impact**: Legacy ObjC hosts cannot wire the same delegate/keyboard contracts to `MTEditableMathLabelSwift` as a drop-in migration.
+- **Relevant files**:
+  - `mathEditorSwift/MTEditableMathLabelSwift.swift`
+  - `mathEditor/editor/MTEditableMathLabel.h`
