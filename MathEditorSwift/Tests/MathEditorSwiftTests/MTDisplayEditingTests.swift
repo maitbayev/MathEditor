@@ -1,9 +1,10 @@
 import CoreGraphics
 import Testing
-@testable import MathEditorSwift
 import iosMath
 
-fileprivate struct ClosestIndexCase {
+@testable import MathEditorSwift
+
+private struct ClosestIndexCase {
   let point: CGPoint
   let expected: MTMathListIndex
 }
@@ -21,8 +22,10 @@ struct MTDisplayEditingTests {
 
     for testCase in cases {
       let actual = displayList.closestIndex(to: testCase.point)
-      #expect(actual?.isEqual(testCase.expected) == true,
-              "Index \(String(describing: actual)) does not match \(testCase.expected) for point \(testCase.point)")
+      #expect(
+        actual?.isEqual(testCase.expected) == true,
+        "Index \(String(describing: actual)) does not match \(testCase.expected) for point \(testCase.point)"
+      )
     }
   }
 
@@ -61,21 +64,66 @@ private let fractionCases: [ClosestIndexCase] = [
   .init(point: CGPoint(x: -2.5, y: 0), expected: .level0Index(0)),
   .init(point: CGPoint(x: -2.5, y: 40), expected: .level0Index(0)),
   .init(point: CGPoint(x: -2.5, y: -20), expected: .level0Index(0)),
-  .init(point: CGPoint(x: -1, y: 0), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
-  .init(point: CGPoint(x: -1, y: 8), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: -1, y: 40), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: -1, y: -20), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
-  .init(point: CGPoint(x: 3, y: 0), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
-  .init(point: CGPoint(x: 3, y: 8), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: 3, y: 40), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: 3, y: -20), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
-  .init(point: CGPoint(x: 7, y: 0), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeDenominator)),
-  .init(point: CGPoint(x: 7, y: 8), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: 7, y: 40), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: 7, y: -20), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeDenominator)),
-  .init(point: CGPoint(x: 11, y: 0), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeDenominator)),
-  .init(point: CGPoint(x: 11, y: 8), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: 11, y: 40), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: -1, y: 0),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: -1, y: 8),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: -1, y: 40),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: -1, y: -20),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: 3, y: 0),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: 3, y: 8),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: 3, y: 40),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: 3, y: -20),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: 7, y: 0),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: 7, y: 8),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: 7, y: 40),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: 7, y: -20),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: 11, y: 0),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: 11, y: 8),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: 11, y: 40),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
   .init(point: CGPoint(x: 11, y: -20), expected: .level0Index(1)),
   .init(point: CGPoint(x: 12.5, y: 8), expected: .level0Index(1)),
   .init(point: CGPoint(x: 12.5, y: 0), expected: .level0Index(1)),
@@ -131,14 +179,38 @@ private let regularPlusFractionCases: [ClosestIndexCase] = [
   .init(point: CGPoint(x: 32, y: 8), expected: .level0Index(2)),
   .init(point: CGPoint(x: 32, y: 40), expected: .level0Index(2)),
   .init(point: CGPoint(x: 32, y: -20), expected: .level0Index(2)),
-  .init(point: CGPoint(x: 33, y: 0), expected: MTMathListIndex(atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
-  .init(point: CGPoint(x: 33, y: 8), expected: MTMathListIndex(atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: 33, y: 40), expected: MTMathListIndex(atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: 33, y: -20), expected: MTMathListIndex(atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
-  .init(point: CGPoint(x: 35, y: 0), expected: MTMathListIndex(atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
-  .init(point: CGPoint(x: 35, y: 8), expected: MTMathListIndex(atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: 35, y: 40), expected: MTMathListIndex(atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: 35, y: -20), expected: MTMathListIndex(atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: 33, y: 0),
+    expected: MTMathListIndex(
+      atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: 33, y: 8),
+    expected: MTMathListIndex(
+      atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: 33, y: 40),
+    expected: MTMathListIndex(
+      atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: 33, y: -20),
+    expected: MTMathListIndex(
+      atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: 35, y: 0),
+    expected: MTMathListIndex(
+      atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: 35, y: 8),
+    expected: MTMathListIndex(
+      atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: 35, y: 40),
+    expected: MTMathListIndex(
+      atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: 35, y: -20),
+    expected: MTMathListIndex(
+      atLocation: 2, withSubIndex: .level0Index(0), type: .subIndexTypeDenominator)),
 ]
 
 private let fractionPlusRegularCases: [ClosestIndexCase] = [
@@ -150,14 +222,38 @@ private let fractionPlusRegularCases: [ClosestIndexCase] = [
   .init(point: CGPoint(x: 13, y: 8), expected: .level0Index(1)),
   .init(point: CGPoint(x: 13, y: 40), expected: .level0Index(1)),
   .init(point: CGPoint(x: 13, y: -20), expected: .level0Index(1)),
-  .init(point: CGPoint(x: 11, y: 0), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeDenominator)),
-  .init(point: CGPoint(x: 11, y: 8), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: 11, y: 40), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: 11, y: -20), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeDenominator)),
-  .init(point: CGPoint(x: 9, y: 0), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeDenominator)),
-  .init(point: CGPoint(x: 9, y: 8), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: 9, y: 40), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
-  .init(point: CGPoint(x: 9, y: -20), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: 11, y: 0),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: 11, y: 8),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: 11, y: 40),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: 11, y: -20),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: 9, y: 0),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeDenominator)),
+  .init(
+    point: CGPoint(x: 9, y: 8),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: 9, y: 40),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNumerator)),
+  .init(
+    point: CGPoint(x: 9, y: -20),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeDenominator)),
 ]
 
 private let exponentCases: [ClosestIndexCase] = [
@@ -169,21 +265,63 @@ private let exponentCases: [ClosestIndexCase] = [
   .init(point: CGPoint(x: 0, y: 8), expected: .level0Index(0)),
   .init(point: CGPoint(x: 0, y: 40), expected: .level0Index(0)),
   .init(point: CGPoint(x: 0, y: -20), expected: .level0Index(0)),
-  .init(point: CGPoint(x: 9, y: 0), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
-  .init(point: CGPoint(x: 9, y: 8), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
-  .init(point: CGPoint(x: 9, y: 40), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeSuperscript)),
-  .init(point: CGPoint(x: 9, y: -20), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
-  .init(point: CGPoint(x: 10, y: 0), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
-  .init(point: CGPoint(x: 10, y: 8), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
-  .init(point: CGPoint(x: 10, y: 40), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeSuperscript)),
-  .init(point: CGPoint(x: 10, y: -20), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
-  .init(point: CGPoint(x: 11, y: 0), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
-  .init(point: CGPoint(x: 11, y: 8), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeSuperscript)),
-  .init(point: CGPoint(x: 11, y: 40), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeSuperscript)),
-  .init(point: CGPoint(x: 11, y: -20), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
+  .init(
+    point: CGPoint(x: 9, y: 0),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
+  .init(
+    point: CGPoint(x: 9, y: 8),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
+  .init(
+    point: CGPoint(x: 9, y: 40),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeSuperscript)),
+  .init(
+    point: CGPoint(x: 9, y: -20),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
+  .init(
+    point: CGPoint(x: 10, y: 0),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
+  .init(
+    point: CGPoint(x: 10, y: 8),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
+  .init(
+    point: CGPoint(x: 10, y: 40),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeSuperscript)),
+  .init(
+    point: CGPoint(x: 10, y: -20),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
+  .init(
+    point: CGPoint(x: 11, y: 0),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
+  .init(
+    point: CGPoint(x: 11, y: 8),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeSuperscript)),
+  .init(
+    point: CGPoint(x: 11, y: 40),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(0), type: .subIndexTypeSuperscript)),
+  .init(
+    point: CGPoint(x: 11, y: -20),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeNucleus)),
   .init(point: CGPoint(x: 17, y: 0), expected: .level0Index(1)),
-  .init(point: CGPoint(x: 17, y: 8), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeSuperscript)),
-  .init(point: CGPoint(x: 17, y: 40), expected: MTMathListIndex(atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeSuperscript)),
+  .init(
+    point: CGPoint(x: 17, y: 8),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeSuperscript)),
+  .init(
+    point: CGPoint(x: 17, y: 40),
+    expected: MTMathListIndex(
+      atLocation: 0, withSubIndex: .level0Index(1), type: .subIndexTypeSuperscript)),
   .init(point: CGPoint(x: 17, y: -20), expected: .level0Index(1)),
   .init(point: CGPoint(x: 30, y: 0), expected: .level0Index(1)),
   .init(point: CGPoint(x: 30, y: 8), expected: .level0Index(1)),
