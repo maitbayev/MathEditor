@@ -8,8 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "MTConfig.h"
 #import "MTEditableMathLabel.h"
-
-@import MathEditorSwift;
+#import "MTView/MTView+FirstResponder.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

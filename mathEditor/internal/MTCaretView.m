@@ -11,9 +11,9 @@
 #import "MTCaretView.h"
 #import "MTEditableMathLabel.h"
 #import "MTConfig.h"
+#import "MTView/MTView+Layout.h"
+#import "MTView/MTView+HitTest.h"
 #import "NSBezierPath+addLineToPoint.h"
-
-@import MathEditorSwift;
 
 static const NSTimeInterval InitialBlinkDelay = 0.7;
 static const NSTimeInterval BlinkRate = 0.5;
