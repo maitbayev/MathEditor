@@ -125,7 +125,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
     layoutLabelIfNeeded()
     guard let displayList = label.displayList else { return }
     displayList.highlightCharacter(at: index, color: highlightColor)
-    setNeedsDisplayCompat()
+    setNeedsDisplay()
   }
 
   @objc public func clearHighlights() {
@@ -441,14 +441,14 @@ extension MTEditableMathLabelSwift {
     caretView.setPosition(caretPosition.applying(flipTransform))
     if caretView.superview == nil {
       addSubview(caretView)
-      setNeedsDisplayCompat()
+      setNeedsDisplay()
     }
 
     // when a caret is displayed, the X symbol should be as well
     cancelImage?.isHidden = false
     // Set up a timer to "blink" the caret.
     caretView.delayBlink()
-    setLabelNeedsLayoutCompat()
+    label.setNeedsLayout()
   }
 
   fileprivate func setKeyboardMode() {
@@ -797,17 +797,5 @@ extension MTEditableMathLabelSwift {
     #else
       label.layoutSubtreeIfNeeded()
     #endif
-  }
-
-  fileprivate func setNeedsDisplayCompat() {
-    #if canImport(UIKit)
-      setNeedsDisplay()
-    #else
-      needsDisplay = true
-    #endif
-  }
-
-  fileprivate func setLabelNeedsLayoutCompat() {
-    label.setNeedsLayout()
   }
 }

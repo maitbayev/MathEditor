@@ -28,7 +28,7 @@ private final class MTCaretHandleSwift: MTView {
   var color: MTColor? {
     didSet {
       baseColor = color?.withAlphaComponent(0.7)
-      setNeedsDisplayCompat()
+      setNeedsDisplay()
     }
   }
 
@@ -59,12 +59,12 @@ private final class MTCaretHandleSwift: MTView {
 
   private func interactionBegan() {
     baseColor = baseColor?.withAlphaComponent(1.0)
-    setNeedsDisplayCompat()
+    setNeedsDisplay()
   }
 
   private func interactionEnded() {
     baseColor = baseColor?.withAlphaComponent(0.6)
-    setNeedsDisplayCompat()
+    setNeedsDisplay()
   }
 
   private func handleDrag(localPoint: CGPoint) {
@@ -153,14 +153,6 @@ private final class MTCaretHandleSwift: MTView {
       return hitArea().contains(localPoint) ? self : nil
     }
   #endif
-
-  private func setNeedsDisplayCompat() {
-    #if canImport(UIKit)
-      setNeedsDisplay()
-    #else
-      needsDisplay = true
-    #endif
-  }
 }
 
 public final class MTCaretViewSwift: MTView {
@@ -208,7 +200,7 @@ public final class MTCaretViewSwift: MTView {
 
   func setFontSize(_ fontSize: CGFloat) {
     scale = fontSize / caretFontSize
-    setNeedsLayoutCompat()
+    setNeedsLayout()
   }
 
   func showHandle(_ show: Bool) {
@@ -293,12 +285,4 @@ public final class MTCaretViewSwift: MTView {
       hitTestOutsideBounds(point)
     }
   #endif
-
-  private func setNeedsLayoutCompat() {
-    #if canImport(UIKit)
-      setNeedsLayout()
-    #else
-      needsLayout = true
-    #endif
-  }
 }
