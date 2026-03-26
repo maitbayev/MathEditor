@@ -4,7 +4,7 @@
   import SwiftUI
   import UIKit
 
-  public final class MTMathKeyboardSwiftUIRootView: UIView, MTMathKeyboardSwift,
+  public final class MTMathKeyboardSwiftUIRootView: UIView, MTMathKeyboard,
     UIInputViewAudioFeedback
   {
     private static let defaultTab: KeyboardTab = .numbers
