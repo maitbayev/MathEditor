@@ -7,14 +7,14 @@ private let greekCapitalStart: UInt32 = 0x0391
 private let greekCapitalEnd: UInt32 = 0x03A9
 
 /// Delegate for the `MTEditableMathLabel`. All methods are optional.
-public protocol MTEditableMathLabelSwiftDelegate: AnyObject {
+public protocol MTEditableMathLabelDelegate: AnyObject {
   func returnPressed(_ label: MTEditableMathLabelSwift)
   func textModified(_ label: MTEditableMathLabelSwift)
   func didBeginEditing(_ label: MTEditableMathLabelSwift)
   func didEndEditing(_ label: MTEditableMathLabelSwift)
 }
 
-extension MTEditableMathLabelSwiftDelegate {
+extension MTEditableMathLabelDelegate {
   public func returnPressed(_ label: MTEditableMathLabelSwift) {}
   public func textModified(_ label: MTEditableMathLabelSwift) {}
   public func didBeginEditing(_ label: MTEditableMathLabelSwift) {}
@@ -24,7 +24,7 @@ extension MTEditableMathLabelSwiftDelegate {
 /// This protocol provides information on the context of the current insertion point.
 /// The keyboard may choose to enable/disable/highlight certain parts of the UI depending on the context.
 /// e.g. you cannot enter the = sign when you are in a fraction so the keyboard could disable that.
-public protocol MTMathKeyboardTraitsSwift: AnyObject {
+public protocol MTMathKeyboardTraits {
   var equalsAllowed: Bool { get set }
   var fractionsAllowed: Bool { get set }
   var variablesAllowed: Bool { get set }
@@ -42,7 +42,7 @@ public protocol MTMathKeyboardTraitsSwift: AnyObject {
 /// The keyboard should use this information to send `MTKeyInput` messages to the label.
 ///
 /// This protocol inherits from `MTMathKeyboardTraits`.
-public protocol MTMathKeyboardSwift: MTMathKeyboardTraitsSwift {
+public protocol MTMathKeyboardSwift: MTMathKeyboardTraits {
   func startedEditing(_ label: MTView & MTKeyInput)
   func finishedEditing(_ label: MTView & MTKeyInput)
 }
@@ -71,7 +71,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
 
   @objc public private(set) var cancelImage: MTCancelView?
   @objc private(set) var caretView: MTCaretView!
-  public weak var delegate: MTEditableMathLabelSwiftDelegate?
+  public weak var delegate: MTEditableMathLabelDelegate?
   public weak var keyboard: (MTView & MTMathKeyboardSwift)?
 
   @objc public var fontSize: CGFloat {
