@@ -16,12 +16,11 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/maitbayev/iosMath.git", branch: "master"),
-    .package(path: "./MathEditorSwift"),
   ],
   targets: [
     .target(
       name: "MathEditor",
-      dependencies: ["iosMath", "MathEditorSwift"],
+      dependencies: ["iosMath"],
       path: "./mathEditor",
       cSettings: [
         .headerSearchPath("./editor"),
