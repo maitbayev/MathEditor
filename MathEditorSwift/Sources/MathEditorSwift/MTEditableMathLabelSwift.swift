@@ -448,21 +448,21 @@ extension MTEditableMathLabelSwift {
   }
 
   fileprivate func setKeyboardMode() {
-    setKeyboardValue(false, forKey: "exponentHighlighted")
-    setKeyboardValue(false, forKey: "radicalHighlighted")
-    setKeyboardValue(false, forKey: "squareRootHighlighted")
+    keyboard?.exponentHighlighted = false
+    keyboard?.radicalHighlighted = false
+    keyboard?.squareRootHighlighted = false
 
     if insertionIndex?.hasSubIndex(of: .subIndexTypeSuperscript) == true {
-      setKeyboardValue(true, forKey: "exponentHighlighted")
-      setKeyboardValue(false, forKey: "equalsAllowed")
+      keyboard?.exponentHighlighted = true
+      keyboard?.equalsAllowed = false
     }
     if insertionIndex?.subIndexType == .subIndexTypeNumerator {
-      setKeyboardValue(false, forKey: "equalsAllowed")
+      keyboard?.equalsAllowed = false
     }
     if insertionIndex?.subIndexType == .subIndexTypeDegree {
-      setKeyboardValue(true, forKey: "radicalHighlighted")
+      keyboard?.radicalHighlighted = true
     } else if insertionIndex?.subIndexType == .subIndexTypeRadicand {
-      setKeyboardValue(true, forKey: "squareRootHighlighted")
+      keyboard?.squareRootHighlighted = true
     }
   }
 
@@ -764,26 +764,5 @@ extension MTEditableMathLabelSwift {
     return list
   }
 
-  fileprivate func setKeyboardValue(_ value: Bool, forKey key: String) {
-    switch key {
-    case "equalsAllowed":
-      keyboard?.equalsAllowed = value
-    case "fractionsAllowed":
-      keyboard?.fractionsAllowed = value
-    case "variablesAllowed":
-      keyboard?.variablesAllowed = value
-    case "numbersAllowed":
-      keyboard?.numbersAllowed = value
-    case "operatorsAllowed":
-      keyboard?.operatorsAllowed = value
-    case "exponentHighlighted":
-      keyboard?.exponentHighlighted = value
-    case "squareRootHighlighted":
-      keyboard?.squareRootHighlighted = value
-    case "radicalHighlighted":
-      keyboard?.radicalHighlighted = value
-    default:
-      break
-    }
-  }
+
 }
