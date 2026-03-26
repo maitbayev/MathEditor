@@ -14,11 +14,11 @@ import Foundation
 #endif
 
 extension MTView {
-  @objc public func pinToSuperview() {
+  public func pinToSuperview() {
     pinToSuperview(withTop: 0, leading: 0, bottom: 0, trailing: 0)
   }
 
-  @objc public func pinToSuperview(
+  public func pinToSuperview(
     withTop top: CGFloat, leading: CGFloat, bottom: CGFloat, trailing: CGFloat
   ) {
     guard let superview else { return }

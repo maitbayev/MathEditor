@@ -15,7 +15,7 @@
 1. - [x] MTKeyInputSwift should be alias to UIKeyInput
 2. - [x] Bring comments back 
 3. - [ ] highlightColor is different in `initialize`
-4. - [ ] layoutLabelIfNeeded should be the same as objc
+4. - [x] layoutLabelIfNeeded should be the same as objc
 5. - [x] setNeedsDisplayCompat should be changed
 6. - [x] setLabelNeedsDisplayCompat should be changed
 7. - [ ] getIndexAfterSpecialStructure: is next should unwrapped?
