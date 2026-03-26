@@ -1,6 +1,5 @@
 import Foundation
 
-@objc
 public final class MTCancelView: MTView {
   private let imageView: MTImageView
 
@@ -18,7 +17,7 @@ public final class MTCancelView: MTView {
       imageView.contentTintColor = .secondaryLabelColor
     #endif
 
-    super.init(frame: .zero)
+    super.init()
 
     addSubview(imageView)
     imageView.pinToSuperview()

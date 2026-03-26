@@ -76,7 +76,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
   }
 
   @objc public private(set) var cancelImage: MTCancelView?
-  @objc public private(set) var caretView: MTCaretViewSwift!
+  @objc private(set) var caretView: MTCaretView!
   public weak var delegate: MTEditableMathLabelSwiftDelegate?
   public weak var keyboard: (MTView & MTMathKeyboardSwift)?
 
@@ -340,7 +340,7 @@ extension MTEditableMathLabelSwift {
     let transform = CGAffineTransform(translationX: 0, y: bounds.size.height)
     flipTransform = CGAffineTransform(scaleX: 1, y: -1).concatenating(transform)
 
-    caretView = MTCaretViewSwift(editor: self)
+    caretView = MTCaretView(editor: self)
     caretView.caretColor = MTColor(white: 0.1, alpha: 1.0)
 
     highlightColor = MTColor.systemRed

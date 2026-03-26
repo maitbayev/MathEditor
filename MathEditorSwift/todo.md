@@ -8,11 +8,11 @@
 5. - [ ] can caretColor be non-optional
 6. - [ ] Can caret handle initialized with label
 7. - [ ] is startBlinkingIfNeeded correct?
-8. - [ ] Rename MTCaretHandleSwift to CaretHandle
+8. - [x] Rename MTCaretHandleSwift to CaretHandle
 
 ## MTEditableMathlabelSwift 
 
-1. - [ ] MTKeyInputSwift should be alias to UIKeyInput
+1. - [x] MTKeyInputSwift should be alias to UIKeyInput
 2. - [x] Bring comments back 
 3. - [ ] highlightColor is different in `initialize`
 4. - [ ] layoutLabelIfNeeded should be the same as objc
@@ -22,7 +22,7 @@
 
 ### Responder
 
-1. - [ ] Should not extend UIKeyInput
+1. - [x] Should not extend UIKeyInput
 2. - [ ] reuse becomeFirstResponder on both 
 3. - [ ] Reuse resignFirstResponder on both
 4. - [ ]

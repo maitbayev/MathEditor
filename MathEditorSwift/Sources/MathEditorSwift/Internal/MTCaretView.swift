@@ -155,7 +155,7 @@ private final class CaretHandle: MTView {
   #endif
 }
 
-public final class MTCaretViewSwift: MTView {
+final class MTCaretView: MTView {
   public var caretColor: MTColor? {
     didSet {
       handle.color = caretColor
