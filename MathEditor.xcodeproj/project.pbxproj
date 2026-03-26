@@ -47,6 +47,7 @@
 		490BE5561CE695CC00AE31A0 /* libMathEditor.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMathEditor.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		490BE5771CE6A08100AE31A0 /* MTDisplayEditingTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDisplayEditingTest.m; sourceTree = "<group>"; };
 		497F92211CF8CBFF00022162 /* MathEditor-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MathEditor-Prefix.pch"; sourceTree = "<group>"; };
+		49DEC81E1CF5523E000053CD /* MTCaretView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCaretView.h; sourceTree = "<group>"; };
 		49DEC81F1CF5523E000053CD /* MTCaretView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCaretView.m; sourceTree = "<group>"; };
 		49DEC8201CF5523E000053CD /* MTDisplay+Editing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MTDisplay+Editing.h"; sourceTree = "<group>"; };
 		49DEC8211CF5523E000053CD /* MTDisplay+Editing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MTDisplay+Editing.m"; sourceTree = "<group>"; };
@@ -135,6 +136,7 @@
 		49DEC81D1CF5523E000053CD /* internal */ = {
 			isa = PBXGroup;
 			children = (
+				49DEC81E1CF5523E000053CD /* MTCaretView.h */,
 				49DEC81F1CF5523E000053CD /* MTCaretView.m */,
 				49DEC8201CF5523E000053CD /* MTDisplay+Editing.h */,
 				49DEC8211CF5523E000053CD /* MTDisplay+Editing.m */,
