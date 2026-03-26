@@ -21,7 +21,7 @@ let package = Package(
   targets: [
     .target(
       name: "MathEditor",
-      dependencies: [.product(name: "iosMath", package: "iosMath"), .product(name: "MathEditorSwift", package: "MathEditorSwift")],
+      dependencies: ["iosMath", "MathEditorSwift"],
       path: "./mathEditor",
       cSettings: [
         .headerSearchPath("./editor"),
@@ -30,7 +30,7 @@ let package = Package(
     ),
     .target(
       name: "MathKeyboard",
-      dependencies: [.product(name: "iosMath", package: "iosMath"), "MathEditor"],
+      dependencies: ["iosMath", "MathEditor"],
       path: "./mathKeyboard",
       resources: [.process("MathKeyboardResources")],
       cSettings: [
