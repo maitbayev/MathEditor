@@ -2,8 +2,8 @@ import Testing
 import iosMath
 
 // Switch the implementation under test by toggling these imports.
-import MathEditor
-//import MathEditorSwift
+// import MathEditor
+import MathEditorSwift
 
 @Suite(.serialized)
 struct MTMathListEditingTests {
@@ -109,6 +109,42 @@ struct MTMathListEditingTests {
     expectLatex("x^{23}", from: superscript)
   }
 
+  @Test("insert is a no-op for inner indices and missing subindices")
+  func insertNoOpsForInnerAndMissingSubindices() {
+    let inner = list("12")
+    inner.insert(
+      atom("9"),
+      atListIndex: MTMathListIndex(
+        atLocation: 0,
+        withSubIndex: .level0Index(0),
+        type: .subIndexTypeInner
+      )
+    )
+    expectLatex("12", from: inner)
+
+    let nucleusWithoutSubindex = list("x^2")
+    nucleusWithoutSubindex.insert(
+      atom("y"),
+      atListIndex: MTMathListIndex(
+        atLocation: 0,
+        withSubIndex: nil,
+        type: .subIndexTypeNucleus
+      )
+    )
+    expectLatex("x^{2}", from: nucleusWithoutSubindex)
+
+    let denominatorWithoutSubindex = list("\\frac{1}{2}")
+    denominatorWithoutSubindex.insert(
+      atom("3"),
+      atListIndex: MTMathListIndex(
+        atLocation: 0,
+        withSubIndex: nil,
+        type: .subIndexTypeDenominator
+      )
+    )
+    expectLatex("\\frac{1}{2}", from: denominatorWithoutSubindex)
+  }
+
   @Test("remove at nucleus fuses scripts into the previous atom when possible")
   func removeAtNucleusFusesIntoPreviousAtom() {
     let mathList = list("xy^2")
@@ -195,6 +231,39 @@ struct MTMathListEditingTests {
       )
     )
     expectLatex("x^{2}", from: superscript)
+  }
+
+  @Test("remove atom is a no-op for inner indices and missing subindices")
+  func removeAtomNoOpsForInnerAndMissingSubindices() {
+    let inner = list("12")
+    inner.removeAtom(
+      atListIndex: MTMathListIndex(
+        atLocation: 0,
+        withSubIndex: .level0Index(0),
+        type: .subIndexTypeInner
+      )
+    )
+    expectLatex("12", from: inner)
+
+    let numeratorWithoutSubindex = list("\\frac{12}{3}")
+    numeratorWithoutSubindex.removeAtom(
+      atListIndex: MTMathListIndex(
+        atLocation: 0,
+        withSubIndex: nil,
+        type: .subIndexTypeNumerator
+      )
+    )
+    expectLatex("\\frac{12}{3}", from: numeratorWithoutSubindex)
+
+    let superscriptWithoutSubindex = list("x^2")
+    superscriptWithoutSubindex.removeAtom(
+      atListIndex: MTMathListIndex(
+        atLocation: 0,
+        withSubIndex: nil,
+        type: .subIndexTypeSuperscript
+      )
+    )
+    expectLatex("x^{2}", from: superscriptWithoutSubindex)
   }
 
   @Test("remove atoms recurses into a denominator range")
@@ -286,6 +355,22 @@ struct MTMathListEditingTests {
     expectLatex("x^{1}", from: superscript)
   }
 
+  @Test("remove atoms is a no-op for inner indices")
+  func removeAtomsNoOpForInnerIndex() {
+    let inner = list("123")
+    inner.removeAtoms(
+      inListIndexRange: .make(
+        MTMathListIndex(
+          atLocation: 0,
+          withSubIndex: .level0Index(0),
+          type: .subIndexTypeInner
+        ),
+        length: 1
+      )
+    )
+    expectLatex("123", from: inner)
+  }
+
   @Test("atom at list index resolves nested atoms")
   func atomAtListIndexResolvesNestedAtoms() throws {
     let mathList = list("\\sqrt[3]{x_2}+y")
@@ -370,6 +455,36 @@ struct MTMathListEditingTests {
           atLocation: 0,
           withSubIndex: .level0Index(0),
           type: .subIndexTypeDegree
+        )) == nil
+    )
+  }
+
+  @Test("atom at list index returns nil for inner indices and missing subindices")
+  func atomAtListIndexReturnsNilForInnerAndMissingSubindices() {
+    #expect(
+      list("x").atom(
+        atListIndex: MTMathListIndex(
+          atLocation: 0,
+          withSubIndex: .level0Index(0),
+          type: .subIndexTypeInner
+        )) == nil
+    )
+
+    #expect(
+      list("x^2").atom(
+        atListIndex: MTMathListIndex(
+          atLocation: 0,
+          withSubIndex: nil,
+          type: .subIndexTypeSuperscript
+        )) == nil
+    )
+
+    #expect(
+      list("\\frac{1}{2}").atom(
+        atListIndex: MTMathListIndex(
+          atLocation: 0,
+          withSubIndex: nil,
+          type: .subIndexTypeNumerator
         )) == nil
     )
   }

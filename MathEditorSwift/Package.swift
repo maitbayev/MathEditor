@@ -24,7 +24,7 @@ let package = Package(
       name: "MathEditorSwiftTests",
       dependencies: [
         "MathEditorSwift",
-        "MathEditor"
+        //"MathEditor"
       ]
     ),
   ]
