@@ -121,11 +121,11 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
     label.layoutIfNeeded()
     guard let displayList = label.displayList else { return }
     displayList.highlightCharacter(at: index, color: highlightColor)
-    setNeedsDisplay()
+    label.setNeedsDisplay()
   }
 
   @objc public func clearHighlights() {
-    setNeedsLayout()
+    label.setNeedsLayout()
   }
 
   @objc(moveCaretToPoint:)
@@ -177,9 +177,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
   }
 
   @objc public func doBecomeFirstResponder() {
-    if insertionIndex == nil {
-      insertionIndex = MTMathListIndex.level0Index(UInt(mathList.atoms.count))
-    }
+    insertionIndex = resolvedInsertionIndex()
     keyboard?.startedEditing(self)
     insertionPointChanged()
     delegate?.didBeginEditing(self)
@@ -526,7 +524,7 @@ extension MTEditableMathLabelSwift {
     handleScriptButton(.subIndexTypeSubscript)
   }
 
-  fileprivate func resolvedInsertionIndex() -> MTMathListIndex {
+  private func resolvedInsertionIndex() -> MTMathListIndex {
     insertionIndex ?? MTMathListIndex.level0Index(UInt(mathList.atoms.count))
   }
 
@@ -718,7 +716,7 @@ extension MTEditableMathLabelSwift {
     insertPairedAtoms(open: "|", close: "|")
   }
 
-  fileprivate func insertPairedAtoms(open: Character, close: Character) {
+  private func insertPairedAtoms(open: Character, close: Character) {
     guard let openAtom = atom(forCharacter: open.unicodeScalars.first!),
       let closeAtom = atom(forCharacter: close.unicodeScalars.first!)
     else { return }
