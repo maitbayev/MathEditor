@@ -770,5 +770,4 @@ extension MTEditableMathLabelSwift {
     setScriptList(list, on: atom, type: type)
     return list
   }
-
 }
