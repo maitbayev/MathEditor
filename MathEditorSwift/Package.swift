@@ -12,7 +12,8 @@ let package = Package(
     )
   ],
   dependencies: [
-    .package(url: "https://github.com/maitbayev/iosMath.git", branch: "master")
+    .package(url: "https://github.com/maitbayev/iosMath.git", branch: "master"),
+    .package(path: "..")
   ],
   targets: [
     .target(
@@ -21,7 +22,10 @@ let package = Package(
     ),
     .testTarget(
       name: "MathEditorSwiftTests",
-      dependencies: ["MathEditorSwift"]
+      dependencies: [
+        "MathEditorSwift",
+        "MathEditor"
+      ]
     ),
   ]
 )
