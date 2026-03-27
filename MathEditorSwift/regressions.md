@@ -104,3 +104,19 @@ The Swift pattern `guard let insertionIndex else { return }` (and similar early 
 - **Relevant files**:
   - `mathEditorSwift/MTEditableMathLabelSwift.swift`
   - `mathEditor/editor/MTEditableMathLabel.h`
+
+### 12) `mathList = nil` no longer clears the editor
+- **Swift behavior**: `mathList` is a non-optional property, so callers cannot clear the editor by assigning `nil`.
+- **Legacy Objective-C behavior**: `setMathList:` explicitly treats `nil` as a clear operation and replaces it with a new empty `MTMathList`.
+- **Impact**: Existing hosts that reset the editor by assigning `nil` lose that API behavior and must switch to a different clearing path.
+- **Relevant files**:
+  - `mathEditorSwift/MTEditableMathLabelSwift.swift`
+  - `mathEditor/editor/MTEditableMathLabel.m`
+
+### 13) Keyboard `equalsAllowed` state differs from legacy behavior
+- **Swift behavior**: `setKeyboardMode()` unconditionally resets `keyboard?.equalsAllowed = true`, then disables it in superscripts, numerators, and denominators.
+- **Legacy Objective-C behavior**: `setKeyboardMode` does not reset `equalsAllowed` to `YES` up front, disables it for superscripts and numerators, and leaves the denominator branch commented out.
+- **Impact**: Keyboard availability for `=` can differ from legacy, especially after moving the caret between contexts or when editing in a denominator. This is an inference from the two implementations' state transitions.
+- **Relevant files**:
+  - `mathEditorSwift/MTEditableMathLabelSwift.swift`
+  - `mathEditor/editor/MTEditableMathLabel.m`
