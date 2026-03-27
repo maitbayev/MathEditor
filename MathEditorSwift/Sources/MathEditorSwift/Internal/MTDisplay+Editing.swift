@@ -145,7 +145,7 @@ extension MTCTLineDisplay {
       if strLenCovered >= strIndex {
         return UInt(mlIndex)
       }
-      guard let atom = atoms[mlIndex] as? MTMathAtom else { continue }
+      let atom = atoms[mlIndex]
       strLenCovered += UInt(atom.nucleus.count)
     }
     // By the end we should have covered all characters that can be addressed.
@@ -159,7 +159,7 @@ extension MTCTLineDisplay {
 
     var strIndex = 0
     for i in 0..<Int(mlIndex) {
-      guard let atom = atoms[i] as? MTMathAtom else { continue }
+      let atom = atoms[i]
       strIndex += atom.nucleus.count
     }
     return strIndex

@@ -27,7 +27,7 @@ extension MTMathList {
 
     case .subIndexTypeNucleus:
       let atomIndex = Int(index.atomIndex)
-      guard let currentAtom = atoms[atomIndex] as? MTMathAtom else { return }
+      let currentAtom = atoms[atomIndex]
       assert(
         currentAtom.subScript != nil || currentAtom.superScript != nil,
         "Nuclear fusion is not supported if there are no subscripts or superscripts.")
@@ -72,14 +72,14 @@ extension MTMathList {
 
     case .subIndexTypeSubscript:
       let atomIndex = Int(index.atomIndex)
-      guard let current = atoms[atomIndex] as? MTMathAtom else { return }
+      let current = atoms[atomIndex]
       assert(current.subScript != nil, "No subscript for atom at index \(index.atomIndex)")
       guard let subIndex = index.sub else { return }
       current.subScript?.insert(atom, atListIndex: subIndex)
 
     case .subIndexTypeSuperscript:
       let atomIndex = Int(index.atomIndex)
-      guard let current = atoms[atomIndex] as? MTMathAtom else { return }
+      let current = atoms[atomIndex]
       assert(current.superScript != nil, "No superscript for atom at index \(index.atomIndex)")
       guard let subIndex = index.sub else { return }
       current.superScript?.insert(atom, atListIndex: subIndex)
@@ -110,13 +110,13 @@ extension MTMathList {
 
     case .subIndexTypeNucleus:
       let atomIndex = Int(index.atomIndex)
-      guard let currentAtom = atoms[atomIndex] as? MTMathAtom else { return }
+      let currentAtom = atoms[atomIndex]
       assert(
         currentAtom.subScript != nil || currentAtom.superScript != nil,
         "Nuclear fission is not supported if there are no subscripts or superscripts.")
       var previous: MTMathAtom?
       if index.atomIndex > 0 {
-        previous = atoms[Int(index.atomIndex - 1)] as? MTMathAtom
+        previous = atoms[Int(index.atomIndex - 1)]
       }
       if let previous,
         previous.subScript == nil,
@@ -160,14 +160,14 @@ extension MTMathList {
 
     case .subIndexTypeSubscript:
       let atomIndex = Int(index.atomIndex)
-      guard let current = atoms[atomIndex] as? MTMathAtom else { return }
+      let current = atoms[atomIndex]
       assert(current.subScript != nil, "No subscript for atom at index \(index.atomIndex)")
       guard let subIndex = index.sub else { return }
       current.subScript?.removeAtom(atListIndex: subIndex)
 
     case .subIndexTypeSuperscript:
       let atomIndex = Int(index.atomIndex)
-      guard let current = atoms[atomIndex] as? MTMathAtom else { return }
+      let current = atoms[atomIndex]
       assert(current.superScript != nil, "No superscript for atom at index \(index.atomIndex)")
       guard let subIndex = index.sub else { return }
       current.superScript?.removeAtom(atListIndex: subIndex)
@@ -221,14 +221,14 @@ extension MTMathList {
 
     case .subIndexTypeSubscript:
       let atomIndex = Int(start.atomIndex)
-      guard let current = atoms[atomIndex] as? MTMathAtom else { return }
+      let current = atoms[atomIndex]
       assert(current.subScript != nil, "No subscript for atom at index \(start.atomIndex)")
       guard let subIndexRange = range.subIndex() else { return }
       current.subScript?.removeAtoms(inListIndexRange: subIndexRange)
 
     case .subIndexTypeSuperscript:
       let atomIndex = Int(start.atomIndex)
-      guard let current = atoms[atomIndex] as? MTMathAtom else { return }
+      let current = atoms[atomIndex]
       assert(current.superScript != nil, "No superscript for atom at index \(start.atomIndex)")
       guard let subIndexRange = range.subIndex() else { return }
       current.superScript?.removeAtoms(inListIndexRange: subIndexRange)
@@ -245,7 +245,7 @@ extension MTMathList {
   public func atom(atListIndex index: MTMathListIndex?) -> MTMathAtom? {
     guard let index else { return nil }
     guard index.atomIndex < UInt(atoms.count) else { return nil }
-    guard let atom = atoms[Int(index.atomIndex)] as? MTMathAtom else { return nil }
+    let atom = atoms[Int(index.atomIndex)]
 
     switch index.subIndexType {
     case .subIndexTypeNone, .subIndexTypeNucleus:
