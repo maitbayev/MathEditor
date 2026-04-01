@@ -11,16 +11,10 @@ import iosMath
 extension MTMathList {
   @objc(insertAtom:atListIndex:)
   public func insert(_ atom: MTMathAtom, atListIndex index: MTMathListIndex) {
-    if index.atomIndex > UInt(atoms.count) {
-      let exception = NSException(
-        name: .rangeException,
-        reason: "Index \(index.atomIndex) is out of bounds for list of size \(atoms.count)",
-        userInfo: nil
-      )
-      exception.raise()
-      return
-    }
-
+    precondition(
+      index.atomIndex <= UInt(atoms.count),
+      "Index \(index.atomIndex) is out of bounds for list of size \(atoms.count)"
+    )
     switch index.subIndexType {
     case .subIndexTypeNone:
       insertAtom(atom, at: index.atomIndex)

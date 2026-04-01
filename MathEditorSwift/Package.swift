@@ -21,7 +21,9 @@ let package = Package(
     ),
     .testTarget(
       name: "MathEditorSwiftTests",
-      dependencies: ["MathEditorSwift"]
+      dependencies: [
+        "MathEditorSwift"
+      ]
     ),
   ]
 )
