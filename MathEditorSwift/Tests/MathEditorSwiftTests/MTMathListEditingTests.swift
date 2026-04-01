@@ -1,13 +1,11 @@
+// Switch the implementation under test by toggling these imports.
+import MathEditorSwift
 import Testing
 import iosMath
 
-// Switch the implementation under test by toggling these imports.
-// import MathEditor
-import MathEditorSwift
-
+@MainActor
 @Suite(.serialized)
 struct MTMathListEditingTests {
-
   @Test("insert at top level adds an atom at the requested index")
   func insertTopLevelAtom() {
     let mathList = list("1+3")
@@ -176,7 +174,9 @@ struct MTMathListEditingTests {
     expectLatex("{}^{2}", from: mathList)
   }
 
-  @Test("remove atom also recurses through top level, fractions, radicals, subscripts, and superscripts")
+  @Test(
+    "remove atom also recurses through top level, fractions, radicals, subscripts, and superscripts"
+  )
   func removeAtomFromOtherNestedLists() {
     let topLevel = list("123")
     topLevel.removeAtom(atListIndex: .level0Index(1))
@@ -413,7 +413,9 @@ struct MTMathListEditingTests {
     #expect(mathList.atom(atListIndex: nil) == nil)
   }
 
-  @Test("atom at list index also resolves fraction and superscript atoms and returns nil for the wrong container type")
+  @Test(
+    "atom at list index also resolves fraction and superscript atoms and returns nil for the wrong container type"
+  )
   func atomAtListIndexCoversRemainingContainerTypes() throws {
     let mathList = list("\\frac{1}{x^2}")
 
@@ -487,6 +489,16 @@ struct MTMathListEditingTests {
           type: .subIndexTypeNumerator
         )) == nil
     )
+  }
+
+  @Test
+  @MainActor
+  func insertOutOfBoundsFail() async throws {
+    await #expect(processExitsWith: .failure) {
+      let mathList = list("12")
+      let _ = mathList.insert(atom("3"), atListIndex: .level0Index(3))
+      return
+    }
   }
 }
 

@@ -47,7 +47,6 @@ public protocol MTMathKeyboard: AnyObject, MTMathKeyboardTraits {
   func finishedEditing(_ label: MTView & MTKeyInput)
 }
 
-@objc(MTEditableMathLabelSwift)
 public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
   @objc public var mathList: MTMathList = MTMathList() {
     didSet {
@@ -59,9 +58,9 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
 
   @objc public var highlightColor: MTColor = .systemRed
 
-  @objc public var textColor: MTColor? {
+  @objc public var textColor: MTColor {
     get { label.textColor }
-    set { label.textColor = newValue ?? label.textColor }
+    set { label.textColor = newValue }
   }
 
   @objc public var caretColor: MTColor {
@@ -69,8 +68,8 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
     set { caretView.caretColor = newValue }
   }
 
-  @objc public private(set) var cancelImage: MTCancelView?
-  @objc private(set) var caretView: MTCaretView!
+  @objc private var cancelImage: MTCancelView?
+  @objc private var caretView: MTCaretView!
   public weak var delegate: MTEditableMathLabelDelegate?
   public weak var keyboard: MTMathKeyboard?
 
@@ -288,6 +287,9 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
     }
 
     label.mathList = mathList
+    if mathList.atoms.isEmpty {
+      caretView.showHandle(false)
+    }
     insertionPointChanged()
     delegate?.textModified(self)
   }

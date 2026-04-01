@@ -3,8 +3,8 @@ import iosMath
 
 @testable import MathEditorSwift
 
-@MainActor
 @Suite(.serialized)
+@MainActor
 struct MTEditableMathLabelSwiftTests {
 
   @Test("insertMathList inserts the provided math list into an empty label")
