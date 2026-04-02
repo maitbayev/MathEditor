@@ -39,7 +39,7 @@ let package = Package(
     ),
     .testTarget(
       name: "MathEditorTests",
-      dependencies: ["MathEditor"],
+      dependencies: ["MathEditor", "iosMath"],
       path: "./Tests",
       cSettings: [
         .headerSearchPath("../mathEditor/editor"),
