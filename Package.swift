@@ -22,22 +22,19 @@ let package = Package(
   targets: [
     .target(
       name: "MathEditorSwift",
-      dependencies: ["iosMath"],
-      path: "MathEditorSwift/Sources/MathEditorSwift"
+      dependencies: ["iosMath"]
     ),
     .testTarget(
       name: "MathEditorSwiftTests",
       dependencies: [
         "MathEditorSwift"
-      ],
-      path: "MathEditorSwift/Tests/MathEditorSwiftTests"
+      ]
     ),
     .target(
       name: "MathKeyboardSwiftUI",
       dependencies: [
         "MathEditorSwift"
       ],
-      path: "MathKeyboardSwiftUI/Sources/MathKeyboardSwiftUI",
       resources: [.process("Resources")]
     ),
   ]

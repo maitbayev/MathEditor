@@ -69,7 +69,7 @@ public final class MTEditableMathLabelSwift: MTView, MTKeyInput {
   }
 
   @objc private var cancelImage: MTCancelView?
-  @objc private var caretView: MTCaretView!
+  @objc private(set) var caretView: MTCaretView!
   public weak var delegate: MTEditableMathLabelDelegate?
   public weak var keyboard: MTMathKeyboard?
 
