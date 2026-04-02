@@ -233,32 +233,33 @@ final class MTCaretView: MTView {
     )
   }
 
+  private func stopBlinking() {
+    blinkTimer?.invalidate()
+    blinkTimer = nil
+  }
+
   private func startBlinkingIfNeeded() {
-    guard superview != nil else {
-      blinkTimer?.invalidate()
-      blinkTimer = nil
+    guard window != nil else {
+      stopBlinking()
       return
     }
     if blinkTimer == nil {
       blinkTimer = Timer.scheduledTimer(withTimeInterval: blinkRate, repeats: true) {
         [weak self] _ in
-        self?.blink()
+        Task { @MainActor [weak self] in
+          self?.blink()
+        }
       }
     }
     delayBlink()
-  }
-
-  deinit {
-    blinkTimer?.invalidate()
-    blinkTimer = nil
   }
 }
 
 #if canImport(UIKit)
   extension MTCaretView {
-    public override func didMoveToSuperview() {
-      super.didMoveToSuperview()
-      // UIView didMoveToSuperview override to set up blink timers after caret view created in superview.
+    public override func didMoveToWindow() {
+      super.didMoveToWindow()
+      // Drive caret blinking from window attachment so ancestor detach/reattach is handled correctly.
       isHidden = false
       startBlinkingIfNeeded()
     }
@@ -281,8 +282,8 @@ final class MTCaretView: MTView {
   extension MTCaretView {
     public override var isFlipped: Bool { true }
 
-    public override func viewDidMoveToSuperview() {
-      super.viewDidMoveToSuperview()
+    public override func viewDidMoveToWindow() {
+      super.viewDidMoveToWindow()
       isHidden = false
       startBlinkingIfNeeded()
     }

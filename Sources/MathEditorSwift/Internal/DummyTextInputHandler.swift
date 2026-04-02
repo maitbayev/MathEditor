@@ -9,6 +9,7 @@
 
   import UIKit
 
+  @MainActor
   struct DummyTextInputHandler {
     var selectedTextRange: UITextRange?
     var markedTextRange: UITextRange?

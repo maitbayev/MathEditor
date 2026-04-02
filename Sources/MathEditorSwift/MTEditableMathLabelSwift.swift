@@ -24,6 +24,7 @@ extension MTEditableMathLabelDelegate {
 /// This protocol provides information on the context of the current insertion point.
 /// The keyboard may choose to enable/disable/highlight certain parts of the UI depending on the context.
 /// e.g. you cannot enter the = sign when you are in a fraction so the keyboard could disable that.
+@MainActor
 public protocol MTMathKeyboardTraits {
   var equalsAllowed: Bool { get set }
   var fractionsAllowed: Bool { get set }
@@ -42,6 +43,7 @@ public protocol MTMathKeyboardTraits {
 /// The keyboard should use this information to send `MTKeyInput` messages to the label.
 ///
 /// This protocol inherits from `MTMathKeyboardTraits`.
+@MainActor
 public protocol MTMathKeyboard: AnyObject, MTMathKeyboardTraits {
   func startedEditing(_ label: MTView & MTKeyInput)
   func finishedEditing(_ label: MTView & MTKeyInput)

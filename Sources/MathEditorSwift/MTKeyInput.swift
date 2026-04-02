@@ -9,6 +9,7 @@
   import UIKit
   public typealias MTKeyInput = UIKeyInput
 #else
+  @MainActor
   public protocol MTKeyInput {
     var hasText: Bool { get }
     func insertText(_ text: String)
