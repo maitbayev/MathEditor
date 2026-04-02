@@ -1,50 +1,44 @@
-// swift-tools-version: 5.6
+// swift-tools-version: 5.9
 
 import PackageDescription
 
 let package = Package(
   name: "MathEditor",
   defaultLocalization: "en",
-  platforms: [.iOS(.v13), .macOS(.v11)],
+  platforms: [.iOS(.v17), .macOS(.v13)],
   products: [
     .library(
-      name: "MathEditor",
-      targets: ["MathEditor"]),
+      name: "MathEditorSwift",
+      targets: ["MathEditorSwift"]
+    ),
     .library(
-      name: "MathKeyboard",
-      targets: ["MathKeyboard"]),
+      name: "MathKeyboardSwiftUI",
+      targets: ["MathKeyboardSwiftUI"]
+    ),
   ],
   dependencies: [
     .package(url: "https://github.com/maitbayev/iosMath.git", branch: "master")
   ],
   targets: [
     .target(
-      name: "MathEditor",
-      dependencies: [.product(name: "iosMath", package: "iosMath")],
-      path: "./mathEditor",
-      cSettings: [
-        .headerSearchPath("./editor"),
-        .headerSearchPath("./internal"),
-      ]
-    ),
-    .target(
-      name: "MathKeyboard",
-      dependencies: [.product(name: "iosMath", package: "iosMath"), "MathEditor"],
-      path: "./mathKeyboard",
-      resources: [.process("MathKeyboardResources")],
-      cSettings: [
-        .headerSearchPath("./keyboard")
-      ]
+      name: "MathEditorSwift",
+      dependencies: ["iosMath"],
+      path: "MathEditorSwift/Sources/MathEditorSwift"
     ),
     .testTarget(
-      name: "MathEditorTests",
-      dependencies: ["MathEditor"],
-      path: "Tests",
-      cSettings: [
-        .headerSearchPath("../mathEditor/editor"),
-        .headerSearchPath("../mathEditor/keyboard"),
-        .headerSearchPath("../mathEditor/internal"),
-      ]
+      name: "MathEditorSwiftTests",
+      dependencies: [
+        "MathEditorSwift"
+      ],
+      path: "MathEditorSwift/Tests/MathEditorSwiftTests"
+    ),
+    .target(
+      name: "MathKeyboardSwiftUI",
+      dependencies: [
+        "MathEditorSwift"
+      ],
+      path: "MathKeyboardSwiftUI/Sources/MathKeyboardSwiftUI",
+      resources: [.process("Resources")]
     ),
   ]
 )
