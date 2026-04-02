@@ -332,8 +332,6 @@ extension MTEditableMathLabelSwift {
     #endif
     label.textAlignment = .center
 
-    createCancelImage()
-
     let transform = CGAffineTransform(translationX: 0, y: bounds.size.height)
     flipTransform = CGAffineTransform(scaleX: 1, y: -1).concatenating(transform)
 
@@ -341,7 +339,9 @@ extension MTEditableMathLabelSwift {
     caretView.caretColor = MTColor(white: 0.1, alpha: 1.0)
 
     highlightColor = MTColor.systemRed
-    bringSubviewToFront(cancelImage!)
+
+    // createCancelImage()
+
     // start with an empty math list
     mathList = MTMathList()
   }

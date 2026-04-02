@@ -1,7 +1,8 @@
-// Switch the implementation under test by toggling these imports.
-@testable import MathEditorSwift
 import Testing
 import iosMath
+
+// Switch the implementation under test by toggling these imports.
+@testable import MathEditorSwift
 
 @MainActor
 @Suite(.serialized)
