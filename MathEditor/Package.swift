@@ -25,6 +25,7 @@ let package = Package(
       cSettings: [
         .headerSearchPath("./editor"),
         .headerSearchPath("./internal"),
+        .headerSearchPath("./include"),
       ]
     ),
     .target(
@@ -44,6 +45,7 @@ let package = Package(
         .headerSearchPath("../MathEditor/mathEditor/editor"),
         .headerSearchPath("../MathEditor/mathEditor/keyboard"),
         .headerSearchPath("../MathEditor/mathEditor/internal"),
+        .headerSearchPath("../MathEditor/mathEditor/include"),
       ]
     ),
   ]
