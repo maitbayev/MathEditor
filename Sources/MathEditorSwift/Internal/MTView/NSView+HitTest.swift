@@ -8,12 +8,11 @@
 #if canImport(AppKit)
   import AppKit
   extension NSView {
-    @objc public func hitTestOutsideBounds(_ point: NSPoint) -> NSView? {
+    @objc func hitTestOutsideBounds(_ point: NSPoint) -> NSView? {
       hitTestOutsideBounds(point, ignoringSubviews: [])
     }
 
-    @objc public func hitTestOutsideBounds(_ point: NSPoint, ignoringSubviews: [NSView]) -> NSView?
-    {
+    @objc func hitTestOutsideBounds(_ point: NSPoint, ignoringSubviews: [NSView]) -> NSView? {
       if isHidden {
         return nil
       }

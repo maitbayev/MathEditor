@@ -14,12 +14,8 @@ import Foundation
 #endif
 
 extension MTView {
-  public func pinToSuperview() {
-    pinToSuperview(withTop: 0, leading: 0, bottom: 0, trailing: 0)
-  }
-
   public func pinToSuperview(
-    withTop top: CGFloat, leading: CGFloat, bottom: CGFloat, trailing: CGFloat
+    top: Double = 0, leading: Double = 0, bottom: Double = 0, trailing: Double = 0
   ) {
     guard let superview else { return }
     translatesAutoresizingMaskIntoConstraints = false

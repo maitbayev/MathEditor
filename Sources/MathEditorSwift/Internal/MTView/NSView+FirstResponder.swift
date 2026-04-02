@@ -10,7 +10,7 @@
   import AppKit
 
   extension NSView {
-    @objc public var isFirstResponder: Bool {
+    @objc var isFirstResponder: Bool {
       window?.firstResponder == self
     }
   }

@@ -160,7 +160,7 @@ private final class CaretHandle: MTView {
 #endif  // canImport(AppKit)
 
 final class MTCaretView: MTView {
-  public var caretColor: MTColor = MTColor.label {
+  var caretColor: MTColor = MTColor.label {
     didSet {
       handle.color = caretColor
       blinker.backgroundColor = caretColor

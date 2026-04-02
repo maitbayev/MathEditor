@@ -9,23 +9,19 @@
   import AppKit
 
   extension NSView {
-    @objc(setNeedsLayout)
-    public func setNeedsLayout() {
+    func setNeedsLayout() {
       self.needsDisplay = true
     }
 
-    @objc(setNeedsDisplay)
-    public func setNeedsDisplay() {
+    func setNeedsDisplay() {
       self.needsDisplay = true
     }
 
-    @objc(layoutIfNeeded)
-    public func layoutIfNeeded() {
+    func layoutIfNeeded() {
       layoutSubtreeIfNeeded()
     }
 
-    @objc(bringSubviewToFront:)
-    public func bringSubviewToFront(_ child: NSView) {
+    func bringSubviewToFront(_ child: NSView) {
       guard child.superview == self else { return }
       child.removeFromSuperview()
       addSubview(child)

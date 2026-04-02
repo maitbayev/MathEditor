@@ -1,5 +1,5 @@
 // Switch the implementation under test by toggling these imports.
-import MathEditorSwift
+@testable import MathEditorSwift
 import Testing
 import iosMath
 

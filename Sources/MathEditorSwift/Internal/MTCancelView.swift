@@ -1,10 +1,10 @@
 import Foundation
 
-public final class MTCancelView: MTView {
+final class MTCancelView: MTView {
   private let imageView: MTImageView
 
   @objc
-  public init(target: AnyObject, action: Selector) {
+  init(target: AnyObject, action: Selector) {
     #if canImport(UIKit)
       let image = MTImage(systemName: "xmark.circle")?.withRenderingMode(.alwaysTemplate)
       imageView = MTImageView(image: image)
