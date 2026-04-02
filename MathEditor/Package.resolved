@@ -1,5 +1,4 @@
 {
-  "originHash" : "779673a4129bbf76e22023d3d663bdb7142623ac6cc97ef158891e34b1f5a007",
   "pins" : [
     {
       "identity" : "iosmath",
@@ -11,5 +10,5 @@
       }
     }
   ],
-  "version" : 3
+  "version" : 2
 }

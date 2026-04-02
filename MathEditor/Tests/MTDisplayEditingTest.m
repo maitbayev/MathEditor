@@ -40,7 +40,8 @@
 }
 
 static NSValue* point(CGFloat x, CGFloat y) {
-    return [NSValue valueWithCGPoint:CGPointMake(x, y)];
+    CGPoint cgPoint = CGPointMake(x, y);
+    return [NSValue value:&cgPoint withObjCType:@encode(CGPoint)];
 }
 
 - (void)testClosestPointForExpression:(NSString*) expr data:(NSDictionary*) testData
@@ -49,7 +50,8 @@ static NSValue* point(CGFloat x, CGFloat y) {
     MTDisplay* displayList = [MTTypesetter createLineForMathList:ml font:_font style:kMTLineStyleDisplay];
     
     for (NSValue* point in testData) {
-        CGPoint cgPoint = [point CGPointValue];
+        CGPoint cgPoint;
+        [point getValue:&cgPoint];
         MTMathListIndex* expectedIndex = testData[point];
         MTMathListIndex* index = [displayList closestIndexToPoint:cgPoint];
         XCTAssertEqualObjects(index, expectedIndex, @"Index %@ does not match %@ for point (%f, %f)", index, expectedIndex, cgPoint.x, cgPoint.y);
