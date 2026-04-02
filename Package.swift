@@ -12,8 +12,8 @@ let package = Package(
       targets: ["MathEditorSwift"]
     ),
     .library(
-      name: "MathKeyboardSwiftUI",
-      targets: ["MathKeyboardSwiftUI"]
+      name: "MathKeyboardSwift",
+      targets: ["MathKeyboardSwift"]
     ),
   ],
   dependencies: [
@@ -31,7 +31,7 @@ let package = Package(
       ]
     ),
     .target(
-      name: "MathKeyboardSwiftUI",
+      name: "MathKeyboardSwift",
       dependencies: [
         "MathEditorSwift"
       ],

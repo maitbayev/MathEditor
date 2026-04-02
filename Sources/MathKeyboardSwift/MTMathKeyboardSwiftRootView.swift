@@ -4,11 +4,11 @@
   import SwiftUI
   import UIKit
 
-  public final class MTMathKeyboardSwiftUIRootView: MTView, MTMathKeyboard,
+  public final class MTMathKeyboardSwiftRootView: MTView, MTMathKeyboard,
     UIInputViewAudioFeedback
   {
     private static let defaultTab: KeyboardTab = .numbers
-    private static let shared = MTMathKeyboardSwiftUIRootView()
+    private static let shared = MTMathKeyboardSwiftRootView()
 
     private var state = KeyboardState()
     private weak var textInput: (any MTView & MTKeyInput)?
@@ -30,7 +30,7 @@
       commonInit()
     }
 
-    public static func sharedInstance() -> MTMathKeyboardSwiftUIRootView {
+    public static func sharedInstance() -> MTMathKeyboardSwiftRootView {
       shared
     }
 

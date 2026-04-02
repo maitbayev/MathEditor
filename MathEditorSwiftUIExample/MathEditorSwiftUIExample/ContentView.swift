@@ -16,7 +16,7 @@ struct ContentView: View {
 }
 
 #if os(iOS)
-  import MathKeyboardSwiftUI
+  import MathKeyboardSwift
 
   struct MathEditorView: UIViewRepresentable {
     typealias UIViewType = MTEditableMathLabelSwift
@@ -24,7 +24,7 @@ struct ContentView: View {
     func makeUIView(context: Context) -> MTEditableMathLabelSwift {
       let mathLabel = MTEditableMathLabelSwift()
       mathLabel.backgroundColor = .clear
-      mathLabel.keyboard = MTMathKeyboardSwiftUIRootView.sharedInstance()
+      mathLabel.keyboard = MTMathKeyboardSwiftRootView.sharedInstance()
       mathLabel.textColor = .label
       mathLabel.caretColor = .label
       mathLabel.startEditing()
