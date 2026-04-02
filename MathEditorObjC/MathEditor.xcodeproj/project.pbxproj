@@ -352,7 +352,7 @@
 			);
 			mainGroup = 6003F581195388D10070C39A;
 			packageReferences = (
-				86149FF92F7E845600F4EC56 /* XCLocalSwiftPackageReference "../MathEditor" */,
+				864DCE522F7E9E8400C1C14B /* XCLocalSwiftPackageReference "../MathEditorObjC" */,
 			);
 			productRefGroup = 6003F58B195388D20070C39A /* Products */;
 			projectDirPath = "";
@@ -694,13 +694,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		86149FF92F7E845600F4EC56 /* XCLocalSwiftPackageReference "../MathEditor" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../MathEditor;
-		};
 		862D28DB2E2D4C4400F9B6FE /* XCLocalSwiftPackageReference "../MathEditor" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../MathEditor;
+		};
+		864DCE522F7E9E8400C1C14B /* XCLocalSwiftPackageReference "../MathEditorObjC" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../MathEditorObjC;
 		};
 /* End XCLocalSwiftPackageReference section */
 
