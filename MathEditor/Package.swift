@@ -42,10 +42,10 @@ let package = Package(
       dependencies: ["MathEditor"],
       path: "./Tests",
       cSettings: [
-        .headerSearchPath("../MathEditor/mathEditor/editor"),
-        .headerSearchPath("../MathEditor/mathEditor/keyboard"),
-        .headerSearchPath("../MathEditor/mathEditor/internal"),
-        .headerSearchPath("../MathEditor/mathEditor/include"),
+        .headerSearchPath("../mathEditor/editor"),
+        .headerSearchPath("../mathEditor/keyboard"),
+        .headerSearchPath("../mathEditor/internal"),
+        .headerSearchPath("../mathEditor/include"),
       ]
     ),
   ]
