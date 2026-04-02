@@ -8,11 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		860CA8B02F7E97620000656F /* MathEditorSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 860CA8AF2F7E97620000656F /* MathEditorSwift */; };
-		860CA8B22F7E97620000656F /* MathKeyboardSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 860CA8B12F7E97620000656F /* MathKeyboardSwiftUI */; };
+		860CA8B22F7E97620000656F /* MathKeyboardSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 860CA8B12F7E97620000656F /* MathKeyboardSwift */; };
 		86251C312F7E7DC500EAB40F /* MathEditorSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 86251C302F7E7DC500EAB40F /* MathEditorSwift */; };
-		86251C332F7E7DC500EAB40F /* MathKeyboardSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 86251C322F7E7DC500EAB40F /* MathKeyboardSwiftUI */; };
+		86251C332F7E7DC500EAB40F /* MathKeyboardSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 86251C322F7E7DC500EAB40F /* MathKeyboardSwift */; };
 		862F48632F7E9BAA002780E0 /* MathEditorSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 862F48622F7E9BAA002780E0 /* MathEditorSwift */; };
-		862F48652F7E9BAA002780E0 /* MathKeyboardSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 862F48642F7E9BAA002780E0 /* MathKeyboardSwiftUI */; };
+		862F48652F7E9BAA002780E0 /* MathKeyboardSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 862F48642F7E9BAA002780E0 /* MathKeyboardSwift */; };
 		86E17B822F7569EF0079CEC2 /* MathEditorSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 86E17B812F7569EF0079CEC2 /* MathEditorSwift */; };
 /* End PBXBuildFile section */
 
@@ -33,12 +33,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				862F48652F7E9BAA002780E0 /* MathKeyboardSwiftUI in Frameworks */,
+				862F48652F7E9BAA002780E0 /* MathKeyboardSwift in Frameworks */,
 				86E17B822F7569EF0079CEC2 /* MathEditorSwift in Frameworks */,
-				860CA8B22F7E97620000656F /* MathKeyboardSwiftUI in Frameworks */,
+				860CA8B22F7E97620000656F /* MathKeyboardSwift in Frameworks */,
 				860CA8B02F7E97620000656F /* MathEditorSwift in Frameworks */,
 				862F48632F7E9BAA002780E0 /* MathEditorSwift in Frameworks */,
-				86251C332F7E7DC500EAB40F /* MathKeyboardSwiftUI in Frameworks */,
+				86251C332F7E7DC500EAB40F /* MathKeyboardSwift in Frameworks */,
 				86251C312F7E7DC500EAB40F /* MathEditorSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -92,11 +92,11 @@
 			packageProductDependencies = (
 				86E17B812F7569EF0079CEC2 /* MathEditorSwift */,
 				86251C302F7E7DC500EAB40F /* MathEditorSwift */,
-				86251C322F7E7DC500EAB40F /* MathKeyboardSwiftUI */,
+				86251C322F7E7DC500EAB40F /* MathKeyboardSwift */,
 				860CA8AF2F7E97620000656F /* MathEditorSwift */,
-				860CA8B12F7E97620000656F /* MathKeyboardSwiftUI */,
+				860CA8B12F7E97620000656F /* MathKeyboardSwift */,
 				862F48622F7E9BAA002780E0 /* MathEditorSwift */,
-				862F48642F7E9BAA002780E0 /* MathKeyboardSwiftUI */,
+				862F48642F7E9BAA002780E0 /* MathKeyboardSwift */,
 			);
 			productName = MathEditorSwiftUIExample;
 			productReference = 862D28E72E2D51E100F9B6FE /* MathEditorSwiftUIExample.app */;
@@ -399,25 +399,25 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MathEditorSwift;
 		};
-		860CA8B12F7E97620000656F /* MathKeyboardSwiftUI */ = {
+		860CA8B12F7E97620000656F /* MathKeyboardSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = MathKeyboardSwiftUI;
+			productName = MathKeyboardSwift;
 		};
 		86251C302F7E7DC500EAB40F /* MathEditorSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MathEditorSwift;
 		};
-		86251C322F7E7DC500EAB40F /* MathKeyboardSwiftUI */ = {
+		86251C322F7E7DC500EAB40F /* MathKeyboardSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = MathKeyboardSwiftUI;
+			productName = MathKeyboardSwift;
 		};
 		862F48622F7E9BAA002780E0 /* MathEditorSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MathEditorSwift;
 		};
-		862F48642F7E9BAA002780E0 /* MathKeyboardSwiftUI */ = {
+		862F48642F7E9BAA002780E0 /* MathKeyboardSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = MathKeyboardSwiftUI;
+			productName = MathKeyboardSwift;
 		};
 		86E17B812F7569EF0079CEC2 /* MathEditorSwift */ = {
 			isa = XCSwiftPackageProductDependency;

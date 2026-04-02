@@ -1,6 +1,6 @@
 //
 //  KeyboardCell.swift
-//  MathKeyboardSwiftUI
+//  MathKeyboardSwift
 //
 //  Created by Madiyar Aitbayev on 23/03/2026.
 //
